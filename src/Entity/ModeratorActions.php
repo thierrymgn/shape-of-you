@@ -27,6 +27,10 @@ class ModeratorActions
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'moderatorActions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Users $moderator = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +80,18 @@ class ModeratorActions
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getModerator(): ?Users
+    {
+        return $this->moderator;
+    }
+
+    public function setModerator(?Users $moderator): static
+    {
+        $this->moderator = $moderator;
 
         return $this;
     }

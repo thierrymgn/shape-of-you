@@ -23,6 +23,14 @@ class SocialPosts
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'socialPosts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Users $customer = null;
+
+    #[ORM\ManyToOne(inversedBy: 'socialPosts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Outfits $outfit = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +68,30 @@ class SocialPosts
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?Users
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Users $customer): static
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    public function getOutfit(): ?Outfits
+    {
+        return $this->outfit;
+    }
+
+    public function setOutfit(?Outfits $outfit): static
+    {
+        $this->outfit = $outfit;
 
         return $this;
     }

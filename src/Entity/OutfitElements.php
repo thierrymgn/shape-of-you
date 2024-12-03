@@ -26,6 +26,14 @@ class OutfitElements
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'outfitElements')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Outfits $outfit = null;
+
+    #[ORM\ManyToOne(inversedBy: 'outfitElements')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categories $category = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +83,30 @@ class OutfitElements
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getOutfit(): ?Outfits
+    {
+        return $this->outfit;
+    }
+
+    public function setOutfit(?Outfits $outfit): static
+    {
+        $this->outfit = $outfit;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Categories
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Categories $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

@@ -23,6 +23,10 @@ class VoiceCommands
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'voiceCommands')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Users $customer = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,18 @@ class VoiceCommands
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?Users
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Users $customer): static
+    {
+        $this->customer = $customer;
 
         return $this;
     }
