@@ -1,352 +1,117 @@
 
-# Routes API - Shape of You
+# Guide d'Architecture - Base de Données Shape of You
 
-## 🔐 Authentication & User Management
-```plaintext
-# Authentication
-POST    /api/auth/register                  # Inscription
-POST    /api/auth/login                     # Connexion
-POST    /api/auth/logout                    # Déconnexion
-POST    /api/auth/refresh-token             # Rafraîchir le token
-POST    /api/auth/forgot-password           # Mot de passe oublié
-POST    /api/auth/reset-password            # Réinitialisation du mot de passe
+## Vue d'ensemble
+Shape of You est une application de gestion de garde-robe avec des fonctionnalités sociales et e-commerce. L'architecture de la base de données est conçue pour supporter une application évolutive avec de multiples domaines interconnectés.
 
-# Profile
-GET     /api/user/profile                   # Obtenir son profil
-PUT     /api/user/profile                   # Mettre à jour son profil
-PUT     /api/user/preferences               # Mettre à jour ses préférences
-GET     /api/user/statistics                # Statistiques personnelles
+## Domaines Fonctionnels
+
+### 1. Système Utilisateur
+#### Tables principales : User, Profile
+```sql
+User (1) --- (1) Profile  // One-to-One
+```
+- **Objectif** : Gestion des utilisateurs et de leurs préférences
+- **Points clés** :
+  - Séparation claire entre authentification (User) et préférences (Profile)
+  - Stockage JSON pour les préférences flexibles
+  - Timestamps pour l'audit et le suivi
+
+### 2. Système de Garde-robe
+#### Tables principales : WardrobeItem, Category, Tag, Acquisition
+```sql
+WardrobeItem (N) --- (1) Category  // Many-to-One
+WardrobeItem (N) --- (N) Tag       // Many-to-Many via WardrobeItemTag
+WardrobeItem (1) --- (1) Acquisition  // One-to-One
+```
+- **Objectif** : Gestion des vêtements et leur catégorisation
+- **Fonctionnalités clés** :
+  - Catégorisation hiérarchique (auto-référencement Category)
+  - Système de tags flexible
+  - Tracking des acquisitions
+
+### 3. Système de Tenues
+#### Tables principales : Outfit, OutfitItem
+```sql
+Outfit (N) --- (N) WardrobeItem  // Many-to-Many via OutfitItem
+```
+- **Objectif** : Création et gestion des tenues
+- **Points techniques** :
+  - OutfitItem comme table de jonction avec position
+  - Support des tenues publiques/privées
+  - Association avec les posts sociaux
+
+### 4. Système Social
+#### Tables principales : SocialPost, Comment, Like, Follow
+```sql
+SocialPost (1) --- (N) Comment
+Comment (1) --- (N) Comment      // Self-referencing
+User (N) --- (N) User           // Follow relationship
+```
+- **Objectif** : Fonctionnalités sociales et engagement
+- **Caractéristiques** :
+  - Commentaires imbriqués
+  - Système de suivi
+  - Compteurs de performance (likes, comments)
+
+### 5. Système Partenaire
+#### Tables principales : Partner, PartnerProduct, PartnerOrder
+```sql
+Partner (1) --- (N) PartnerProduct
+Partner (1) --- (N) PartnerOrder
+WardrobeItem (N) --- (N) PartnerProduct  // via WardrobeItemPartnerProduct
+```
+- **Objectif** : Intégration e-commerce et monétisation
+- **Fonctionnalités** :
+  - Gestion des produits partenaires
+  - Tracking des commandes
+  - Système de commission
+
+### 6. Système d'Administration
+#### Tables principales : AdminLog, Statistics, UserReport, ModeratorAction
+```sql
+UserReport (1) --- (1) ModeratorAction
+ModeratorAction (N) --- (1) User
+```
+- **Objectif** : Gestion et modération de l'application
+- **Composants clés** :
+  - Logs d'audit
+  - Statistiques agrégées
+  - Workflow de modération
+
+### 7. Système IA
+#### Tables principales : AIAnalysis, AIAlert
+```sql
+AIAnalysis (N) --- (1) WardrobeItem
+AIAnalysis (N) --- (1) Outfit
+```
+- **Objectif** : Intégration des fonctionnalités IA
+- **Caractéristiques** :
+  - Analyse des items et tenues
+  - Système d'alerte pour modération
+  - Stockage des résultats d'analyse
+
+## Considérations Techniques
+
+### 1. Indexation
+```sql
+-- Indexes critiques
+CREATE INDEX idx_user_created ON users(user_id, created_at);
+CREATE INDEX idx_outfit_items ON outfit_items(outfit_id, wardrobe_item_id);
+CREATE INDEX idx_content_moderation ON content_moderation(content_type, content_id);
 ```
 
-## 👕 Wardrobe Management
-```plaintext
-# Categories
-GET     /api/categories                     # Liste des catégories
-GET     /api/categories/{id}                # Détail d'une catégorie
-GET     /api/categories/{id}/subcategories  # Sous-catégories
+### 2. Triggers Recommandés
+- Mise à jour automatique des compteurs (likes_count, comments_count)
+- Mise à jour des timestamps updated_at
+- Validation des données sensibles
 
-# Wardrobe Items
-GET     /api/wardrobe                       # Liste de sa garde-robe
-POST    /api/wardrobe                       # Ajouter un vêtement
-GET     /api/wardrobe/{id}                  # Détail d'un vêtement
-PUT     /api/wardrobe/{id}                  # Modifier un vêtement
-DELETE  /api/wardrobe/{id}                  # Supprimer un vêtement
-POST    /api/wardrobe/scan                  # Scanner un vêtement (IA)
-GET     /api/wardrobe/search               # Recherche dans la garde-robe
+### 3. Gestion des Relations
+- Utilisation systématique de contraintes de clé étrangère
+- Cascade DELETE configurée selon le contexte
+- Indexes sur les clés étrangères fréquemment utilisées
 
-# Tags
-GET     /api/tags                           # Liste des tags
-POST    /api/wardrobe/{id}/tags            # Ajouter des tags
-DELETE  /api/wardrobe/{id}/tags/{tagId}    # Retirer un tag
-
-# Acquisitions
-GET     /api/wardrobe/{id}/acquisition      # Info d'acquisition
-POST    /api/wardrobe/{id}/acquisition      # Ajouter info d'acquisition
-PUT     /api/wardrobe/{id}/acquisition      # Modifier info d'acquisition
-```
-
-## 👗 Outfit Management
-```plaintext
-# Outfits
-GET     /api/outfits                        # Liste des tenues
-POST    /api/outfits                        # Créer une tenue
-GET     /api/outfits/{id}                   # Détail d'une tenue
-PUT     /api/outfits/{id}                   # Modifier une tenue
-DELETE  /api/outfits/{id}                   # Supprimer une tenue
-POST    /api/outfits/{id}/items            # Ajouter des items à la tenue
-DELETE  /api/outfits/{id}/items/{itemId}   # Retirer un item
-PUT     /api/outfits/{id}/items/reorder    # Réorganiser les items
-GET     /api/outfits/suggestions           # Suggestions de tenues (IA)
-```
-
-## 🤝 Social Features
-```plaintext
-# Posts
-GET     /api/social/feed                    # Flux social
-POST    /api/social/posts                   # Créer un post
-GET     /api/social/posts/{id}              # Détail d'un post
-PUT     /api/social/posts/{id}              # Modifier un post
-DELETE  /api/social/posts/{id}              # Supprimer un post
-
-# Comments
-GET     /api/posts/{id}/comments            # Commentaires d'un post
-POST    /api/posts/{id}/comments            # Commenter
-PUT     /api/comments/{id}                  # Modifier un commentaire
-DELETE  /api/comments/{id}                  # Supprimer un commentaire
-POST    /api/comments/{id}/reply            # Répondre à un commentaire
-
-# Likes
-POST    /api/posts/{id}/like                # Liker un post
-DELETE  /api/posts/{id}/like                # Unliker un post
-POST    /api/comments/{id}/like             # Liker un commentaire
-DELETE  /api/comments/{id}/like             # Unliker un commentaire
-
-# Following
-GET     /api/social/users                   # Liste des utilisateurs
-POST    /api/social/users/{id}/follow       # Suivre un utilisateur
-DELETE  /api/social/users/{id}/follow       # Ne plus suivre
-GET     /api/social/users/{id}/followers    # Liste des followers
-GET     /api/social/users/{id}/following    # Liste des followings
-```
-
-## 🛍️ Partner & Shopping
-```plaintext
-# Products
-GET     /api/products                       # Catalogue produits
-GET     /api/products/{id}                  # Détail produit
-GET     /api/products/similar/{itemId}      # Produits similaires
-GET     /api/products/recommendations       # Recommandations
-
-# Partners
-GET     /api/partners                       # Liste des partenaires
-GET     /api/partners/{id}/products         # Produits d'un partenaire
-
-# Orders
-GET     /api/orders                         # Historique commandes
-POST    /api/orders                         # Passer commande
-GET     /api/orders/{id}                    # Détail commande
-```
-
-## 🤖 AI Features
-```plaintext
-POST    /api/ai/analyze-image               # Analyser une image
-POST    /api/ai/detect-items                # Détecter les items
-POST    /api/ai/suggest-outfit              # Suggérer une tenue
-GET     /api/ai/trends                      # Analyse des tendances
-```
-
-## 📱 Notifications
-```plaintext
-GET     /api/notifications                  # Liste notifications
-PUT     /api/notifications/{id}/read        # Marquer comme lu
-PUT     /api/notifications/read-all         # Tout marquer comme lu
-GET     /api/notifications/settings         # Préférences notifs
-PUT     /api/notifications/settings         # Modifier préférences
-```
-
-## 👮‍♂️ Administration
-```plaintext
-# Dashboard
-GET     /api/admin/dashboard                # Vue d'ensemble
-GET     /api/admin/statistics               # Statistiques globales
-GET     /api/admin/logs                     # Logs d'activité
-
-# Moderation
-GET     /api/admin/reports                  # Liste signalements
-PUT     /api/admin/reports/{id}             # Traiter signalement
-GET     /api/admin/moderation-queue         # File de modération
-POST    /api/admin/moderate/{id}            # Action de modération
-
-# Users Management
-GET     /api/admin/users                    # Liste utilisateurs
-PUT     /api/admin/users/{id}/ban           # Bannir utilisateur
-PUT     /api/admin/users/{id}/role          # Modifier rôle
-
-# Content Management
-GET     /api/admin/categories               # Gérer catégories
-POST    /api/admin/categories               # Ajouter catégorie
-PUT     /api/admin/categories/{id}          # Modifier catégorie
-DELETE  /api/admin/categories/{id}          # Supprimer catégorie
-
-# Partners Management
-GET     /api/admin/partners                 # Liste partenaires
-POST    /api/admin/partners                 # Ajouter partenaire
-PUT     /api/admin/partners/{id}            # Modifier partenaire
-GET     /api/admin/partners/sales           # Rapport ventes
-```
-
-## Points importants :
-
-1. **Sécurité** :
-   - Protection CSRF pour les routes non-API
-   - Authentification JWT pour l'API
-   - Vérification des rôles pour routes admin
-
-2. **Versions** :
-   - Préfixe `/api/v1` possible pour le versioning
-   - Documentation OpenAPI/Swagger à prévoir
-
-3. **Pagination** :
-   - Toutes les routes GET de liste supportent :
-   - `?page=` et `?limit=`
-   - `?sort=` et `?order=`
-
-4. **Filtres communs** :
-   - `?search=` pour la recherche
-   - `?category=` pour le filtrage
-   - `?start_date=` et `?end_date=`# Routes API - Shape of You
-
-## 🔐 Authentication & User Management
-```plaintext
-# Authentication
-POST    /api/auth/register                  # Inscription
-POST    /api/auth/login                     # Connexion
-POST    /api/auth/logout                    # Déconnexion
-POST    /api/auth/refresh-token             # Rafraîchir le token
-POST    /api/auth/forgot-password           # Mot de passe oublié
-POST    /api/auth/reset-password            # Réinitialisation du mot de passe
-
-# Profile
-GET     /api/user/profile                   # Obtenir son profil
-PUT     /api/user/profile                   # Mettre à jour son profil
-PUT     /api/user/preferences               # Mettre à jour ses préférences
-GET     /api/user/statistics                # Statistiques personnelles
-```
-
-## 👕 Wardrobe Management
-```plaintext
-# Categories
-GET     /api/categories                     # Liste des catégories
-GET     /api/categories/{id}                # Détail d'une catégorie
-GET     /api/categories/{id}/subcategories  # Sous-catégories
-
-# Wardrobe Items
-GET     /api/wardrobe                       # Liste de sa garde-robe
-POST    /api/wardrobe                       # Ajouter un vêtement
-GET     /api/wardrobe/{id}                  # Détail d'un vêtement
-PUT     /api/wardrobe/{id}                  # Modifier un vêtement
-DELETE  /api/wardrobe/{id}                  # Supprimer un vêtement
-POST    /api/wardrobe/scan                  # Scanner un vêtement (IA)
-GET     /api/wardrobe/search               # Recherche dans la garde-robe
-
-# Tags
-GET     /api/tags                           # Liste des tags
-POST    /api/wardrobe/{id}/tags            # Ajouter des tags
-DELETE  /api/wardrobe/{id}/tags/{tagId}    # Retirer un tag
-
-# Acquisitions
-GET     /api/wardrobe/{id}/acquisition      # Info d'acquisition
-POST    /api/wardrobe/{id}/acquisition      # Ajouter info d'acquisition
-PUT     /api/wardrobe/{id}/acquisition      # Modifier info d'acquisition
-```
-
-## 👗 Outfit Management
-```plaintext
-# Outfits
-GET     /api/outfits                        # Liste des tenues
-POST    /api/outfits                        # Créer une tenue
-GET     /api/outfits/{id}                   # Détail d'une tenue
-PUT     /api/outfits/{id}                   # Modifier une tenue
-DELETE  /api/outfits/{id}                   # Supprimer une tenue
-POST    /api/outfits/{id}/items            # Ajouter des items à la tenue
-DELETE  /api/outfits/{id}/items/{itemId}   # Retirer un item
-PUT     /api/outfits/{id}/items/reorder    # Réorganiser les items
-GET     /api/outfits/suggestions           # Suggestions de tenues (IA)
-```
-
-## 🤝 Social Features
-```plaintext
-# Posts
-GET     /api/social/feed                    # Flux social
-POST    /api/social/posts                   # Créer un post
-GET     /api/social/posts/{id}              # Détail d'un post
-PUT     /api/social/posts/{id}              # Modifier un post
-DELETE  /api/social/posts/{id}              # Supprimer un post
-
-# Comments
-GET     /api/posts/{id}/comments            # Commentaires d'un post
-POST    /api/posts/{id}/comments            # Commenter
-PUT     /api/comments/{id}                  # Modifier un commentaire
-DELETE  /api/comments/{id}                  # Supprimer un commentaire
-POST    /api/comments/{id}/reply            # Répondre à un commentaire
-
-# Likes
-POST    /api/posts/{id}/like                # Liker un post
-DELETE  /api/posts/{id}/like                # Unliker un post
-POST    /api/comments/{id}/like             # Liker un commentaire
-DELETE  /api/comments/{id}/like             # Unliker un commentaire
-
-# Following
-GET     /api/social/users                   # Liste des utilisateurs
-POST    /api/social/users/{id}/follow       # Suivre un utilisateur
-DELETE  /api/social/users/{id}/follow       # Ne plus suivre
-GET     /api/social/users/{id}/followers    # Liste des followers
-GET     /api/social/users/{id}/following    # Liste des followings
-```
-
-## 🛍️ Partner & Shopping
-```plaintext
-# Products
-GET     /api/products                       # Catalogue produits
-GET     /api/products/{id}                  # Détail produit
-GET     /api/products/similar/{itemId}      # Produits similaires
-GET     /api/products/recommendations       # Recommandations
-
-# Partners
-GET     /api/partners                       # Liste des partenaires
-GET     /api/partners/{id}/products         # Produits d'un partenaire
-
-# Orders
-GET     /api/orders                         # Historique commandes
-POST    /api/orders                         # Passer commande
-GET     /api/orders/{id}                    # Détail commande
-```
-
-## 🤖 AI Features
-```plaintext
-POST    /api/ai/analyze-image               # Analyser une image
-POST    /api/ai/detect-items                # Détecter les items
-POST    /api/ai/suggest-outfit              # Suggérer une tenue
-GET     /api/ai/trends                      # Analyse des tendances
-```
-
-## 📱 Notifications
-```plaintext
-GET     /api/notifications                  # Liste notifications
-PUT     /api/notifications/{id}/read        # Marquer comme lu
-PUT     /api/notifications/read-all         # Tout marquer comme lu
-GET     /api/notifications/settings         # Préférences notifs
-PUT     /api/notifications/settings         # Modifier préférences
-```
-
-## 👮‍♂️ Administration
-```plaintext
-# Dashboard
-GET     /api/admin/dashboard                # Vue d'ensemble
-GET     /api/admin/statistics               # Statistiques globales
-GET     /api/admin/logs                     # Logs d'activité
-
-# Moderation
-GET     /api/admin/reports                  # Liste signalements
-PUT     /api/admin/reports/{id}             # Traiter signalement
-GET     /api/admin/moderation-queue         # File de modération
-POST    /api/admin/moderate/{id}            # Action de modération
-
-# Users Management
-GET     /api/admin/users                    # Liste utilisateurs
-PUT     /api/admin/users/{id}/ban           # Bannir utilisateur
-PUT     /api/admin/users/{id}/role          # Modifier rôle
-
-# Content Management
-GET     /api/admin/categories               # Gérer catégories
-POST    /api/admin/categories               # Ajouter catégorie
-PUT     /api/admin/categories/{id}          # Modifier catégorie
-DELETE  /api/admin/categories/{id}          # Supprimer catégorie
-
-# Partners Management
-GET     /api/admin/partners                 # Liste partenaires
-POST    /api/admin/partners                 # Ajouter partenaire
-PUT     /api/admin/partners/{id}            # Modifier partenaire
-GET     /api/admin/partners/sales           # Rapport ventes
-```
-
-## Points importants :
-
-1. **Sécurité** :
-   - Protection CSRF pour les routes non-API
-   - Authentification JWT pour l'API
-   - Vérification des rôles pour routes admin
-
-2. **Versions** :
-   - Préfixe `/api/v1` possible pour le versioning
-   - Documentation OpenAPI/Swagger à prévoir
-
-3. **Pagination** :
-   - Toutes les routes GET de liste supportent :
-   - `?page=` et `?limit=`
-   - `?sort=` et `?order=`
-
-4. **Filtres communs** :
-   - `?search=` pour la recherche
-   - `?category=` pour le filtrage
-   - `?start_date=` et `?end_date=`
+### 4. Optimisations de Performance
+- Compteurs précalculés pour les métriques fréquentes
+- Dénormalisation stratégique (ex: nested comments level)
+- Partitionnement possible sur les grandes tables (logs, posts)
