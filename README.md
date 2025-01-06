@@ -84,3 +84,7 @@ npm run dev
 ---
 
 ## License
+
+**MIT License**
+\
+Copyright (c) 2025 **Thierry MGN, Zeyoman, EkinL**
