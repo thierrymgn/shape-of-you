@@ -77,9 +77,9 @@ npm run dev
 
 ## Contribution
 
-@Zeyoman
-@thierrymgn
-@EkinL
+- @Zeyoman
+- @thierrymgn
+- @EkinL
 
 ---
 
