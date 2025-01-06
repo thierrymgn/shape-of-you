@@ -1,13 +1,17 @@
-# Projet Symfony : Shape Of You
+# Shape Of You
 
-Bienvenue dans le **Projet Symfony : Nom de votre projet**. Ce document explique comment configurer, installer et lancer l'application, ainsi que les outils nécessaires pour contribuer ou explorer davantage.
+Bienvenue dans le **Projet : Shape Of You**. Shape of you is a mobile-first application designed to help people
+people who need help to dress “better”. Choice of
+morphology, trends, advice, second-hand clothes, eco-design,
+upcycling, sewing, customization, etc. are just some of the features that
+your promise.
 
 ---
 
 ## Table des matières
 
 - [About](#About)
-- [Prérequis](#prérequis)
+- [Requirements](#Requirements)
 - [Installation](#installation)
 - [Start the project](#Start-the-project)
 - [Contribution](#contribution)
@@ -17,13 +21,13 @@ Bienvenue dans le **Projet Symfony : Nom de votre projet**. Ce document explique
 
 ## About
 
-Ce projet est une application web développée en Symfony. Elle inclut une architecture moderne avec des fonctionnalités interactives grâce à Webpack Encore et Docker.
+This project is a web application developed in Symfony. It features a modern architecture with interactive functionalities thanks to Webpack Encore and Docker.
 
 ---
 
-## Prérequis
+## Requirements
 
-Avant de commencer, assurez-vous que les outils suivants sont installés sur votre machine :
+Before you begin, make sure that the following tools are installed on your machine:
 
 - **PHP** (>= 8.1)
 - **Composer** (gestionnaire de dépendances PHP)
@@ -37,7 +41,7 @@ Avant de commencer, assurez-vous que les outils suivants sont installés sur vot
 
 ### 1. Clone the project
 
-Clonez le dépôt Git et naviguez dans le dossier du projet :
+Clone the Git repository and navigate to the project folder :
 
 ```bash
 git clone https://github.com/thierrymgn/shape-of-you.git
