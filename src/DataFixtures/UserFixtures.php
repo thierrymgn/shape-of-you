@@ -62,9 +62,6 @@ class UserFixtures extends Fixture
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
         $user->setFirstName($faker->firstName());
         $user->setLastName($faker->lastName());
-        $now = new \DateTimeImmutable();
-        $user->setCreatedAt($now);
-        $user->setUpdatedAt($now);
 
         $user->setAvatar("https://ui-avatars.com/api/?name=" . urlencode($user->getFirstName() . "+" . $user->getLastName()));
 
@@ -72,8 +69,6 @@ class UserFixtures extends Fixture
         $profile->setCustomer($user);
         $profile->setHeight($faker->randomFloat(2, 150, 200));
         $profile->setWeight($faker->randomFloat(2, 45, 120));
-        $profile->setCreatedAt($now);
-        $profile->setUpdatedAt($now);
 
         $bodyTypes = ['ectomorphe', 'mesomorphe', 'endomorphe', 'triangle', 'triangle inversé', 'sablier', 'rectangle'];
         $profile->setBodyType($faker->randomElement($bodyTypes));
