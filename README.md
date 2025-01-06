@@ -6,19 +6,17 @@ Bienvenue dans le **Projet Symfony : Nom de votre projet**. Ce document explique
 
 ## Table des matières
 
-- [À propos](#à-propos)
+- [About](#About)
 - [Prérequis](#prérequis)
 - [Installation](#installation)
-- [Configuration](#configuration)
-- [Lancer le projet](#lancer-le-projet)
-- [Commandes utiles](#commandes-utiles)
-- [Structure du projet](#structure-du-projet)
+- [Start the project](#Start-the-project)
+- [Useful commands](#Useful-commands)
 - [Contribution](#contribution)
 - [Licence](#licence)
 
 ---
 
-## À propos
+## About
 
 Ce projet est une application web développée en Symfony. Elle inclut une architecture moderne avec des fonctionnalités interactives grâce à Webpack Encore et Docker.
 
@@ -38,10 +36,51 @@ Avant de commencer, assurez-vous que les outils suivants sont installés sur vot
 
 ## Installation
 
-### 1. Cloner le projet
+### 1. Clone the project
 
 Clonez le dépôt Git et naviguez dans le dossier du projet :
 
 ```bash
 git clone https://github.com/thierrymgn/shape-of-you.git
 cd shape-of-you
+```
+
+### 1. Dependance Install
+
+```bash
+composer install
+npm install
+```
+
+---
+
+## Start the project
+
+### 2. Start the docker
+
+```bash
+docker compose up -d
+```
+### 2. Symfony Part
+
+```bash
+symfony serve
+```
+
+### 3. Webpack encore Part
+
+```bash
+npm run dev
+```
+
+---
+
+## Contribution
+
+@Zeyoman
+@thierrymgn
+@EkinL
+
+---
+
+## License
