@@ -45,7 +45,7 @@ git clone https://github.com/thierrymgn/shape-of-you.git
 cd shape-of-you
 ```
 
-### 1. Dependance Install
+### 2. Dependance Install
 
 ```bash
 composer install
@@ -56,7 +56,7 @@ npm install
 
 ## Start the project
 
-### 2. Start the docker
+### 1. Start the docker
 
 ```bash
 docker compose up -d
