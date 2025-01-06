@@ -10,7 +10,6 @@ Bienvenue dans le **Projet Symfony : Nom de votre projet**. Ce document explique
 - [Prérequis](#prérequis)
 - [Installation](#installation)
 - [Start the project](#Start-the-project)
-- [Useful commands](#Useful-commands)
 - [Contribution](#contribution)
 - [License](#license)
 
