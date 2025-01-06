@@ -12,7 +12,7 @@ Bienvenue dans le **Projet Symfony : Nom de votre projet**. Ce document explique
 - [Start the project](#Start-the-project)
 - [Useful commands](#Useful-commands)
 - [Contribution](#contribution)
-- [Licence](#licence)
+- [License](#license)
 
 ---
 
