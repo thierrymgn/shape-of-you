@@ -1,4 +1,4 @@
-# Projet Symfony : Nom de votre projet
+# Projet Symfony : Shape Of You
 
 Bienvenue dans le **Projet Symfony : Nom de votre projet**. Ce document explique comment configurer, installer et lancer l'application, ainsi que les outils nécessaires pour contribuer ou explorer davantage.
 
@@ -43,5 +43,5 @@ Avant de commencer, assurez-vous que les outils suivants sont installés sur vot
 Clonez le dépôt Git et naviguez dans le dossier du projet :
 
 ```bash
-git clone https://github.com/votre-utilisateur/votre-projet.git
-cd votre-projet
+git clone https://github.com/thierrymgn/shape-of-you.git
+cd shape-of-you
