@@ -1,5 +1,7 @@
 {
     "type": "project",
+    "name": "vendor/shape-of-you",
+    "description": "A fashion recommendation site",
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
@@ -100,7 +102,10 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.6",
         "fakerphp/faker": "^1.24",
-        "phpunit/phpunit": "^9.5",
+        "friendsofphp/php-cs-fixer": "*",
+        "phpstan/phpstan": "*",
+        "phpstan/phpstan-symfony": "*",
+        "phpunit/phpunit": "*",
         "symfony/browser-kit": "7.1.*",
         "symfony/css-selector": "7.1.*",
         "symfony/debug-bundle": "7.1.*",
