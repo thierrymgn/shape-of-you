@@ -28,7 +28,7 @@ class Profile
      * @var string[]
      */
     #[ORM\Column(type: 'json')]
-    private array $stylePreferences= [];
+    private array $stylePreferences = [];
 
     /**
      * @var string[]
@@ -111,6 +111,7 @@ class Profile
 
     /**
      * @param array<string, string> $stylePreferences
+     *
      * @return $this
      */
     public function setStylePreferences(array $stylePreferences): static
@@ -130,6 +131,7 @@ class Profile
 
     /**
      * @param array<string, string> $colorPreferences
+     *
      * @return $this
      */
     public function setColorPreferences(array $colorPreferences): static
@@ -149,6 +151,7 @@ class Profile
 
     /**
      * @param array<string, string> $sizePreferences
+     *
      * @return $this
      */
     public function setSizePreferences(array $sizePreferences): static

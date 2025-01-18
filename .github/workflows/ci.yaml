@@ -49,8 +49,10 @@ jobs:
           DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}?serverVersion=16&charset=utf8
         run: vendor/bin/phpunit
 
-      - name: PHP CS Fixer
-        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+      -   name: PHP CS Fixer
+          run: |
+            vendor/bin/php-cs-fixer fix
+            git diff --exit-code
 
       - name: PHPStan
         run: vendor/bin/phpstan analyse src tests
