@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+    tests:
+        name: Tests
+        runs-on: ubuntu-latest
+        services:
+          postgres:
+            image: postgres:16-alpine
+            env:
+              POSTGRES_DB: app
+              POSTGRES_USER: app
+              POSTGRES_PASSWORD: !ChangeMe!
+            ports:
+              - 5432:5432
+            options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+        steps:
+          - uses: actions/checkout@v3
+
+          - name: Validate composer.json and composer.lock
+            run: composer validate --strict
+
+          - name: Cache Composer packages
+            id: composer-cache
+            uses: actions/cache@v3
+            with:
+              path: vendor
+              key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+              restore-keys: |
+                ${{ runner.os }}-php-
+
+          - name: Install Dependencies
+            run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+          - name: Create test database
+            run: |
+              bin/console --env=test doctrine:database:create
+              bin/console --env=test doctrine:schema:create
+
+          - name: Execute tests (Unit and Feature tests) via PHPUnit
+            env:
+              DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app_test?serverVersion=13&charset=utf8
+            run: vendor/bin/phpunit
+
+          - name: PHP CS Fixer
+            run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+          - name: PHPStan
+            run: vendor/bin/phpstan analyse src tests
+
+          - name: Security Check
+            run: composer require symfony/security-checker && php vendor/bin/security-checker security:check

@@ -16,7 +16,10 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
-    public function findChildren(Category $category)
+    /**
+     * @return array<int, Category>
+     */
+    public function findChildren(Category $category): array
     {
         return $this->createQueryBuilder('c')
             ->where('c.lft > :left')

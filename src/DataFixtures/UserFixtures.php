@@ -2,12 +2,12 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
 use App\Entity\Profile;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
@@ -18,7 +18,7 @@ class UserFixtures extends Fixture
         $this->passwordHasher = $passwordHasher;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
 
@@ -40,7 +40,7 @@ class UserFixtures extends Fixture
         $manager->persist($moderator);
         $manager->persist($moderator->getProfile());
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 20; ++$i) {
             $user = $this->createUser(
                 $faker,
                 $faker->email(),
@@ -54,8 +54,13 @@ class UserFixtures extends Fixture
         $manager->flush();
     }
 
-    private function createUser($faker, $email, $roles, $password): User
-    {
+    /** @param array<string> $roles */
+    private function createUser(
+        \Faker\Generator $faker,
+        string $email,
+        array $roles,
+        string $password,
+    ): User {
         $user = new User();
         $user->setEmail($email);
         $user->setRoles($roles);
@@ -63,12 +68,12 @@ class UserFixtures extends Fixture
         $user->setFirstName($faker->firstName());
         $user->setLastName($faker->lastName());
 
-        $user->setAvatar("https://ui-avatars.com/api/?name=" . urlencode($user->getFirstName() . "+" . $user->getLastName()));
+        $user->setAvatar('https://ui-avatars.com/api/?name='.urlencode($user->getFirstName().'+'.$user->getLastName()));
 
         $profile = new Profile();
         $profile->setCustomer($user);
-        $profile->setHeight($faker->randomFloat(2, 150, 200));
-        $profile->setWeight($faker->randomFloat(2, 45, 120));
+        $profile->setHeight((string) $faker->randomFloat(2, 150, 200));
+        $profile->setWeight((string) $faker->randomFloat(2, 45, 120));
 
         $bodyTypes = ['ectomorphe', 'mesomorphe', 'endomorphe', 'triangle', 'triangle inversé', 'sablier', 'rectangle'];
         $profile->setBodyType($faker->randomElement($bodyTypes));
@@ -76,19 +81,19 @@ class UserFixtures extends Fixture
         $stylePreferences = $faker->randomElements([
             'casual', 'business', 'sportswear', 'bohème',
             'minimaliste', 'streetwear', 'vintage', 'élégant',
-            'rock', 'preppy', 'romantique'
+            'rock', 'preppy', 'romantique',
         ], $faker->numberBetween(2, 5));
 
         $colorPreferences = $faker->randomElements([
             'noir', 'blanc', 'bleu marine', 'beige',
             'gris', 'marron', 'bordeaux', 'vert kaki',
-            'bleu ciel', 'rose poudré'
+            'bleu ciel', 'rose poudré',
         ], $faker->numberBetween(3, 6));
 
         $sizePreferences = [
             'haut' => $faker->randomElement(['XS', 'S', 'M', 'L', 'XL']),
             'bas' => $faker->randomElement(['36', '38', '40', '42', '44']),
-            'chaussures' => $faker->randomElement(['36', '37', '38', '39', '40', '41', '42', '43', '44'])
+            'chaussures' => $faker->randomElement(['36', '37', '38', '39', '40', '41', '42', '43', '44']),
         ];
 
         $profile->setStylePreferences($stylePreferences);

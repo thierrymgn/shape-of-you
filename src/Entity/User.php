@@ -53,11 +53,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(inversedBy: 'customer', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?profile $profile = null;
+    private ?Profile $profile = null;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -190,12 +197,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getProfile(): ?profile
+    public function getProfile(): ?Profile
     {
         return $this->profile;
     }
 
-    public function setProfile(profile $profile): static
+    public function setProfile(Profile $profile): static
     {
         $this->profile = $profile;
 

@@ -20,7 +20,7 @@ class CategoryFixtures extends Fixture
                             'T-shirts' => ['icon' => 'tshirt'],
                             'Chemises' => ['icon' => 'shirt'],
                             'Pulls' => ['icon' => 'sweater'],
-                        ]
+                        ],
                     ],
                     'Bas' => [
                         'icon' => 'pants',
@@ -28,30 +28,40 @@ class CategoryFixtures extends Fixture
                             'Pantalons' => ['icon' => 'pants'],
                             'Jeans' => ['icon' => 'jeans'],
                             'Jupes' => ['icon' => 'skirt'],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             'Accessoires' => [
                 'icon' => 'accessories',
                 'children' => [
                     'Bijoux' => ['icon' => 'jewelry'],
                     'Sacs' => ['icon' => 'bag'],
-                    'Chapeaux' => ['icon' => 'hat']
-                ]
-            ]
+                    'Chapeaux' => ['icon' => 'hat'],
+                ],
+            ],
         ];
 
         $this->createCategories($categories, null, $manager);
         $manager->flush();
     }
 
+    /**
+     * @param array<string, array{
+     *     icon: string,
+     *     children?: array<string, array{
+     *         icon: string,
+     *         children?: array<string, array{icon: string}>
+     *     }>
+     * }> $categories
+     */
     private function createCategories(array $categories, ?Category $parent, ObjectManager $manager): void
     {
         foreach ($categories as $name => $data) {
+            /** @var array{icon: string, children?: array<string, array{icon: string}>} $data */
             $category = new Category();
             $category->setName($name);
-            $category->setIcon($data['icon'] ?? null);
+            $category->setIcon($data['icon']);
 
             if ($parent) {
                 $category->setParent($parent);

@@ -24,13 +24,22 @@ class Profile
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $bodyType = null;
 
-    #[ORM\Column]
+    /**
+     * @var string[]
+     */
+    #[ORM\Column(type: 'json')]
     private array $stylePreferences = [];
 
-    #[ORM\Column]
+    /**
+     * @var string[]
+     */
+    #[ORM\Column(type: 'json')]
     private array $colorPreferences = [];
 
-    #[ORM\Column]
+    /**
+     * @var string[]
+     */
+    #[ORM\Column(type: 'json')]
     private array $sizePreferences = [];
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -47,6 +56,13 @@ class Profile
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getHeight(): ?string
@@ -85,11 +101,19 @@ class Profile
         return $this;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getStylePreferences(): array
     {
         return $this->stylePreferences;
     }
 
+    /**
+     * @param array<string, string> $stylePreferences
+     *
+     * @return $this
+     */
     public function setStylePreferences(array $stylePreferences): static
     {
         $this->stylePreferences = $stylePreferences;
@@ -97,11 +121,19 @@ class Profile
         return $this;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getColorPreferences(): array
     {
         return $this->colorPreferences;
     }
 
+    /**
+     * @param array<string, string> $colorPreferences
+     *
+     * @return $this
+     */
     public function setColorPreferences(array $colorPreferences): static
     {
         $this->colorPreferences = $colorPreferences;
@@ -109,11 +141,19 @@ class Profile
         return $this;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getSizePreferences(): array
     {
         return $this->sizePreferences;
     }
 
+    /**
+     * @param array<string, string> $sizePreferences
+     *
+     * @return $this
+     */
     public function setSizePreferences(array $sizePreferences): static
     {
         $this->sizePreferences = $sizePreferences;
