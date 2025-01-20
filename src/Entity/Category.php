@@ -53,9 +53,16 @@ class Category
     #[Gedmo\TreeLevel]
     private ?int $level = null;
 
+    /**
+     * @var Collection<int, WardrobeItem>
+     */
+    #[ORM\OneToMany(targetEntity: WardrobeItem::class, mappedBy: 'category')]
+    private Collection $wardrobeItems;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->wardrobeItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -192,6 +199,36 @@ class Category
     public function setLevel(int $level): static
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WardrobeItem>
+     */
+    public function getWardrobeItems(): Collection
+    {
+        return $this->wardrobeItems;
+    }
+
+    public function addWardrobeItem(WardrobeItem $wardrobeItem): static
+    {
+        if (!$this->wardrobeItems->contains($wardrobeItem)) {
+            $this->wardrobeItems->add($wardrobeItem);
+            $wardrobeItem->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWardrobeItem(WardrobeItem $wardrobeItem): static
+    {
+        if ($this->wardrobeItems->removeElement($wardrobeItem)) {
+            // set the owning side to null (unless already changed)
+            if ($wardrobeItem->getCategory() === $this) {
+                $wardrobeItem->setCategory(null);
+            }
+        }
 
         return $this;
     }
