@@ -11,4 +11,4 @@ when@test:
             not_compromised_password: false
             mapping:
                 paths:
-                    - '%kernel.project_root%/config/validator'
+                    - '%kernel.project_dir%/config/validator'
