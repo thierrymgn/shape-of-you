@@ -7,8 +7,11 @@ use App\Enum\WardrobeStatus;
 use App\Repository\WardrobeItemRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: WardrobeItemRepository::class)]
+#[Vich\Uploadable]
 class WardrobeItem
 {
     #[ORM\Id]
@@ -31,14 +34,17 @@ class WardrobeItem
     #[ORM\Column(length: 50)]
     private ?string $color = null;
 
+    #[Vich\UploadableField(mapping: 'wardrobe_items', fileNameProperty: 'image')]
+    private ?File $imageFile = null;
+
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
     #[ORM\Column(length: 255, enumType: WardrobeStatus::class)]
-    private ?WardrobeStatus $status = null;
+    private WardrobeStatus $status = WardrobeStatus::ACTIVE;
 
     #[ORM\Column(length: 255, enumType: WardrobeSeason::class)]
-    private ?WardrobeSeason $season = null;
+    private WardrobeSeason $season = WardrobeSeason::ALL;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -53,6 +59,12 @@ class WardrobeItem
     #[ORM\ManyToOne(inversedBy: 'wardrobeItems')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    public function __construct()
+    {
+        $this->status = WardrobeStatus::ACTIVE;
+        $this->season = WardrobeSeason::ALL;
+    }
 
     public function getId(): ?int
     {
@@ -126,12 +138,26 @@ class WardrobeItem
         return $this;
     }
 
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
     public function getImage(): ?string
     {
         return $this->image;
     }
 
-    public function setImage(string $image): static
+    public function setImage(?string $image): self
     {
         $this->image = $image;
 
