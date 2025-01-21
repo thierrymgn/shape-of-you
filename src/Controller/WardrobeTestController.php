@@ -24,7 +24,6 @@ class WardrobeTestController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $wardrobeItem->setCustomer($entityManager->getRepository(User::class)->findOneBy([]));
-//            $wardrobeItem->setCustomer($this->getUser()); // Nécessite d'être connecté
             $wardrobeItem->setCreatedAt(new \DateTimeImmutable());
             $wardrobeItem->setUpdatedAt(new \DateTimeImmutable());
 
