@@ -26,7 +26,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: mbstring, xml, pdo_pgsql, intl, zip
+          extensions: mbstring, xml, pdo_pgsql, intl, zip, gd
           coverage: xdebug
 
       - name: Validate composer.json and composer.lock
@@ -44,9 +44,11 @@ jobs:
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
+      - name: Create .env.test.local
+        run: |
+          echo "DATABASE_URL=\"postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}?serverVersion=16&charset=utf8\"" > .env.test.local
+
       - name: Create test database
-        env:
-          DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}?serverVersion=16&charset=utf8
         run: |
           bin/console --env=test doctrine:database:create
           bin/console --env=test doctrine:schema:create
@@ -60,10 +62,10 @@ jobs:
           DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}?serverVersion=16&charset=utf8
         run: vendor/bin/phpunit
 
-      -   name: PHP CS Fixer
-          run: |
-            vendor/bin/php-cs-fixer fix
-            git diff --exit-code
+      - name: PHP CS Fixer
+        run: |
+          vendor/bin/php-cs-fixer fix
+          git diff --exit-code
 
       - name: PHPStan
         run: vendor/bin/phpstan analyse src tests
