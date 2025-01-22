@@ -37,7 +37,7 @@ class WardrobeItem
     #[Vich\UploadableField(mapping: 'wardrobe_items', fileNameProperty: 'image')]
     private ?File $imageFile = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
     #[ORM\Column(length: 255, enumType: WardrobeStatus::class)]

@@ -51,6 +51,10 @@ jobs:
           bin/console --env=test doctrine:database:create
           bin/console --env=test doctrine:schema:create
 
+      - name: Load fixtures
+        run: |
+          bin/console --env=test doctrine:fixtures:load --no-interaction
+
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}?serverVersion=16&charset=utf8

@@ -33,6 +33,3 @@ App\Entity\WardrobeItem:
         category:
             - NotNull:
                   message: 'La catégorie est obligatoire'
-        customer:
-            - NotNull:
-                  message: 'L''utilisateur est obligatoire'

@@ -22,20 +22,21 @@ class WardrobeTestController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $wardrobeItem->setCustomer($entityManager->getRepository(User::class)->findOneBy([]));
-            $wardrobeItem->setCreatedAt(new \DateTimeImmutable());
-            $wardrobeItem->setUpdatedAt(new \DateTimeImmutable());
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $wardrobeItem->setCustomer($this->getUser());
+                $wardrobeItem->setCreatedAt(new \DateTimeImmutable());
+                $wardrobeItem->setUpdatedAt(new \DateTimeImmutable());
 
-            $category = $entityManager->getRepository(Category::class)->findOneBy([]);
-            $wardrobeItem->setCategory($category);
+                $entityManager->persist($wardrobeItem);
+                $entityManager->flush();
 
-            $entityManager->persist($wardrobeItem);
-            $entityManager->flush();
+                return $this->redirectToRoute('app_wardrobe_test');
+            }
 
-            $this->addFlash('success', 'Item ajouté avec succès !');
-
-            return $this->redirectToRoute('app_wardrobe_test');
+            return $this->render('wardrobe_test/index.html.twig', [
+                'form' => $form->createView(),
+            ], new Response(null, Response::HTTP_UNPROCESSABLE_ENTITY));
         }
 
         return $this->render('wardrobe_test/index.html.twig', [

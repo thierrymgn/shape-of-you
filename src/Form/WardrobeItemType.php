@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\WardrobeItem;
 use App\Enum\WardrobeSeason;
 use App\Enum\WardrobeStatus;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,6 +28,12 @@ class WardrobeItemType extends AbstractType
             ])
             ->add('season', EnumType::class, [
                 'class' => WardrobeSeason::class,
+            ])
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'placeholder' => 'Choisir une catégorie',
+                'required' => true
             ])
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
