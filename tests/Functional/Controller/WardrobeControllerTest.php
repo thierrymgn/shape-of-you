@@ -59,8 +59,8 @@ class WardrobeControllerTest extends WebTestCase
                 'color' => '',
                 'status' => WardrobeStatus::ACTIVE->value,
                 'season' => WardrobeSeason::ALL->value,
-                '_token' => $csrfToken
-            ]
+                '_token' => $csrfToken,
+            ],
         ];
 
         $this->client->request(
@@ -92,8 +92,8 @@ class WardrobeControllerTest extends WebTestCase
                 'status' => WardrobeStatus::ACTIVE->value,
                 'season' => WardrobeSeason::ALL->value,
                 'category' => $this->category->getId(), // Ajout de la catégorie
-                '_token' => $csrfToken
-            ]
+                '_token' => $csrfToken,
+            ],
         ];
 
         $this->client->request('POST', '/wardrobe/test', $formData);

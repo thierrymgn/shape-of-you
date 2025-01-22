@@ -33,7 +33,7 @@ class WardrobeItemType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'placeholder' => 'Choisir une catégorie',
-                'required' => true
+                'required' => true,
             ])
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
