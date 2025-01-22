@@ -22,7 +22,11 @@ class WardrobeTestController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $wardrobeItem->setCustomer($this->getUser());
+                if ($this->getUser() instanceof \App\Entity\User) {
+                    $wardrobeItem->setCustomer($this->getUser());
+                } else {
+                    throw new \InvalidArgumentException('Expected an instance of App\Entity\User.');
+                }
                 $wardrobeItem->setCreatedAt(new \DateTimeImmutable());
                 $wardrobeItem->setUpdatedAt(new \DateTimeImmutable());
 

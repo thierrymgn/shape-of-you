@@ -4,20 +4,24 @@ namespace App\Tests\Functional\Controller;
 
 use App\DataFixtures\CategoryFixtures;
 use App\DataFixtures\UserFixtures;
+use App\Entity\Category;
+use App\Entity\User;
 use App\Enum\WardrobeSeason;
 use App\Enum\WardrobeStatus;
 use App\Repository\CategoryRepository;
 use App\Repository\UserRepository;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class WardrobeControllerTest extends WebTestCase
 {
-    private $client;
-    private $databaseTool;
-    private $user;
-    private $category;
+    private KernelBrowser $client;
+    private AbstractDatabaseTool $databaseTool;
+    private User $user;
+    private Category $category;
 
     protected function setUp(): void
     {
