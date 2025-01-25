@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -54,6 +56,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(inversedBy: 'customer', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Profile $profile = null;
+
+    /**
+     * @var Collection<int, WardrobeItem>
+     */
+    #[ORM\OneToMany(targetEntity: WardrobeItem::class, mappedBy: 'customer')]
+    private Collection $wardrobeItems;
+
+    public function __construct()
+    {
+        $this->wardrobeItems = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -205,6 +218,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfile(Profile $profile): static
     {
         $this->profile = $profile;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WardrobeItem>
+     */
+    public function getWardrobeItems(): Collection
+    {
+        return $this->wardrobeItems;
+    }
+
+    public function addWardrobeItem(WardrobeItem $wardrobeItem): static
+    {
+        if (!$this->wardrobeItems->contains($wardrobeItem)) {
+            $this->wardrobeItems->add($wardrobeItem);
+            $wardrobeItem->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWardrobeItem(WardrobeItem $wardrobeItem): static
+    {
+        if ($this->wardrobeItems->removeElement($wardrobeItem)) {
+            // set the owning side to null (unless already changed)
+            if ($wardrobeItem->getCustomer() === $this) {
+                $wardrobeItem->setCustomer(null);
+            }
+        }
 
         return $this;
     }

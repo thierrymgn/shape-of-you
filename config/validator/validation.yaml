@@ -1,0 +1,35 @@
+App\Entity\WardrobeItem:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+              fields: [name, customer]
+              message: 'Un vêtement avec ce nom existe déjà dans votre garde-robe'
+    properties:
+        name:
+            - NotBlank:
+                  message: 'Le nom est obligatoire'
+            - Length:
+                  min: 2
+                  max: 255
+                  minMessage: 'Le nom doit faire au moins {{ limit }} caractères'
+                  maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
+        description:
+            - Length:
+                  max: 1000
+                  maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères'
+        brand:
+            - Length:
+                  max: 100
+                  maxMessage: 'La marque ne peut pas dépasser {{ limit }} caractères'
+        size:
+            - NotBlank:
+                  message: 'La taille est obligatoire'
+            - Length:
+                  max: 20
+        color:
+            - NotBlank:
+                  message: 'La couleur est obligatoire'
+            - Length:
+                  max: 50
+        category:
+            - NotNull:
+                  message: 'La catégorie est obligatoire'

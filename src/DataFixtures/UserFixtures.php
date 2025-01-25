@@ -30,6 +30,7 @@ class UserFixtures extends Fixture
         );
         $manager->persist($admin);
         $manager->persist($admin->getProfile());
+        $this->addReference('user_admin', $admin);
 
         $moderator = $this->createUser(
             $faker,
@@ -39,8 +40,9 @@ class UserFixtures extends Fixture
         );
         $manager->persist($moderator);
         $manager->persist($moderator->getProfile());
+        $this->addReference('user_moderator', $moderator);
 
-        for ($i = 0; $i < 20; ++$i) {
+        for ($i = 0; $i <= 10; ++$i) {
             $user = $this->createUser(
                 $faker,
                 $faker->email(),
@@ -49,6 +51,7 @@ class UserFixtures extends Fixture
             );
             $manager->persist($user);
             $manager->persist($user->getProfile());
+            $this->addReference('user_'.$i, $user);
         }
 
         $manager->flush();
