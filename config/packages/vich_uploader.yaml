@@ -12,7 +12,7 @@ vich_uploader:
 
         outfits:
             uri_prefix: /images/outfits
-            upload_destination: '%kernel.project_root%/public/image/outfits'
+            upload_destination: '%kernel.project_dir%/public/image/outfits'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
 
             delete_on_update: true
