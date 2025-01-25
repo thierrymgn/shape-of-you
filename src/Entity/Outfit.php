@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -39,9 +40,11 @@ class Outfit
     private ?File $imageFile = null;
 
     #[ORM\Column]
+    #[Gedmo\Timestampable(on: 'create')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'outfits')]
@@ -53,6 +56,9 @@ class Outfit
      */
     #[ORM\OneToMany(targetEntity: OutfitItem::class, mappedBy: 'outfit', orphanRemoval: true)]
     private Collection $outfitItems;
+
+    #[ORM\Column]
+    private ?bool $isPublic = null;
 
     public function __construct()
     {
@@ -206,6 +212,18 @@ class Outfit
                 $outfitItem->setOutfit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isPublic(): ?bool
+    {
+        return $this->isPublic;
+    }
+
+    public function setPublic(bool $isPublic): static
+    {
+        $this->isPublic = $isPublic;
 
         return $this;
     }

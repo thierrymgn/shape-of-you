@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OutfitItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: OutfitItemRepository::class)]
 class OutfitItem
@@ -25,9 +26,11 @@ class OutfitItem
     private ?int $position = null;
 
     #[ORM\Column]
+    #[Gedmo\Timestampable(on: 'create')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
