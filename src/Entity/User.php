@@ -63,9 +63,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: WardrobeItem::class, mappedBy: 'customer')]
     private Collection $wardrobeItems;
 
+    /**
+     * @var Collection<int, Outfit>
+     */
+    #[ORM\OneToMany(targetEntity: Outfit::class, mappedBy: 'customer', orphanRemoval: true)]
+    private Collection $outfits;
+
     public function __construct()
     {
         $this->wardrobeItems = new ArrayCollection();
+        $this->outfits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -246,6 +253,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($wardrobeItem->getCustomer() === $this) {
                 $wardrobeItem->setCustomer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Outfit>
+     */
+    public function getOutfits(): Collection
+    {
+        return $this->outfits;
+    }
+
+    public function addOutfit(Outfit $outfit): static
+    {
+        if (!$this->outfits->contains($outfit)) {
+            $this->outfits->add($outfit);
+            $outfit->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOutfit(Outfit $outfit): static
+    {
+        if ($this->outfits->removeElement($outfit)) {
+            // set the owning side to null (unless already changed)
+            if ($outfit->getCustomer() === $this) {
+                $outfit->setCustomer(null);
             }
         }
 

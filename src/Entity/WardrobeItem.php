@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Enum\WardrobeSeason;
 use App\Enum\WardrobeStatus;
 use App\Repository\WardrobeItemRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -63,10 +65,17 @@ class WardrobeItem
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
+    /**
+     * @var Collection<int, OutfitItem>
+     */
+    #[ORM\OneToMany(targetEntity: OutfitItem::class, mappedBy: 'wardrobeItem', orphanRemoval: true)]
+    private Collection $outfitItems;
+
     public function __construct()
     {
         $this->status = WardrobeStatus::ACTIVE;
         $this->season = WardrobeSeason::ALL;
+        $this->outfitItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -235,6 +244,36 @@ class WardrobeItem
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OutfitItem>
+     */
+    public function getOutfitItems(): Collection
+    {
+        return $this->outfitItems;
+    }
+
+    public function addOutfitItem(OutfitItem $outfitItem): static
+    {
+        if (!$this->outfitItems->contains($outfitItem)) {
+            $this->outfitItems->add($outfitItem);
+            $outfitItem->setWardrobeItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOutfitItem(OutfitItem $outfitItem): static
+    {
+        if ($this->outfitItems->removeElement($outfitItem)) {
+            // set the owning side to null (unless already changed)
+            if ($outfitItem->getWardrobeItem() === $this) {
+                $outfitItem->setWardrobeItem(null);
+            }
+        }
 
         return $this;
     }
