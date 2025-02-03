@@ -3,8 +3,7 @@
 namespace App\Entity;
 
 use App\Enum\WardrobeSeason;
-use App\Enum\WardrobeStatus;
-use App\Repository\WardrobeItemRepository;
+use App\Repository\OutfitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -13,9 +12,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-#[ORM\Entity(repositoryClass: WardrobeItemRepository::class)]
+#[ORM\Entity(repositoryClass: OutfitRepository::class)]
 #[Vich\Uploadable]
-class WardrobeItem
+class Outfit
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,26 +27,17 @@ class WardrobeItem
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $brand = null;
+    #[ORM\Column(length: 100)]
+    private ?string $occasion = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $size = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $color = null;
-
-    #[Vich\UploadableField(mapping: 'wardrobe_items', fileNameProperty: 'image')]
-    private ?File $imageFile = null;
+    #[ORM\Column(enumType: WardrobeSeason::class)]
+    private ?WardrobeSeason $season = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\Column(length: 255, enumType: WardrobeStatus::class)]
-    private WardrobeStatus $status = WardrobeStatus::ACTIVE;
-
-    #[ORM\Column(length: 255, enumType: WardrobeSeason::class)]
-    private WardrobeSeason $season = WardrobeSeason::ALL;
+    #[Vich\UploadableField(mapping: 'outfits', fileNameProperty: 'image')]
+    private ?File $imageFile = null;
 
     #[ORM\Column]
     #[Gedmo\Timestampable(on: 'create')]
@@ -57,24 +47,21 @@ class WardrobeItem
     #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'wardrobeItems')]
+    #[ORM\ManyToOne(inversedBy: 'outfits')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $customer = null;
-
-    #[ORM\ManyToOne(inversedBy: 'wardrobeItems')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Category $category = null;
 
     /**
      * @var Collection<int, OutfitItem>
      */
-    #[ORM\OneToMany(targetEntity: OutfitItem::class, mappedBy: 'wardrobeItem', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: OutfitItem::class, mappedBy: 'outfit', orphanRemoval: true)]
     private Collection $outfitItems;
+
+    #[ORM\Column]
+    private ?bool $isPublic = null;
 
     public function __construct()
     {
-        $this->status = WardrobeStatus::ACTIVE;
-        $this->season = WardrobeSeason::ALL;
         $this->outfitItems = new ArrayCollection();
     }
 
@@ -114,54 +101,28 @@ class WardrobeItem
         return $this;
     }
 
-    public function getBrand(): ?string
+    public function getOccasion(): ?string
     {
-        return $this->brand;
+        return $this->occasion;
     }
 
-    public function setBrand(?string $brand): static
+    public function setOccasion(string $occasion): static
     {
-        $this->brand = $brand;
+        $this->occasion = $occasion;
 
         return $this;
     }
 
-    public function getSize(): ?string
+    public function getSeason(): ?WardrobeSeason
     {
-        return $this->size;
+        return $this->season;
     }
 
-    public function setSize(string $size): static
+    public function setSeason(WardrobeSeason $season): static
     {
-        $this->size = $size;
+        $this->season = $season;
 
         return $this;
-    }
-
-    public function getColor(): ?string
-    {
-        return $this->color;
-    }
-
-    public function setColor(string $color): static
-    {
-        $this->color = $color;
-
-        return $this;
-    }
-
-    public function setImageFile(?File $imageFile = null): void
-    {
-        $this->imageFile = $imageFile;
-
-        if (null !== $imageFile) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-    }
-
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
     }
 
     public function getImage(): ?string
@@ -169,35 +130,24 @@ class WardrobeItem
         return $this->image;
     }
 
-    public function setImage(?string $image): self
+    public function setImage(?string $image): static
     {
         $this->image = $image;
 
         return $this;
     }
 
-    public function getStatus(): WardrobeStatus
+    public function getImageFile(): ?File
     {
-        return $this->status;
+        return $this->imageFile;
     }
 
-    public function setStatus(WardrobeStatus $status): self
+    public function setImageFile(?File $imageFile = null): void
     {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getSeason(): WardrobeSeason
-    {
-        return $this->season;
-    }
-
-    public function setSeason(WardrobeSeason $season): self
-    {
-        $this->season = $season;
-
-        return $this;
+        $this->imageFile = $imageFile;
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -236,18 +186,6 @@ class WardrobeItem
         return $this;
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, OutfitItem>
      */
@@ -260,7 +198,7 @@ class WardrobeItem
     {
         if (!$this->outfitItems->contains($outfitItem)) {
             $this->outfitItems->add($outfitItem);
-            $outfitItem->setWardrobeItem($this);
+            $outfitItem->setOutfit($this);
         }
 
         return $this;
@@ -270,10 +208,22 @@ class WardrobeItem
     {
         if ($this->outfitItems->removeElement($outfitItem)) {
             // set the owning side to null (unless already changed)
-            if ($outfitItem->getWardrobeItem() === $this) {
-                $outfitItem->setWardrobeItem(null);
+            if ($outfitItem->getOutfit() === $this) {
+                $outfitItem->setOutfit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isPublic(): ?bool
+    {
+        return $this->isPublic;
+    }
+
+    public function setPublic(bool $isPublic): static
+    {
+        $this->isPublic = $isPublic;
 
         return $this;
     }

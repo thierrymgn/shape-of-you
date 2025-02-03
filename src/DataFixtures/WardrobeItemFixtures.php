@@ -40,7 +40,7 @@ class WardrobeItemFixtures extends Fixture implements DependentFixtureInterface
         );
 
         foreach ($users as $userRef) {
-            $usedCategories = []; // Pour suivre les catégories utilisées par utilisateur
+            $usedCategories = [];
 
             for ($i = 0; $i < 5; ++$i) {
                 $item = new WardrobeItem();
@@ -50,7 +50,7 @@ class WardrobeItemFixtures extends Fixture implements DependentFixtureInterface
                 $item->setSize($faker->randomElement(['XS', 'S', 'M', 'L', 'XL']));
                 $item->setColor($faker->safeColorName);
                 $item->setStatus(WardrobeStatus::ACTIVE);
-                $item->setSeason(WardrobeSeason::ALL);
+                $item->setSeason($faker->randomElement(WardrobeSeason::getSeasons()));
                 $item->setImage($faker->imageUrl());
 
                 do {
@@ -62,6 +62,8 @@ class WardrobeItemFixtures extends Fixture implements DependentFixtureInterface
                 $item->setCustomer($this->getReference($userRef, User::class));
 
                 $manager->persist($item);
+
+                $this->addReference('wardrobe_item_'.$userRef.'_'.$i, $item);
             }
         }
 
