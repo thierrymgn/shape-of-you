@@ -11,6 +11,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Faker\Generator;
 
 class WardrobeItemFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -43,16 +44,19 @@ class WardrobeItemFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
+    /**
+     * @return array<string>
+     */
     private function getUserReferences(): array
     {
         return [
             'user_admin',
             'user_moderator',
-            ...array_map(fn($i) => 'user_'.$i, range(1, 10)),
+            ...array_map(fn ($i): string => 'user_'.$i, range(1, 10)),
         ];
     }
 
-    private function createUserItems(ObjectManager $manager, \Faker\Generator $faker, string $userRef): void
+    private function createUserItems(ObjectManager $manager, Generator $faker, string $userRef): void
     {
         $categories = $faker->randomElements(self::CATEGORY_REFERENCES, self::ITEMS_PER_USER);
 
@@ -63,7 +67,7 @@ class WardrobeItemFixtures extends Fixture implements DependentFixtureInterface
         }
     }
 
-    private function createWardrobeItem(\Faker\Generator $faker, string $userRef, string $categoryRef): WardrobeItem
+    private function createWardrobeItem(Generator $faker, string $userRef, string $categoryRef): WardrobeItem
     {
         return (new WardrobeItem())
             ->setName($faker->words(3, true))

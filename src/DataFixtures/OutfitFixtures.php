@@ -11,6 +11,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Faker\Generator;
 
 class OutfitFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -31,16 +32,19 @@ class OutfitFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
+    /**
+     * @return array<string>
+     */
     private function getUserReferences(): array
     {
         return [
             'user_admin',
             'user_moderator',
-            ...array_map(fn($i) => 'user_'.$i, range(1, 10)),
+            ...array_map(fn ($i): string => 'user_'.$i, range(1, 10)),
         ];
     }
 
-    private function createOutfitsForUser(ObjectManager $manager, \Faker\Generator $faker, string $userRef): void
+    private function createOutfitsForUser(ObjectManager $manager, Generator $faker, string $userRef): void
     {
         for ($i = 0; $i < self::OUTFITS_PER_USER; ++$i) {
             $outfit = $this->createOutfit($faker, $userRef);
@@ -50,7 +54,7 @@ class OutfitFixtures extends Fixture implements DependentFixtureInterface
         }
     }
 
-    private function createOutfit(\Faker\Generator $faker, string $userRef): Outfit
+    private function createOutfit(Generator $faker, string $userRef): Outfit
     {
         return (new Outfit())
             ->setName($faker->words(3, true))
@@ -62,7 +66,7 @@ class OutfitFixtures extends Fixture implements DependentFixtureInterface
             ->setCustomer($this->getReference($userRef, User::class));
     }
 
-    private function addItemsToOutfit(ObjectManager $manager, \Faker\Generator $faker, Outfit $outfit, string $userRef): void
+    private function addItemsToOutfit(ObjectManager $manager, Generator $faker, Outfit $outfit, string $userRef): void
     {
         $itemCount = $faker->numberBetween(self::MIN_ITEMS_PER_OUTFIT, self::MAX_ITEMS_PER_OUTFIT);
 
