@@ -11,63 +11,75 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Faker\Generator;
 
 class WardrobeItemFixtures extends Fixture implements DependentFixtureInterface
 {
+    private const ITEMS_PER_USER = 5;
+    private const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
+    private const CATEGORY_REFERENCES = [
+        'category_t-shirts',
+        'category_chemises',
+        'category_pulls',
+        'category_hauts',
+        'category_pantalons',
+        'category_jeans',
+        'category_jupes',
+        'category_bas',
+        'category_vêtements',
+        'category_bijoux',
+        'category_sacs',
+        'category_chapeaux',
+        'category_accessoires',
+    ];
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
 
-        $categories = [
-            'category_t-shirts',
-            'category_chemises',
-            'category_pulls',
-            'category_hauts',
-            'category_pantalons',
-            'category_jeans',
-            'category_jupes',
-            'category_bas',
-            'category_vêtements',
-            'category_bijoux',
-            'category_sacs',
-            'category_chapeaux',
-            'category_accessoires',
-        ];
-
-        $users = array_merge(
-            ['user_admin', 'user_moderator'],
-            array_map(function ($i) { return 'user_'.$i; }, range(1, 10))
-        );
-
-        foreach ($users as $userRef) {
-            $usedCategories = [];
-
-            for ($i = 0; $i < 5; ++$i) {
-                $item = new WardrobeItem();
-                $item->setName($faker->words(3, true));
-                $item->setDescription($faker->text());
-                $item->setBrand($faker->company());
-                $item->setSize($faker->randomElement(['XS', 'S', 'M', 'L', 'XL']));
-                $item->setColor($faker->safeColorName);
-                $item->setStatus(WardrobeStatus::ACTIVE);
-                $item->setSeason($faker->randomElement(WardrobeSeason::getSeasons()));
-                $item->setImage($faker->imageUrl());
-
-                do {
-                    $randomCategory = $faker->randomElement($categories);
-                } while (in_array($randomCategory, $usedCategories));
-
-                $usedCategories[] = $randomCategory;
-                $item->setCategory($this->getReference($randomCategory, Category::class));
-                $item->setCustomer($this->getReference($userRef, User::class));
-
-                $manager->persist($item);
-
-                $this->addReference('wardrobe_item_'.$userRef.'_'.$i, $item);
-            }
+        foreach ($this->getUserReferences() as $userRef) {
+            $this->createUserItems($manager, $faker, $userRef);
         }
 
         $manager->flush();
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function getUserReferences(): array
+    {
+        return [
+            'user_admin',
+            'user_moderator',
+            ...array_map(fn ($i): string => 'user_'.$i, range(1, 10)),
+        ];
+    }
+
+    private function createUserItems(ObjectManager $manager, Generator $faker, string $userRef): void
+    {
+        $categories = $faker->randomElements(self::CATEGORY_REFERENCES, self::ITEMS_PER_USER);
+
+        foreach ($categories as $index => $categoryRef) {
+            $item = $this->createWardrobeItem($faker, $userRef, $categoryRef);
+            $manager->persist($item);
+            $this->addReference("wardrobe_item_{$userRef}_{$index}", $item);
+        }
+    }
+
+    private function createWardrobeItem(Generator $faker, string $userRef, string $categoryRef): WardrobeItem
+    {
+        return (new WardrobeItem())
+            ->setName($faker->words(3, true))
+            ->setDescription($faker->text())
+            ->setBrand($faker->company())
+            ->setSize($faker->randomElement(self::SIZES))
+            ->setColor($faker->safeColorName)
+            ->setStatus(WardrobeStatus::ACTIVE)
+            ->setSeason($faker->randomElement(WardrobeSeason::getSeasons()))
+            ->setImage($faker->imageUrl())
+            ->setCategory($this->getReference($categoryRef, Category::class))
+            ->setCustomer($this->getReference($userRef, User::class));
     }
 
     public function getDependencies(): array
