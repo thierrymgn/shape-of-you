@@ -7,6 +7,7 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
@@ -59,7 +60,7 @@ class UserFixtures extends Fixture
 
     /** @param array<string> $roles */
     private function createUser(
-        \Faker\Generator $faker,
+        Generator $faker,
         string $email,
         array $roles,
         string $password,
