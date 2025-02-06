@@ -54,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\OneToOne(inversedBy: 'customer', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Profile $profile = null;
 
     /**
@@ -68,6 +68,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Outfit::class, mappedBy: 'customer', orphanRemoval: true)]
     private Collection $outfits;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $googleId = null;
 
     public function __construct()
     {
@@ -285,6 +288,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $outfit->setCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGoogleId(): ?string
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(?string $googleId): static
+    {
+        $this->googleId = $googleId;
 
         return $this;
     }
