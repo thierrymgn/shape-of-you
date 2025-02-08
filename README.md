@@ -1,32 +1,31 @@
-# Projet Symfony : Nom de votre projet
+Bienvenue dans le projet **Shape Of You** !
 
-Bienvenue dans le **Projet Symfony : Nom de votre projet**. Ce document explique comment configurer, installer et lancer l'application, ainsi que les outils nécessaires pour contribuer ou explorer davantage.
-
----
-
-## Table des matières
-
-- [À propos](#à-propos)
-- [Prérequis](#prérequis)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Lancer le projet](#lancer-le-projet)
-- [Commandes utiles](#commandes-utiles)
-- [Structure du projet](#structure-du-projet)
-- [Contribution](#contribution)
-- [Licence](#licence)
+Shape Of You est une application mobile-first conçue pour aider les utilisateurs à mieux s'habiller en fonction de leur morphologie, des tendances actuelles et des conseils de mode. L'application propose également des fonctionnalités autour de la mode durable telles que la seconde main, l'éco-conception, l'upcycling, la couture et la personnalisation.
 
 ---
 
-## À propos
+## 📌 **Table des matières**
 
-Ce projet est une application web développée en Symfony. Elle inclut une architecture moderne avec des fonctionnalités interactives grâce à Webpack Encore et Docker.
+- [📝 À propos](#-À-propos)
+- [📦 Prérequis](#-Prérequis)
+- [⚙️ Installation](#-Installation)
+- [🚀 Lancement du projet](#-Lancement-du-projet)
+- [🤝 Contribution](#-Contribution)
+- [📜 Licence](#-Licence)
 
 ---
 
-## Prérequis
+## 📝 **À propos**
 
-Avant de commencer, assurez-vous que les outils suivants sont installés sur votre machine :
+Ce projet est une application web développée en **Symfony**, intégrant **Webpack Encore** pour la gestion des assets et utilisant **Docker** pour simplifier l'environnement de développement.
+
+L'architecture repose sur des technologies modernes pour offrir une expérience utilisateur fluide et interactive.
+
+---
+
+## 📦 **Prérequis**
+
+Avant de commencer, assurez-vous d'avoir les outils suivants installés sur votre machine :
 
 - **PHP** (>= 8.1)
 - **Composer** (gestionnaire de dépendances PHP)
@@ -36,12 +35,86 @@ Avant de commencer, assurez-vous que les outils suivants sont installés sur vot
 
 ---
 
-## Installation
+## ⚙️ **Installation**
 
-### 1. Cloner le projet
+### 1️⃣ **Cloner le projet**
 
-Clonez le dépôt Git et naviguez dans le dossier du projet :
+Clonez le dépôt Git et accédez au dossier du projet :
 
 ```bash
-git clone https://github.com/votre-utilisateur/votre-projet.git
-cd votre-projet
+git clone https://github.com/thierrymgn/shape-of-you.git
+cd shape-of-you
+```
+
+### 2️⃣ **Installer les dépendances PHP et JavaScript**
+
+Installez les dépendances PHP :
+
+```bash
+composer install
+```
+
+Installez les dépendances JavaScript :
+
+```bash
+npm install
+```
+
+### 3️⃣ **Configurer les variables d'environnement**
+
+Copiez le fichier `.env` et ajustez les configurations si nécessaire :
+
+```bash
+cp .env.example .env
+```
+
+Si besoin, modifiez le fichier `.env` pour configurer la base de données, par exemple :
+
+```env
+DATABASE_URL=mysql://user:password@127.0.0.1:3306/shape_of_you
+```
+
+---
+
+## 🚀 **Lancement du projet**
+
+### 1️⃣ **Démarrer l’environnement Docker**
+
+Lancez les conteneurs nécessaires :
+
+```bash
+docker compose up -d
+```
+
+### 2️⃣ **Démarrer le serveur Symfony**
+
+```bash
+symfony serve
+```
+
+### 3️⃣ **Lancer Webpack Encore pour la compilation des assets**
+
+```bash
+npm run watch
+```
+
+Votre application est maintenant accessible à l'adresse :  
+➡️ **http://127.0.0.1:8000**
+
+---
+
+## 🤝 **Contribution**
+
+Les contributeurs de ce projet :
+
+- @Zeyoman
+- @thierrymgn
+- @EkinL
+
+---
+
+## 📜 **Licence**
+
+**MIT License**  
+\
+© 2025 **Thierry MGN, Zeyoman, EkinL**
