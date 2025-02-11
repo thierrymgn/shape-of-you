@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Tests\Unit\Entity;
-
 use App\Entity\Comment;
-
 use PHPUnit\Framework\TestCase;
 
 class CommentTest extends TestCase
