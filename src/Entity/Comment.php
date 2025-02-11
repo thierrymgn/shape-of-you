@@ -12,7 +12,6 @@ class Comment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    /* @phpstan-ignore-next-line */
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -34,6 +33,13 @@ class Comment
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getId(): ?int
