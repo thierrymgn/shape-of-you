@@ -29,6 +29,9 @@ class Comment
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?User $userId = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -103,6 +106,18 @@ class Comment
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUserId(): ?User
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(?User $userId): static
+    {
+        $this->userId = $userId;
 
         return $this;
     }
