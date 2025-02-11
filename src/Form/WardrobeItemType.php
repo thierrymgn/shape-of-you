@@ -9,6 +9,10 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use App\Enum\WardrobeStatus;
+use App\Enum\WardrobeSeason;
+
 
 class WardrobeItemType extends AbstractType
 {
@@ -21,8 +25,15 @@ class WardrobeItemType extends AbstractType
             ->add('size')
             ->add('color')
             ->add('image')
-            ->add('status')
-            ->add('season')
+            ->add('status', EnumType::class, [
+                'class' => WardrobeStatus::class,
+                'choice_label' => fn (WardrobeStatus $wardrobeStatus) => $wardrobeStatus->getStatuses(),
+
+            ])
+            ->add('season', EnumType::class, [
+                'class' => WardrobeSeason::class,
+                'choice_label' => fn (WardrobeSeason $wardrobeSeason) => $wardrobeSeason->getSeasons(),
+            ])
             ->add('createdAt', null, [
                 'widget' => 'single_text',
             ])
