@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}WardrobeItem index
+{% endblock %}
+
+{% block body %}
+	<h1>WardrobeItem index</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Brand</th>
+				<th>Size</th>
+				<th>Color</th>
+				<th>Image</th>
+				<th>Status</th>
+				<th>Season</th>
+				<th>CreatedAt</th>
+				<th>UpdatedAt</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for wardrobe_item in wardrobe_items %}
+				<tr>
+					<td>{{ wardrobe_item.id }}</td>
+					<td>{{ wardrobe_item.name }}</td>
+					<td>{{ wardrobe_item.description }}</td>
+					<td>{{ wardrobe_item.brand }}</td>
+					<td>{{ wardrobe_item.size }}</td>
+					<td>{{ wardrobe_item.color }}</td>
+					<td>{{ wardrobe_item.image }}</td>
+					<td>{{ wardrobe_item.status.value }}</td>
+					<td>{{ wardrobe_item.season.value }}</td>
+					<td>{{ wardrobe_item.createdAt ? wardrobe_item.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+					<td>{{ wardrobe_item.updatedAt ? wardrobe_item.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+					<td>
+						<a href="{{ path('app_wardrobe_item_show', {'id': wardrobe_item.id}) }}">show</a>
+						<a href="{{ path('app_wardrobe_item_edit', {'id': wardrobe_item.id}) }}">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="12">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_wardrobe_item_new') }}">Create new</a>
+{% endblock %}

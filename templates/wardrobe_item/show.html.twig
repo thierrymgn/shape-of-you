@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}WardrobeItem{% endblock %}
+
+{% block body %}
+    <h1>WardrobeItem</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ wardrobe_item.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ wardrobe_item.name }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ wardrobe_item.description }}</td>
+            </tr>
+            <tr>
+                <th>Brand</th>
+                <td>{{ wardrobe_item.brand }}</td>
+            </tr>
+            <tr>
+                <th>Size</th>
+                <td>{{ wardrobe_item.size }}</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>{{ wardrobe_item.color }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ wardrobe_item.image }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ wardrobe_item.status }}</td>
+            </tr>
+            <tr>
+                <th>Season</th>
+                <td>{{ wardrobe_item.season }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ wardrobe_item.createdAt ? wardrobe_item.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ wardrobe_item.updatedAt ? wardrobe_item.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_wardrobe_item_index') }}">back to list</a>
+
+    <a href="{{ path('app_wardrobe_item_edit', {'id': wardrobe_item.id}) }}">edit</a>
+
+    {{ include('wardrobe_item/_delete_form.html.twig') }}
+{% endblock %}
