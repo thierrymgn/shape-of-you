@@ -33,5 +33,4 @@ class CommentTest extends TestCase
 
         $this->assertEquals($now, $this->comment->getCreatedAt());
     }
-
 }
