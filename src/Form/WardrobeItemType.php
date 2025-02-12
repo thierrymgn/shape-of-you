@@ -32,12 +32,6 @@ class WardrobeItemType extends AbstractType
                 'class' => WardrobeSeason::class,
                 'choice_label' => fn (WardrobeSeason $wardrobeSeason) => $wardrobeSeason->name, // ou getLabel() si défini
             ])
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updatedAt', null, [
-                'widget' => 'single_text',
-            ])
             ->add('customer', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',
