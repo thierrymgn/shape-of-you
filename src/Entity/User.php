@@ -72,20 +72,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Follow>
      */
-    #[ORM\OneToMany(mappedBy: 'follower', targetEntity: Follow::class, orphanRemoval: true)]
-    private Collection $followings;
+    #[ORM\OneToMany(targetEntity: Follow::class, mappedBy: 'follower')]
+    private Collection $following;
 
     /**
      * @var Collection<int, Follow>
      */
-    #[ORM\OneToMany(mappedBy: 'following', targetEntity: Follow::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Follow::class, mappedBy: 'following')]
     private Collection $followers;
 
     public function __construct()
     {
         $this->wardrobeItems = new ArrayCollection();
         $this->outfits = new ArrayCollection();
-        $this->followings = new ArrayCollection();
+        $this->following = new ArrayCollection();
         $this->followers = new ArrayCollection();
     }
 
@@ -306,28 +306,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Follow>
      */
-    public function getFollowings(): Collection
+    public function getFollowing(): Collection
     {
-        return $this->followings;
+        return $this->following;
     }
 
-    public function addFollowing(Follow $follow): self
+    public function addFollowing(Follow $following): static
     {
-        if (!$this->followings->contains($follow)) {
-            $this->followings[] = $follow;
-            $follow->setFollower($this);
+        if (!$this->following->contains($following)) {
+            $this->following->add($following);
+            $following->setFollower($this);
         }
+
         return $this;
     }
 
-    public function removeFollowing(Follow $follow): self
+    public function removeFollowing(Follow $following): static
     {
-        if ($this->followings->removeElement($follow)) {
+        if ($this->following->removeElement($following)) {
             // set the owning side to null (unless already changed)
-            if ($follow->getFollower() === $this) {
-                $follow->setFollower(null);
+            if ($following->getFollower() === $this) {
+                $following->setFollower(null);
             }
         }
+
         return $this;
     }
 
@@ -339,23 +341,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->followers;
     }
 
-    public function addFollower(Follow $follow): self
+    public function addFollower(Follow $follower): static
     {
-        if (!$this->followers->contains($follow)) {
-            $this->followers[] = $follow;
-            $follow->setFollowing($this);
+        if (!$this->followers->contains($follower)) {
+            $this->followers->add($follower);
+            $follower->setFollowing($this);
         }
+
         return $this;
     }
 
-    public function removeFollower(Follow $follow): self
+    public function removeFollower(Follow $follower): static
     {
-        if ($this->followers->removeElement($follow)) {
+        if ($this->followers->removeElement($follower)) {
             // set the owning side to null (unless already changed)
-            if ($follow->getFollowing() === $this) {
-                $follow->setFollowing(null);
+            if ($follower->getFollowing() === $this) {
+                $follower->setFollowing(null);
             }
         }
+
         return $this;
     }
 }
