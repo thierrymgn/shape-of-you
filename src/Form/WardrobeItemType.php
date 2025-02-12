@@ -5,14 +5,13 @@ namespace App\Form;
 use App\Entity\Category;
 use App\Entity\User;
 use App\Entity\WardrobeItem;
+use App\Enum\WardrobeSeason;
+use App\Enum\WardrobeStatus;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use App\Enum\WardrobeStatus;
-use App\Enum\WardrobeSeason;
-
 
 class WardrobeItemType extends AbstractType
 {
@@ -27,12 +26,11 @@ class WardrobeItemType extends AbstractType
             ->add('image')
             ->add('status', EnumType::class, [
                 'class' => WardrobeStatus::class,
-                'choice_label' => fn (WardrobeStatus $wardrobeStatus) => $wardrobeStatus->getStatuses(),
-
+                'choice_label' => fn (WardrobeStatus $wardrobeStatus) => $wardrobeStatus->name, // ou getLabel() si défini
             ])
             ->add('season', EnumType::class, [
                 'class' => WardrobeSeason::class,
-                'choice_label' => fn (WardrobeSeason $wardrobeSeason) => $wardrobeSeason->getSeasons(),
+                'choice_label' => fn (WardrobeSeason $wardrobeSeason) => $wardrobeSeason->name, // ou getLabel() si défini
             ])
             ->add('createdAt', null, [
                 'widget' => 'single_text',
@@ -42,11 +40,11 @@ class WardrobeItemType extends AbstractType
             ])
             ->add('customer', EntityType::class, [
                 'class' => User::class,
-'choice_label' => 'id',
+                'choice_label' => 'id',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-'choice_label' => 'id',
+                'choice_label' => 'id',
             ])
         ;
     }
