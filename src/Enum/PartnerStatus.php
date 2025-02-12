@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-# App\Enum\PartnerStatus
+// App\Enum\PartnerStatus
 
 enum PartnerStatus: string
 {
