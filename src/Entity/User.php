@@ -54,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\OneToOne(inversedBy: 'customer', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Profile $profile = null;
 
     /**
@@ -81,12 +81,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Follow::class, mappedBy: 'following')]
     private Collection $followers;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $googleId = null;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'userId')]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->wardrobeItems = new ArrayCollection();
         $this->outfits = new ArrayCollection();
         $this->following = new ArrayCollection();
         $this->followers = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -329,6 +339,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $following->setFollower(null);
             }
         }
+    public function getGoogleId(): ?string
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(?string $googleId): static
+    {
+        $this->googleId = $googleId;
 
         return $this;
     }
@@ -346,10 +364,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (!$this->followers->contains($follower)) {
             $this->followers->add($follower);
             $follower->setFollowing($this);
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setUserId($this);
         }
 
         return $this;
     }
+
 
     public function removeFollower(Follow $follower): static
     {
@@ -357,6 +389,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($follower->getFollowing() === $this) {
                 $follower->setFollowing(null);
+            }
+        }
+    }
+          
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getUserId() === $this) {
+                $comment->setUserId(null);
             }
         }
 
