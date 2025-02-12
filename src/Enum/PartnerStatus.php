@@ -2,7 +2,6 @@
 
 namespace App\Enum;
 
-
 enum PartnerStatus: string
 {
     case ACTIVE = 'active';
