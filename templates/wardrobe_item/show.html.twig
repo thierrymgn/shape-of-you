@@ -4,62 +4,520 @@
 {% endblock %}
 
 {% block body %}
-	<h1>WardrobeItem</h1>
+	<div class="bg-white">
+		<div class="relative z-40 lg:hidden" role="dialog" aria-modal="true">
+			<div class="fixed inset-0 bg-black/25" aria-hidden="true"></div>
 
-	<table class="table">
-		<tbody>
-			<tr>
-				<th>Id</th>
-				<td>{{ wardrobe_item.id }}</td>
-			</tr>
-			<tr>
-				<th>Name</th>
-				<td>{{ wardrobe_item.name }}</td>
-			</tr>
-			<tr>
-				<th>Description</th>
-				<td>{{ wardrobe_item.description }}</td>
-			</tr>
-			<tr>
-				<th>Brand</th>
-				<td>{{ wardrobe_item.brand }}</td>
-			</tr>
-			<tr>
-				<th>Size</th>
-				<td>{{ wardrobe_item.size }}</td>
-			</tr>
-			<tr>
-				<th>Color</th>
-				<td>{{ wardrobe_item.color }}</td>
-			</tr>
-			<tr>
-				<th>Image</th>
-				<td>
-					<img src="{{ wardrobe_item.image }}" alt="{{ wardrobe_item.name }}" style="max-width: 200px;">
-				</td>
-			</tr>
-			<tr>
-				<th>Status</th>
-				<td>{{ wardrobe_item.status.value }}</td>
-			</tr>
-			<tr>
-				<th>Season</th>
-				<td>{{ wardrobe_item.season.value }}</td>
-			</tr>
-			<tr>
-				<th>CreatedAt</th>
-				<td>{{ wardrobe_item.createdAt ? wardrobe_item.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-			</tr>
-			<tr>
-				<th>UpdatedAt</th>
-				<td>{{ wardrobe_item.updatedAt ? wardrobe_item.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-			</tr>
-		</tbody>
-	</table>
+			<div class="fixed inset-0 z-40 flex">
+				<div class="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl">
+					<div class="flex px-4 pt-5 pb-2">
+						<button type="button" class="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400">
+							<span class="sr-only">Close menu</span>
+							<svg class="size-6" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+							</svg>
+						</button>
+					</div>
+					<div class="mt-2">
+						<div class="border-b border-gray-200">
+							<div class="-mb-px flex space-x-8 px-4" aria-orientation="horizontal" role="tablist">
+								<button id="tabs-1-tab-1" class="flex-1 border-b-2 border-transparent px-1 py-4 text-base font-medium whitespace-nowrap text-gray-900" aria-controls="tabs-1-panel-1" role="tab" type="button">Women</button>
+								<button id="tabs-1-tab-2" class="flex-1 border-b-2 border-transparent px-1 py-4 text-base font-medium whitespace-nowrap text-gray-900" aria-controls="tabs-1-panel-2" role="tab" type="button">Men</button>
+							</div>
+						</div>
+						<div id="tabs-1-panel-1" class="space-y-10 px-4 pt-10 pb-8" aria-labelledby="tabs-1-tab-1" role="tabpanel" tabindex="0">
+							<div class="space-y-4">
+								<div class="group relative overflow-hidden rounded-md bg-gray-100">
+									<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg" alt="Models sitting back to back, wearing Basic Tee in black and bone." class="aspect-square w-full object-cover group-hover:opacity-75">
+									<div class="absolute inset-0 flex flex-col justify-end">
+										<div class="bg-white/60 p-4 text-base sm:text-sm">
+											<a href="#" class="font-medium text-gray-900">
+												<span class="absolute inset-0" aria-hidden="true"></span>
+												New Arrivals
+											</a>
+											<p aria-hidden="true" class="mt-0.5 text-gray-700 sm:mt-1">Shop now</p>
+										</div>
+									</div>
+								</div>
+								<div class="group relative overflow-hidden rounded-md bg-gray-100">
+									<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg" alt="Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees." class="aspect-square w-full object-cover group-hover:opacity-75">
+									<div class="absolute inset-0 flex flex-col justify-end">
+										<div class="bg-white/60 p-4 text-base sm:text-sm">
+											<a href="#" class="font-medium text-gray-900">
+												<span class="absolute inset-0" aria-hidden="true"></span>
+												Basic Tees
+											</a>
+											<p aria-hidden="true" class="mt-0.5 text-gray-700 sm:mt-1">Shop now</p>
+										</div>
+									</div>
+								</div>
+								<div class="group relative overflow-hidden rounded-md bg-gray-100">
+									<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/mega-menu-category-03.jpg" alt="Model wearing minimalist watch with black wristband and white watch face." class="aspect-square w-full object-cover group-hover:opacity-75">
+									<div class="absolute inset-0 flex flex-col justify-end">
+										<div class="bg-white/60 p-4 text-base sm:text-sm">
+											<a href="#" class="font-medium text-gray-900">
+												<span class="absolute inset-0" aria-hidden="true"></span>
+												Accessories
+											</a>
+											<p aria-hidden="true" class="mt-0.5 text-gray-700 sm:mt-1">Shop now</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="space-y-10">
+								<div>
+									<p id="women-shoes-heading-mobile" class="font-medium text-gray-900">Shoes &amp; Accessories</p>
+									<ul role="list" aria-labelledby="women-shoes-heading-mobile" class="mt-6 flex flex-col space-y-6">
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Sneakers</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Boots</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Flats</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Sandals</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Heels</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Socks</a>
+										</li>
+									</ul>
+								</div>
+								<div>
+									<p id="women-collection-heading-mobile" class="font-medium text-gray-900">Shop Collection</p>
+									<ul role="list" aria-labelledby="women-collection-heading-mobile" class="mt-6 flex flex-col space-y-6">
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Everything</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Core</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">New Arrivals</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Sale</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Accessories</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="space-y-10">
+								<div>
+									<p id="women-clothing-heading-mobile" class="font-medium text-gray-900">All Clothing</p>
+									<ul role="list" aria-labelledby="women-clothing-heading-mobile" class="mt-6 flex flex-col space-y-6">
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Basic Tees</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Artwork Tees</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Tops</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Bottoms</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Swimwear</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Underwear</a>
+										</li>
+									</ul>
+								</div>
+								<div>
+									<p id="women-accessories-heading-mobile" class="font-medium text-gray-900">All Accessories</p>
+									<ul role="list" aria-labelledby="women-accessories-heading-mobile" class="mt-6 flex flex-col space-y-6">
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Watches</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Wallets</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Bags</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Sunglasses</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Hats</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Belts</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="space-y-10">
+								<div>
+									<p id="women-brands-heading-mobile" class="font-medium text-gray-900">Brands</p>
+									<ul role="list" aria-labelledby="women-brands-heading-mobile" class="mt-6 flex flex-col space-y-6">
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Full Nelson</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">My Way</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Re-Arranged</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Counterfeit</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Significant Other</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div id="tabs-1-panel-2" class="space-y-10 px-4 pt-10 pb-8" aria-labelledby="tabs-1-tab-2" role="tabpanel" tabindex="0">
+							<div class="space-y-4">
+								<div class="group relative overflow-hidden rounded-md bg-gray-100">
+									<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/home-page-03-category-01.jpg" alt="Wooden shelf with gray and olive drab green baseball caps, next to wooden clothes hanger with sweaters." class="aspect-square w-full object-cover group-hover:opacity-75">
+									<div class="absolute inset-0 flex flex-col justify-end">
+										<div class="bg-white/60 p-4 text-base sm:text-sm">
+											<a href="#" class="font-medium text-gray-900">
+												<span class="absolute inset-0" aria-hidden="true"></span>
+												Accessories
+											</a>
+											<p aria-hidden="true" class="mt-0.5 text-gray-700 sm:mt-1">Shop now</p>
+										</div>
+									</div>
+								</div>
+								<div class="group relative overflow-hidden rounded-md bg-gray-100">
+									<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg" alt="Drawstring top with elastic loop closure and textured interior padding." class="aspect-square w-full object-cover group-hover:opacity-75">
+									<div class="absolute inset-0 flex flex-col justify-end">
+										<div class="bg-white/60 p-4 text-base sm:text-sm">
+											<a href="#" class="font-medium text-gray-900">
+												<span class="absolute inset-0" aria-hidden="true"></span>
+												New Arrivals
+											</a>
+											<p aria-hidden="true" class="mt-0.5 text-gray-700 sm:mt-1">Shop now</p>
+										</div>
+									</div>
+								</div>
+								<div class="group relative overflow-hidden rounded-md bg-gray-100">
+									<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/category-page-02-image-card-06.jpg" alt="Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt." class="aspect-square w-full object-cover group-hover:opacity-75">
+									<div class="absolute inset-0 flex flex-col justify-end">
+										<div class="bg-white/60 p-4 text-base sm:text-sm">
+											<a href="#" class="font-medium text-gray-900">
+												<span class="absolute inset-0" aria-hidden="true"></span>
+												Artwork Tees
+											</a>
+											<p aria-hidden="true" class="mt-0.5 text-gray-700 sm:mt-1">Shop now</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="space-y-10">
+								<div>
+									<p id="men-shoes-heading-mobile" class="font-medium text-gray-900">Shoes &amp; Accessories</p>
+									<ul role="list" aria-labelledby="men-shoes-heading-mobile" class="mt-6 flex flex-col space-y-6">
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Sneakers</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Boots</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Sandals</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Socks</a>
+										</li>
+									</ul>
+								</div>
+								<div>
+									<p id="men-collection-heading-mobile" class="font-medium text-gray-900">Shop Collection</p>
+									<ul role="list" aria-labelledby="men-collection-heading-mobile" class="mt-6 flex flex-col space-y-6">
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Everything</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Core</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">New Arrivals</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Sale</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="space-y-10">
+								<div>
+									<p id="men-clothing-heading-mobile" class="font-medium text-gray-900">All Clothing</p>
+									<ul role="list" aria-labelledby="men-clothing-heading-mobile" class="mt-6 flex flex-col space-y-6">
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Basic Tees</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Artwork Tees</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Pants</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Hoodies</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Swimsuits</a>
+										</li>
+									</ul>
+								</div>
+								<div>
+									<p id="men-accessories-heading-mobile" class="font-medium text-gray-900">All Accessories</p>
+									<ul role="list" aria-labelledby="men-accessories-heading-mobile" class="mt-6 flex flex-col space-y-6">
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Watches</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Wallets</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Bags</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Sunglasses</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Hats</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Belts</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="space-y-10">
+								<div>
+									<p id="men-brands-heading-mobile" class="font-medium text-gray-900">Brands</p>
+									<ul role="list" aria-labelledby="men-brands-heading-mobile" class="mt-6 flex flex-col space-y-6">
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Re-Arranged</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Counterfeit</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">Full Nelson</a>
+										</li>
+										<li class="flow-root">
+											<a href="#" class="-m-2 block p-2 text-gray-500">My Way</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
 
-	<a href="{{ path('app_wardrobe_item_index') }}">back to list</a>
+					<div class="space-y-6 border-t border-gray-200 px-4 py-6">
+						<div class="flow-root">
+							<a href="#" class="-m-2 block p-2 font-medium text-gray-900">Company</a>
+						</div>
+						<div class="flow-root">
+							<a href="#" class="-m-2 block p-2 font-medium text-gray-900">Stores</a>
+						</div>
+					</div>
 
-	<a href="{{ path('app_wardrobe_item_edit', {'id': wardrobe_item.id}) }}">edit</a>
+					<div class="border-t border-gray-200 px-4 py-6">
+						<a href="#" class="-m-2 flex items-center p-2">
+							<img src="https://tailwindui.com/plus-assets/img/flags/flag-canada.svg" alt="" class="block h-auto w-5 shrink-0">
+							<span class="ml-3 block text-base font-medium text-gray-900">CAD</span>
+							<span class="sr-only">, change currency</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
 
-	{{ include('wardrobe_item/_delete_form.html.twig') }}
+
+		<main class="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
+			<div
+				class="mx-auto max-w-2xl lg:max-w-none">
+				<!-- Product -->
+				<div
+					class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+					<!-- Image gallery -->
+					<div class="flex flex-col-reverse">
+
+						<div>
+							<!-- Tab panel, show/hide based on tab state. -->
+							<div id="tabs-2-panel-1" aria-labelledby="tabs-2-tab-1" role="tabpanel" tabindex="0">
+								<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-03-product-01.jpg" alt="Angled front view with bag zipped and handles upright." class="aspect-square w-full object-cover sm:rounded-lg">
+							</div>
+
+							<!-- More images... -->
+						</div>
+					</div>
+
+					<!-- Product info -->
+					<div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+						<h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ wardrobe_item.name }}</h1>
+
+						<div class="mt-3">
+							<h2 class="sr-only">Product information</h2>
+							<p class="text-3xl tracking-tight text-gray-900">{{ wardrobe_item.brand }}</p>
+						</div>
+
+						<!-- Reviews -->
+						<div class="mt-3">
+							<h3 class="sr-only">Reviews</h3>
+							<div class="flex items-center">
+								<div
+									class="flex items-center">
+									<!-- Active: "text-indigo-500", Inactive: "text-gray-300" -->
+									<svg class="size-5 shrink-0 text-indigo-500" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+										<path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd"/>
+									</svg>
+									<svg class="size-5 shrink-0 text-indigo-500" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+										<path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd"/>
+									</svg>
+									<svg class="size-5 shrink-0 text-indigo-500" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+										<path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd"/>
+									</svg>
+									<svg class="size-5 shrink-0 text-indigo-500" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+										<path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd"/>
+									</svg>
+									<svg class="size-5 shrink-0 text-gray-300" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+										<path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd"/>
+									</svg>
+								</div>
+								<p class="sr-only">4 out of 5 stars</p>
+							</div>
+						</div>
+
+						<div class="mt-6">
+							<h3 class="sr-only">Description</h3>
+
+							<div class="space-y-6 text-base text-gray-700">
+								<p>{{ wardrobe_item.description }}</p>
+							</div>
+						</div>
+
+						<form
+							class="mt-6">
+							<!-- Colors -->
+							<div>
+								<h3 class="text-sm text-gray-600">Color</h3>
+
+								<fieldset aria-label="Choose a color" class="mt-2">
+									<div
+										class="flex items-center gap-x-3">
+										<!-- Active and Checked: "ring-3 ring-offset-1" -->
+										<label aria-label="Washed Black" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-700 focus:outline-hidden">
+											<input type="radio" name="color-choice" value="Washed Black" class="sr-only">
+											<span aria-hidden="true" class="size-8 rounded-full border border-black/10 bg-gray-700"></span>
+										</label>
+										<!-- Active and Checked: "ring-3 ring-offset-1" -->
+										<label aria-label="White" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-400 focus:outline-hidden">
+											<input type="radio" name="color-choice" value="White" class="sr-only">
+											<span aria-hidden="true" class="size-8 rounded-full border border-black/10 bg-white"></span>
+										</label>
+										<!-- Active and Checked: "ring-3 ring-offset-1" -->
+										<label aria-label="Washed Gray" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-500 focus:outline-hidden">
+											<input type="radio" name="color-choice" value="Washed Gray" class="sr-only">
+											<span aria-hidden="true" class="size-8 rounded-full border border-black/10 bg-gray-500"></span>
+										</label>
+									</div>
+								</fieldset>
+							</div>
+
+							<div class="mt-10 flex">
+								<a href="{{ path('app_wardrobe_item_edit', {'id': wardrobe_item.id}) }}" class="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 focus:outline-hidden sm:w-full">Edit
+								</a>
+
+								<button type="button" class="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
+									<svg class="size-6 shrink-0" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/>
+									</svg>
+									<span class="sr-only">Add to favorites</span>
+								</button>
+							</div>
+						</form>
+
+						<section aria-labelledby="details-heading" class="mt-12">
+							<h2 id="details-heading" class="sr-only">Additional details</h2>
+
+							<div class="divide-y divide-gray-200 border-t">
+								<div>
+									<h3>
+										<button type="button" class="group relative flex w-full items-center justify-between py-6 text-left" aria-controls="disclosure-1" aria-expanded="false">
+											<span class="text-sm font-medium text-gray-900">Features</span>
+											<span
+												class="ml-6 flex items-center">
+												<!-- Open: "hidden", Closed: "block" -->
+												<svg class="block size-6 text-gray-400 group-hover:text-gray-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+													<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+												</svg>
+												<!-- Open: "block", Closed: "hidden" -->
+												<svg class="hidden size-6 text-indigo-400 group-hover:text-indigo-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+													<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
+												</svg>
+											</span>
+										</button>
+									</h3>
+									<div class="pb-6" id="disclosure-1">
+										<ul role="list" class="list-disc space-y-1 pl-5 text-sm/6 text-gray-700 marker:text-gray-300">
+											<li class="pl-2">Size :
+												{{ wardrobe_item.size }}</li>
+											<li class="pl-2">Color :
+												{{ wardrobe_item.color }}</li>
+											<li class="pl-2">Status :
+												{{ wardrobe_item.status.value }}</li>
+											<li class="pl-2">Season :
+												{{ wardrobe_item.season.value }}</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+
+				<section aria-labelledby="related-heading" class="mt-10 border-t border-gray-200 px-4 py-16 sm:px-0">
+					<h2 id="related-heading" class="text-xl font-bold text-gray-900">More product</h2>
+
+					<div class="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+						{% for wardrobe_item in wardrobe_items %}
+							<div>
+								<div class="relative">
+									<div class="relative h-72 w-full overflow-hidden rounded-lg">
+										<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-03-related-product-01.jpg" alt="Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls." class="size-full object-cover">
+									</div>
+									<div class="relative mt-4">
+										<h3 class="text-sm font-medium text-gray-900">{{ wardrobe_item.name }}</h3>
+										<p class="mt-1 text-sm text-gray-500">{{ wardrobe_item.brand }}
+										</p>
+									</div>
+									<div class="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
+										<div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-36 bg-linear-to-t from-black opacity-50"></div>
+										<p class="relative text-lg font-semibold text-white">$140</p>
+									</div>
+								</div>
+								<div class="mt-6">
+									<a href="{{ path('app_wardrobe_item_show', {'id': wardrobe_item.id}) }}" class="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200">View more</a>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</section>
+			</div>
+		</main>
+
+	</div>
+
+	{# <a href="{{ path('app_wardrobe_item_index') }}">back to list</a> #}
+	{# {{ include('wardrobe_item/_delete_form.html.twig') }} #}
 {% endblock %}
