@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,10 +34,23 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?User $userId = null;
 
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?SocialPost $postId = null;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'comments')]
+    private ?self $commentId = null;
+
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'commentId')]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->comments = new ArrayCollection();
     }
 
     public function setId(int $id): static
@@ -118,6 +133,60 @@ class Comment
     public function setUserId(?User $userId): static
     {
         $this->userId = $userId;
+
+        return $this;
+    }
+
+    public function getPostId(): ?SocialPost
+    {
+        return $this->postId;
+    }
+
+    public function setPostId(?SocialPost $postId): static
+    {
+        $this->postId = $postId;
+
+        return $this;
+    }
+
+    public function getCommentId(): ?self
+    {
+        return $this->commentId;
+    }
+
+    public function setCommentId(?self $commentId): static
+    {
+        $this->commentId = $commentId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(self $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setCommentId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(self $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getCommentId() === $this) {
+                $comment->setCommentId(null);
+            }
+        }
 
         return $this;
     }
