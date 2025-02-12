@@ -7,7 +7,7 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20250211230428 extends AbstractMigration
+final class Version20250212161442 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,8 +20,9 @@ final class Version20250211230428 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_64C19C1727ACA70 ON category (parent_id)');
         $this->addSql('COMMENT ON COLUMN category.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN category.updated_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE comment (id SERIAL NOT NULL, user_id_id INT DEFAULT NULL, content TEXT NOT NULL, level INT NOT NULL, replies_count INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE comment (id SERIAL NOT NULL, user_id_id INT DEFAULT NULL, post_id_id INT DEFAULT NULL, content TEXT NOT NULL, level INT NOT NULL, replies_count INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_9474526C9D86650F ON comment (user_id_id)');
+        $this->addSql('CREATE INDEX IDX_9474526CE85F12B8 ON comment (post_id_id)');
         $this->addSql('COMMENT ON COLUMN comment.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN comment.updated_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE outfit (id SERIAL NOT NULL, customer_id INT NOT NULL, name VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, occasion VARCHAR(100) NOT NULL, season VARCHAR(255) NOT NULL, image VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, is_public BOOLEAN NOT NULL, PRIMARY KEY(id))');
@@ -74,6 +75,7 @@ final class Version20250211230428 extends AbstractMigration
         $this->addSql('CREATE TRIGGER notify_trigger AFTER INSERT OR UPDATE ON messenger_messages FOR EACH ROW EXECUTE PROCEDURE notify_messenger_messages();');
         $this->addSql('ALTER TABLE category ADD CONSTRAINT FK_64C19C1727ACA70 FOREIGN KEY (parent_id) REFERENCES category (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE comment ADD CONSTRAINT FK_9474526C9D86650F FOREIGN KEY (user_id_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE comment ADD CONSTRAINT FK_9474526CE85F12B8 FOREIGN KEY (post_id_id) REFERENCES social_post (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE outfit ADD CONSTRAINT FK_320296019395C3F3 FOREIGN KEY (customer_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE outfit_item ADD CONSTRAINT FK_98142D2AE96E385 FOREIGN KEY (outfit_id) REFERENCES outfit (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE outfit_item ADD CONSTRAINT FK_98142D23B14586B FOREIGN KEY (wardrobe_item_id) REFERENCES wardrobe_item (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -89,6 +91,7 @@ final class Version20250211230428 extends AbstractMigration
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE category DROP CONSTRAINT FK_64C19C1727ACA70');
         $this->addSql('ALTER TABLE comment DROP CONSTRAINT FK_9474526C9D86650F');
+        $this->addSql('ALTER TABLE comment DROP CONSTRAINT FK_9474526CE85F12B8');
         $this->addSql('ALTER TABLE outfit DROP CONSTRAINT FK_320296019395C3F3');
         $this->addSql('ALTER TABLE outfit_item DROP CONSTRAINT FK_98142D2AE96E385');
         $this->addSql('ALTER TABLE outfit_item DROP CONSTRAINT FK_98142D23B14586B');
