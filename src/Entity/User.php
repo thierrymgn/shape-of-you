@@ -331,7 +331,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeFollowing(Follow $following): static
+    public function removeFollowing(Follow $following): void
     {
         if ($this->following->removeElement($following)) {
             // set the owning side to null (unless already changed)
@@ -339,6 +339,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $following->setFollower(null);
             }
         }
+    }
+
     public function getGoogleId(): ?string
     {
         return $this->googleId;
@@ -359,11 +361,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->followers;
     }
 
-    public function addFollower(Follow $follower): static
+    public function addFollower(Follow $follower): void
     {
         if (!$this->followers->contains($follower)) {
             $this->followers->add($follower);
             $follower->setFollowing($this);
+        }
+    }
+
     /**
      * @return Collection<int, Comment>
      */
@@ -382,8 +387,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-    public function removeFollower(Follow $follower): static
+    public function removeFollower(Follow $follower): void
     {
         if ($this->followers->removeElement($follower)) {
             // set the owning side to null (unless already changed)
@@ -392,7 +396,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             }
         }
     }
-          
+
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
