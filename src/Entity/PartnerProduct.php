@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Enum\StockStatus;
 use App\Repository\PartnerProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -47,6 +49,17 @@ class PartnerProduct
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @var Collection<int, WardrobeItemPartnerProduct>
+     */
+    #[ORM\OneToMany(targetEntity: WardrobeItemPartnerProduct::class, mappedBy: 'partnerProductId')]
+    private Collection $wardrobeItemPartnerProducts;
+
+    public function __construct()
+    {
+        $this->wardrobeItemPartnerProducts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -188,6 +201,36 @@ class PartnerProduct
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WardrobeItemPartnerProduct>
+     */
+    public function getWardrobeItemPartnerProducts(): Collection
+    {
+        return $this->wardrobeItemPartnerProducts;
+    }
+
+    public function addWardrobeItemPartnerProduct(WardrobeItemPartnerProduct $wardrobeItemPartnerProduct): static
+    {
+        if (!$this->wardrobeItemPartnerProducts->contains($wardrobeItemPartnerProduct)) {
+            $this->wardrobeItemPartnerProducts->add($wardrobeItemPartnerProduct);
+            $wardrobeItemPartnerProduct->setPartnerProductId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWardrobeItemPartnerProduct(WardrobeItemPartnerProduct $wardrobeItemPartnerProduct): static
+    {
+        if ($this->wardrobeItemPartnerProducts->removeElement($wardrobeItemPartnerProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($wardrobeItemPartnerProduct->getPartnerProductId() === $this) {
+                $wardrobeItemPartnerProduct->setPartnerProductId(null);
+            }
+        }
 
         return $this;
     }
