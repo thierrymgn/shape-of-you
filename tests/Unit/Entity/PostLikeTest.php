@@ -25,7 +25,6 @@ class PostLikeTest extends TestCase
 
     public function testSetAndGetUserId(): void
     {
-        // Création d'un utilisateur minimal
         $user = new User();
         $user->setEmail('likeuser@example.com')
              ->setFirstName('Like')
@@ -38,7 +37,6 @@ class PostLikeTest extends TestCase
 
     public function testSetAndGetPostId(): void
     {
-        // Création d'un SocialPost minimal
         $socialPost = new SocialPost();
         $socialPost->setTitle('Sample Social Post')
                    ->setContent('This is a sample post content.')
