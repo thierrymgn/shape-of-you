@@ -43,9 +43,16 @@ class SocialPost
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'postId')]
     private Collection $comments;
 
+    /**
+     * @var Collection<int, PostLike>
+     */
+    #[ORM\OneToMany(targetEntity: PostLike::class, mappedBy: 'postId')]
+    private Collection $postLikes;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->postLikes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -168,6 +175,36 @@ class SocialPost
             // set the owning side to null (unless already changed)
             if ($comment->getPostId() === $this) {
                 $comment->setPostId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PostLike>
+     */
+    public function getPostLikes(): Collection
+    {
+        return $this->postLikes;
+    }
+
+    public function addPostLike(PostLike $postLike): static
+    {
+        if (!$this->postLikes->contains($postLike)) {
+            $this->postLikes->add($postLike);
+            $postLike->setPostId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostLike(PostLike $postLike): static
+    {
+        if ($this->postLikes->removeElement($postLike)) {
+            // set the owning side to null (unless already changed)
+            if ($postLike->getPostId() === $this) {
+                $postLike->setPostId(null);
             }
         }
 
