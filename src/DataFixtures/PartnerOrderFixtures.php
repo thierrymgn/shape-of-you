@@ -6,6 +6,7 @@ use App\Entity\Partner;
 use App\Entity\PartnerOrder;
 use App\Entity\User;
 use App\Enum\PartnerOrderStatus;
+use App\Enum\PartnerStatus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -24,7 +25,10 @@ class PartnerOrderFixtures extends Fixture
         // Création d'un partenaire minimal (pour la relation partnerId)
         $partner = new Partner();
         $partner->setName('Partner One')
-                ->setWebsiteUrl('https://partnerone.com');
+                ->setWebsiteUrl('https://partnerone.com')
+                ->setStatus(PartnerStatus::ACTIVE)
+                ->setCreatedAt(new \DateTimeImmutable('now'))
+                ->setUpdatedAt(new \DateTimeImmutable('now'));
         $manager->persist($partner);
 
         // Création d'une commande partenaire (PartnerOrder) avec les champs obligatoires
