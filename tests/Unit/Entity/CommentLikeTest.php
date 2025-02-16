@@ -29,7 +29,7 @@ class CommentLikeTest extends TestCase
         $user->setEmail('commentlikeuser@example.com')
              ->setFirstName('Comment')
              ->setLastName('Liker')
-             ->setPassword('password'); // Pour le test, en clair (à hasher en production)
+             ->setPassword('password');
 
         $this->commentLike->setUserId($user);
         $this->assertSame($user, $this->commentLike->getUserId());
@@ -43,7 +43,7 @@ class CommentLikeTest extends TestCase
                 ->setRepliesCount(0)
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setUpdatedAt(new \DateTimeImmutable());
-        // Ici, on se contente de créer une instance minimale de Comment.
+
         $this->commentLike->setCommentID($comment);
         $this->assertSame($comment, $this->commentLike->getCommentID());
     }
