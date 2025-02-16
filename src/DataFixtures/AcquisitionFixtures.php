@@ -11,7 +11,6 @@ class AcquisitionFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // Première acquisition
         $acquisition1 = new Acquisition();
         $acquisition1->setPurchaseDate(new \DateTime('2025-01-15'))
             ->setPrice('199.99')
