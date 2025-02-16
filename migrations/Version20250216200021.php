@@ -7,7 +7,7 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20250212161442 extends AbstractMigration
+final class Version20250216200021 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,9 +20,10 @@ final class Version20250212161442 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_64C19C1727ACA70 ON category (parent_id)');
         $this->addSql('COMMENT ON COLUMN category.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN category.updated_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE comment (id SERIAL NOT NULL, user_id_id INT DEFAULT NULL, post_id_id INT DEFAULT NULL, content TEXT NOT NULL, level INT NOT NULL, replies_count INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE comment (id SERIAL NOT NULL, user_id_id INT DEFAULT NULL, post_id_id INT DEFAULT NULL, comment_id_id INT DEFAULT NULL, content TEXT NOT NULL, level INT NOT NULL, replies_count INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_9474526C9D86650F ON comment (user_id_id)');
         $this->addSql('CREATE INDEX IDX_9474526CE85F12B8 ON comment (post_id_id)');
+        $this->addSql('CREATE INDEX IDX_9474526CD6DE06A6 ON comment (comment_id_id)');
         $this->addSql('COMMENT ON COLUMN comment.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN comment.updated_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE outfit (id SERIAL NOT NULL, customer_id INT NOT NULL, name VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, occasion VARCHAR(100) NOT NULL, season VARCHAR(255) NOT NULL, image VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, is_public BOOLEAN NOT NULL, PRIMARY KEY(id))');
@@ -37,6 +38,9 @@ final class Version20250212161442 extends AbstractMigration
         $this->addSql('CREATE TABLE partner (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, website_url VARCHAR(255) NOT NULL, logo VARCHAR(255) DEFAULT NULL, api_key VARCHAR(255) DEFAULT NULL, api_secret VARCHAR(255) DEFAULT NULL, status VARCHAR(255) NOT NULL, commission_rate NUMERIC(5, 2) DEFAULT NULL, description TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN partner.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN partner.updated_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('CREATE TABLE partner_product (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, price NUMERIC(10, 2) NOT NULL, sale_price NUMERIC(10, 2) DEFAULT NULL, product_url VARCHAR(255) NOT NULL, image_url VARCHAR(255) NOT NULL, category VARCHAR(100) NOT NULL, brand VARCHAR(100) NOT NULL, stock_status VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('COMMENT ON COLUMN partner_product.created_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN partner_product.updated_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE profile (id SERIAL NOT NULL, height NUMERIC(5, 2) DEFAULT NULL, weight NUMERIC(5, 2) DEFAULT NULL, body_type VARCHAR(50) DEFAULT NULL, style_preferences JSON NOT NULL, color_preferences JSON NOT NULL, size_preferences JSON NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE social_post (id SERIAL NOT NULL, title VARCHAR(255) NOT NULL, content TEXT NOT NULL, image VARCHAR(255) NOT NULL, likes_count INT DEFAULT NULL, comments_count INT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN social_post.created_at IS \'(DC2Type:datetime_immutable)\'');
@@ -53,6 +57,10 @@ final class Version20250212161442 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_12D46B7812469DE2 ON wardrobe_item (category_id)');
         $this->addSql('COMMENT ON COLUMN wardrobe_item.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN wardrobe_item.updated_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('CREATE TABLE wardrobe_item_partner_product (id SERIAL NOT NULL, wardrobe_item_id_id INT DEFAULT NULL, partner_product_id_id INT DEFAULT NULL, similarity_score NUMERIC(5, 2) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_304BF7E24A7BE2EB ON wardrobe_item_partner_product (wardrobe_item_id_id)');
+        $this->addSql('CREATE INDEX IDX_304BF7E292E0D84A ON wardrobe_item_partner_product (partner_product_id_id)');
+        $this->addSql('COMMENT ON COLUMN wardrobe_item_partner_product.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE wardrobe_item_tag (id SERIAL NOT NULL, wardrobe_item_id INT NOT NULL, tag_id INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_B20673983B14586B ON wardrobe_item_tag (wardrobe_item_id)');
         $this->addSql('CREATE INDEX IDX_B2067398BAD26311 ON wardrobe_item_tag (tag_id)');
@@ -76,12 +84,15 @@ final class Version20250212161442 extends AbstractMigration
         $this->addSql('ALTER TABLE category ADD CONSTRAINT FK_64C19C1727ACA70 FOREIGN KEY (parent_id) REFERENCES category (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE comment ADD CONSTRAINT FK_9474526C9D86650F FOREIGN KEY (user_id_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE comment ADD CONSTRAINT FK_9474526CE85F12B8 FOREIGN KEY (post_id_id) REFERENCES social_post (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE comment ADD CONSTRAINT FK_9474526CD6DE06A6 FOREIGN KEY (comment_id_id) REFERENCES comment (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE outfit ADD CONSTRAINT FK_320296019395C3F3 FOREIGN KEY (customer_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE outfit_item ADD CONSTRAINT FK_98142D2AE96E385 FOREIGN KEY (outfit_id) REFERENCES outfit (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE outfit_item ADD CONSTRAINT FK_98142D23B14586B FOREIGN KEY (wardrobe_item_id) REFERENCES wardrobe_item (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "user" ADD CONSTRAINT FK_8D93D649CCFA12B8 FOREIGN KEY (profile_id) REFERENCES profile (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE wardrobe_item ADD CONSTRAINT FK_12D46B789395C3F3 FOREIGN KEY (customer_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE wardrobe_item ADD CONSTRAINT FK_12D46B7812469DE2 FOREIGN KEY (category_id) REFERENCES category (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE wardrobe_item_partner_product ADD CONSTRAINT FK_304BF7E24A7BE2EB FOREIGN KEY (wardrobe_item_id_id) REFERENCES wardrobe_item (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE wardrobe_item_partner_product ADD CONSTRAINT FK_304BF7E292E0D84A FOREIGN KEY (partner_product_id_id) REFERENCES partner_product (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE wardrobe_item_tag ADD CONSTRAINT FK_B20673983B14586B FOREIGN KEY (wardrobe_item_id) REFERENCES wardrobe_item (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE wardrobe_item_tag ADD CONSTRAINT FK_B2067398BAD26311 FOREIGN KEY (tag_id) REFERENCES tag (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
@@ -92,12 +103,15 @@ final class Version20250212161442 extends AbstractMigration
         $this->addSql('ALTER TABLE category DROP CONSTRAINT FK_64C19C1727ACA70');
         $this->addSql('ALTER TABLE comment DROP CONSTRAINT FK_9474526C9D86650F');
         $this->addSql('ALTER TABLE comment DROP CONSTRAINT FK_9474526CE85F12B8');
+        $this->addSql('ALTER TABLE comment DROP CONSTRAINT FK_9474526CD6DE06A6');
         $this->addSql('ALTER TABLE outfit DROP CONSTRAINT FK_320296019395C3F3');
         $this->addSql('ALTER TABLE outfit_item DROP CONSTRAINT FK_98142D2AE96E385');
         $this->addSql('ALTER TABLE outfit_item DROP CONSTRAINT FK_98142D23B14586B');
         $this->addSql('ALTER TABLE "user" DROP CONSTRAINT FK_8D93D649CCFA12B8');
         $this->addSql('ALTER TABLE wardrobe_item DROP CONSTRAINT FK_12D46B789395C3F3');
         $this->addSql('ALTER TABLE wardrobe_item DROP CONSTRAINT FK_12D46B7812469DE2');
+        $this->addSql('ALTER TABLE wardrobe_item_partner_product DROP CONSTRAINT FK_304BF7E24A7BE2EB');
+        $this->addSql('ALTER TABLE wardrobe_item_partner_product DROP CONSTRAINT FK_304BF7E292E0D84A');
         $this->addSql('ALTER TABLE wardrobe_item_tag DROP CONSTRAINT FK_B20673983B14586B');
         $this->addSql('ALTER TABLE wardrobe_item_tag DROP CONSTRAINT FK_B2067398BAD26311');
         $this->addSql('DROP TABLE category');
@@ -105,11 +119,13 @@ final class Version20250212161442 extends AbstractMigration
         $this->addSql('DROP TABLE outfit');
         $this->addSql('DROP TABLE outfit_item');
         $this->addSql('DROP TABLE partner');
+        $this->addSql('DROP TABLE partner_product');
         $this->addSql('DROP TABLE profile');
         $this->addSql('DROP TABLE social_post');
         $this->addSql('DROP TABLE tag');
         $this->addSql('DROP TABLE "user"');
         $this->addSql('DROP TABLE wardrobe_item');
+        $this->addSql('DROP TABLE wardrobe_item_partner_product');
         $this->addSql('DROP TABLE wardrobe_item_tag');
         $this->addSql('DROP TABLE messenger_messages');
     }
