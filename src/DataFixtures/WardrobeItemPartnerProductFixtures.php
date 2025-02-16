@@ -16,7 +16,7 @@ class WardrobeItemPartnerProductFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $user = new User();
-        $user->setEmail('user@example.com')
+        $user->setEmail('userwardrobe@example.com')
              ->setFirstName('Alice')
              ->setLastName('Dupont')
              ->setPassword('password');
