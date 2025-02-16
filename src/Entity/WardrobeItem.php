@@ -77,12 +77,19 @@ class WardrobeItem
     #[ORM\OneToMany(targetEntity: WardrobeItemTag::class, mappedBy: 'wardrobeItem', orphanRemoval: true)]
     private Collection $wardrobeItemTags;
 
+    /**
+     * @var Collection<int, AiAnalysis>
+     */
+    #[ORM\OneToMany(targetEntity: AiAnalysis::class, mappedBy: 'wardrobeItemId')]
+    private Collection $WardrobeItemId;
+
     public function __construct()
     {
         $this->status = WardrobeStatus::ACTIVE;
         $this->season = WardrobeSeason::ALL;
         $this->outfitItems = new ArrayCollection();
         $this->wardrobeItemTags = new ArrayCollection();
+        $this->WardrobeItemId = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -309,6 +316,36 @@ class WardrobeItem
             // set the owning side to null (unless already changed)
             if ($wardrobeItemTag->getWardrobeItem() === $this) {
                 $wardrobeItemTag->setWardrobeItem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AiAnalysis>
+     */
+    public function getWardrobeItemId(): Collection
+    {
+        return $this->WardrobeItemId;
+    }
+
+    public function addWardrobeItemId(AiAnalysis $wardrobeItemId): static
+    {
+        if (!$this->WardrobeItemId->contains($wardrobeItemId)) {
+            $this->WardrobeItemId->add($wardrobeItemId);
+            $wardrobeItemId->setWardrobeItemId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWardrobeItemId(AiAnalysis $wardrobeItemId): static
+    {
+        if ($this->WardrobeItemId->removeElement($wardrobeItemId)) {
+            // set the owning side to null (unless already changed)
+            if ($wardrobeItemId->getWardrobeItemId() === $this) {
+                $wardrobeItemId->setWardrobeItemId(null);
             }
         }
 
