@@ -69,6 +69,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Outfit::class, mappedBy: 'customer', orphanRemoval: true)]
     private Collection $outfits;
 
+    /**
+     * @var Collection<int, Follow>
+     */
+    #[ORM\OneToMany(targetEntity: Follow::class, mappedBy: 'follower')]
+    private Collection $following;
+
+    /**
+     * @var Collection<int, Follow>
+     */
+    #[ORM\OneToMany(targetEntity: Follow::class, mappedBy: 'following')]
+    private Collection $followers;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleId = null;
 
@@ -77,6 +89,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'userId')]
     private Collection $comments;
+
+    /**
+     * @var Collection<int, PartnerOrder>
+     */
+    #[ORM\OneToMany(targetEntity: PartnerOrder::class, mappedBy: 'userId')]
+    private Collection $partnerOrders;
 
     /**
      * @var Collection<int, CommentLike>
@@ -88,7 +106,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->wardrobeItems = new ArrayCollection();
         $this->outfits = new ArrayCollection();
+        $this->following = new ArrayCollection();
+        $this->followers = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->partnerOrders = new ArrayCollection();
         $this->commentLikes = new ArrayCollection();
     }
 
@@ -306,6 +327,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, Follow>
+     */
+    public function getFollowing(): Collection
+    {
+        return $this->following;
+    }
+
+    public function addFollowing(Follow $following): static
+    {
+        if (!$this->following->contains($following)) {
+            $this->following->add($following);
+            $following->setFollower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollowing(Follow $following): void
+    {
+        if ($this->following->removeElement($following)) {
+            // set the owning side to null (unless already changed)
+            if ($following->getFollower() === $this) {
+                $following->setFollower(null);
+            }
+        }
+    }
+
     public function getGoogleId(): ?string
     {
         return $this->googleId;
@@ -316,6 +365,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->googleId = $googleId;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Follow>
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(Follow $follower): void
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers->add($follower);
+            $follower->setFollowing($this);
+        }
     }
 
     /**
@@ -336,12 +401,52 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function removeFollower(Follow $follower): void
+    {
+        if ($this->followers->removeElement($follower)) {
+            // set the owning side to null (unless already changed)
+            if ($follower->getFollowing() === $this) {
+                $follower->setFollowing(null);
+            }
+        }
+    }
+
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
             if ($comment->getUserId() === $this) {
                 $comment->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PartnerOrder>
+     */
+    public function getPartnerOrders(): Collection
+    {
+        return $this->partnerOrders;
+    }
+
+    public function addPartnerOrder(PartnerOrder $partnerOrder): static
+    {
+        if (!$this->partnerOrders->contains($partnerOrder)) {
+            $this->partnerOrders->add($partnerOrder);
+            $partnerOrder->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePartnerOrder(PartnerOrder $partnerOrder): static
+    {
+        if ($this->partnerOrders->removeElement($partnerOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($partnerOrder->getUserId() === $this) {
+                $partnerOrder->setUserId(null);
             }
         }
 

@@ -60,9 +60,16 @@ class Outfit
     #[ORM\Column]
     private ?bool $isPublic = null;
 
+    /**
+     * @var Collection<int, AiAnalysis>
+     */
+    #[ORM\OneToMany(targetEntity: AiAnalysis::class, mappedBy: 'OutfitId')]
+    private Collection $OutfitId;
+
     public function __construct()
     {
         $this->outfitItems = new ArrayCollection();
+        $this->OutfitId = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -224,6 +231,35 @@ class Outfit
     public function setPublic(bool $isPublic): static
     {
         $this->isPublic = $isPublic;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AiAnalysis>
+     */
+    public function getOutfitId(): Collection
+    {
+        return $this->OutfitId;
+    }
+
+    public function addOutfitId(AiAnalysis $outfitId): static
+    {
+        if (!$this->OutfitId->contains($outfitId)) {
+            $this->OutfitId->add($outfitId);
+            $outfitId->setOutfitId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOutfitId(AiAnalysis $outfitId): static
+    {
+        if ($this->OutfitId->removeElement($outfitId)) {
+            if ($outfitId->getOutfitId() === $this) {
+                $outfitId->setOutfitId(null);
+            }
+        }
 
         return $this;
     }
