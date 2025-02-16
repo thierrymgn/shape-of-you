@@ -20,7 +20,6 @@ class AcquisitionTest extends TestCase
         $purchaseDate = new \DateTime('2025-01-15');
         $price = '199.99';
         $store = 'Store One';
-        // Assurez-vous que votre enum AcquisitionCondition contient la valeur NEW
         $condition = AcquisitionCondition::NEW;
         $warrentyEnd = new \DateTime('2026-01-15');
         $receiptImage = 'receipt1.jpg';

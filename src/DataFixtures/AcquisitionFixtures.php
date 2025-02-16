@@ -23,7 +23,6 @@ class AcquisitionFixtures extends Fixture
             ->setUpdatedAt(new \DateTimeImmutable());
         $manager->persist($acquisition1);
 
-        // Deuxième acquisition
         $acquisition2 = new Acquisition();
         $acquisition2->setPurchaseDate(new \DateTime('2025-02-20'))
             ->setPrice('299.99')
@@ -35,7 +34,6 @@ class AcquisitionFixtures extends Fixture
             ->setUpdatedAt(new \DateTimeImmutable());
         $manager->persist($acquisition2);
 
-        // Troisième acquisition
         $acquisition3 = new Acquisition();
         $acquisition3->setPurchaseDate(new \DateTime('2025-03-30'))
             ->setPrice('399.99')
