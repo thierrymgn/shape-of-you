@@ -20,7 +20,7 @@ class AiAnalysisFixtures extends Fixture
         $customer->setEmail('customer@example.com')
             ->setFirstName('John')
             ->setLastName('Doe')
-            ->setPassword('password'); 
+            ->setPassword('password');
         $manager->persist($customer);
 
         $outfit = new Outfit();
@@ -31,7 +31,6 @@ class AiAnalysisFixtures extends Fixture
             ->setUpdatedAt(new \DateTimeImmutable())
             ->setCustomer($customer)
             ->setPublic(true);
-
 
         $manager->persist($outfit);
 
