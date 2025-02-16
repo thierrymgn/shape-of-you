@@ -90,6 +90,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'userId')]
     private Collection $comments;
 
+    /**
+     * @var Collection<int, PartnerOrder>
+     */
+    #[ORM\OneToMany(targetEntity: PartnerOrder::class, mappedBy: 'userId')]
+    private Collection $partnerOrders;
+
     public function __construct()
     {
         $this->wardrobeItems = new ArrayCollection();
@@ -97,6 +103,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->following = new ArrayCollection();
         $this->followers = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->partnerOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -403,6 +410,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($comment->getUserId() === $this) {
                 $comment->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PartnerOrder>
+     */
+    public function getPartnerOrders(): Collection
+    {
+        return $this->partnerOrders;
+    }
+
+    public function addPartnerOrder(PartnerOrder $partnerOrder): static
+    {
+        if (!$this->partnerOrders->contains($partnerOrder)) {
+            $this->partnerOrders->add($partnerOrder);
+            $partnerOrder->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePartnerOrder(PartnerOrder $partnerOrder): static
+    {
+        if ($this->partnerOrders->removeElement($partnerOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($partnerOrder->getUserId() === $this) {
+                $partnerOrder->setUserId(null);
             }
         }
 

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Enum\PartnerStatus;
 use App\Repository\PartnerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -44,6 +46,17 @@ class Partner
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @var Collection<int, PartnerOrder>
+     */
+    #[ORM\OneToMany(targetEntity: PartnerOrder::class, mappedBy: 'partnerId')]
+    private Collection $partnerOrders;
+
+    public function __construct()
+    {
+        $this->partnerOrders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -173,6 +186,36 @@ class Partner
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PartnerOrder>
+     */
+    public function getPartnerOrders(): Collection
+    {
+        return $this->partnerOrders;
+    }
+
+    public function addPartnerOrder(PartnerOrder $partnerOrder): static
+    {
+        if (!$this->partnerOrders->contains($partnerOrder)) {
+            $this->partnerOrders->add($partnerOrder);
+            $partnerOrder->setPartnerId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePartnerOrder(PartnerOrder $partnerOrder): static
+    {
+        if ($this->partnerOrders->removeElement($partnerOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($partnerOrder->getPartnerId() === $this) {
+                $partnerOrder->setPartnerId(null);
+            }
+        }
 
         return $this;
     }
