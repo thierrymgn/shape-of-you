@@ -16,36 +16,31 @@ class AiAnalysisFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // Création d'un utilisateur (customer)
         $customer = new User();
         $customer->setEmail('customer@example.com')
             ->setFirstName('John')
             ->setLastName('Doe')
-            ->setPassword('password'); // Pour le test, en clair (mais à hasher en production)
-        // Vous pouvez définir d'autres propriétés requises pour User ici...
+            ->setPassword('password'); 
         $manager->persist($customer);
 
-        // Création d'un Outfit pour l'analyse de type OUTFIT
         $outfit = new Outfit();
-        // Exemple d'initialisation minimaliste pour l'Outfit
         $outfit->setName('Summer Look')
             ->setOccasion('Casual')
-            ->setSeason(WardrobeSeason::SUMMER) // Assurez-vous que WardrobeSeason::SUMMER existe
+            ->setSeason(WardrobeSeason::SUMMER)
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable())
             ->setCustomer($customer)
-            ->setPublic(true); // Remplit le champ isPublic
+            ->setPublic(true);
 
-        // Vous pouvez ajouter d'autres propriétés requises ici
+
         $manager->persist($outfit);
 
         $category = new Category();
         $category->setName('Default Category');
         $manager->persist($category);
 
-        // Création d'un WardrobeItem pour l'analyse de type ITEM
         $wardrobeItem = new WardrobeItem();
-        // Exemple d'initialisation minimaliste pour le WardrobeItem
+
         $wardrobeItem->setName('Basic T-Shirt')
                      ->setSize('M')
                      ->setColor('Blue')
@@ -53,10 +48,9 @@ class AiAnalysisFixtures extends Fixture
                      ->setUpdatedAt(new \DateTimeImmutable())
                      ->setCustomer($customer)
                      ->setCategory($category);
-        // Vous pouvez ajouter d'autres propriétés requises ici
+
         $manager->persist($wardrobeItem);
 
-        // Création de l'analyse pour un outfit
         $analysisOutfit = new AiAnalysis();
         $analysisOutfit->setAnalysisType(AnalysisType::OUTFIT)
             ->setResults([
@@ -65,10 +59,9 @@ class AiAnalysisFixtures extends Fixture
             ])
             ->setConfidenceScore('92.50')
             ->setCreatedAt(new \DateTimeImmutable())
-            ->setOutfitId($outfit); // Association avec l'Outfit créé
+            ->setOutfitId($outfit);
         $manager->persist($analysisOutfit);
 
-        // Création de l'analyse pour un wardrobe item (vêtement)
         $analysisItem = new AiAnalysis();
         $analysisItem->setAnalysisType(AnalysisType::ITEM)
             ->setResults([
@@ -77,7 +70,7 @@ class AiAnalysisFixtures extends Fixture
             ])
             ->setConfidenceScore('88.75')
             ->setCreatedAt(new \DateTimeImmutable())
-            ->setWardrobeItemId($wardrobeItem); // Association avec le WardrobeItem créé
+            ->setWardrobeItemId($wardrobeItem);
         $manager->persist($analysisItem);
 
         $manager->flush();
