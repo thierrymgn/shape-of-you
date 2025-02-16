@@ -33,7 +33,6 @@ class WardrobeItemPartnerProductTest extends TestCase
     public function testSetAndGetWardrobeItemId(): void
     {
         $wardrobeItem = new WardrobeItem();
-        // Vous pouvez éventuellement initialiser quelques propriétés minimales sur $wardrobeItem
         $this->entity->setWardrobeItemId($wardrobeItem);
         $this->assertSame($wardrobeItem, $this->entity->getWardrobeItemId());
     }
@@ -41,7 +40,6 @@ class WardrobeItemPartnerProductTest extends TestCase
     public function testSetAndGetPartnerProductId(): void
     {
         $partnerProduct = new PartnerProduct();
-        // Vous pouvez éventuellement initialiser quelques propriétés minimales sur $partnerProduct
         $this->entity->setPartnerProductId($partnerProduct);
         $this->assertSame($partnerProduct, $this->entity->getPartnerProductId());
     }

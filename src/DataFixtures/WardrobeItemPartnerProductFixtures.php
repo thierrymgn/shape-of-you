@@ -15,20 +15,17 @@ class WardrobeItemPartnerProductFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // Création d'un utilisateur minimal pour le WardrobeItem
         $user = new User();
         $user->setEmail('user@example.com')
              ->setFirstName('Alice')
              ->setLastName('Dupont')
-             ->setPassword('password'); // En clair pour le test
+             ->setPassword('password');
         $manager->persist($user);
 
-        // Création d'une catégorie minimale pour le WardrobeItem
         $category = new Category();
         $category->setName('Vêtements');
         $manager->persist($category);
 
-        // Création d'un WardrobeItem minimal en renseignant les champs obligatoires
         $wardrobeItem = new WardrobeItem();
         $wardrobeItem->setName('T-Shirt Basique')
                      ->setSize('M')
@@ -37,10 +34,8 @@ class WardrobeItemPartnerProductFixtures extends Fixture
                      ->setUpdatedAt(new \DateTimeImmutable())
                      ->setCustomer($user)
                      ->setCategory($category);
-        // Les autres champs (description, brand, image, etc.) étant optionnels, on les laisse null ou avec leurs valeurs par défaut
         $manager->persist($wardrobeItem);
 
-        // Création d'un PartnerProduct minimal
         $partnerProduct = new PartnerProduct();
         $partnerProduct->setName('Produit Test')
                        ->setPrice('100.00')
@@ -48,17 +43,16 @@ class WardrobeItemPartnerProductFixtures extends Fixture
                        ->setImageUrl('https://example.com/produit-test.jpg')
                        ->setCategory('Vêtements')
                        ->setBrand('MarqueTest')
-                       ->setStockStatus(StockStatus::INSTOCK) // Assurez-vous que cette valeur existe dans votre enum StockStatus
+                       ->setStockStatus(StockStatus::INSTOCK)
                        ->setCreatedAt(new \DateTimeImmutable())
                        ->setUpdatedAt(new \DateTimeImmutable());
         $manager->persist($partnerProduct);
 
-        // Création de l'entité WardrobeItemPartnerProduct en renseignant tous les champs obligatoires
         $wardrobeItemPartnerProduct = new WardrobeItemPartnerProduct();
         $wardrobeItemPartnerProduct->setSimilarityScore('95.50')
                                    ->setCreatedAt(new \DateTimeImmutable())
-                                   ->setWardrobeItemId($wardrobeItem)      // Association avec le WardrobeItem créé
-                                   ->setPartnerProductId($partnerProduct);  // Association avec le PartnerProduct créé
+                                   ->setWardrobeItemId($wardrobeItem)
+                                   ->setPartnerProductId($partnerProduct);
         $manager->persist($wardrobeItemPartnerProduct);
 
         $manager->flush();
