@@ -46,11 +46,18 @@ class Comment
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'commentId')]
     private Collection $comments;
 
+    /**
+     * @var Collection<int, CommentLike>
+     */
+    #[ORM\OneToMany(targetEntity: CommentLike::class, mappedBy: 'commentID')]
+    private Collection $commentLikes;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->comments = new ArrayCollection();
+        $this->commentLikes = new ArrayCollection();
     }
 
     public function setId(int $id): static
@@ -185,6 +192,36 @@ class Comment
             // set the owning side to null (unless already changed)
             if ($comment->getCommentId() === $this) {
                 $comment->setCommentId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentLike>
+     */
+    public function getCommentLikes(): Collection
+    {
+        return $this->commentLikes;
+    }
+
+    public function addCommentLike(CommentLike $commentLike): static
+    {
+        if (!$this->commentLikes->contains($commentLike)) {
+            $this->commentLikes->add($commentLike);
+            $commentLike->setCommentID($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentLike(CommentLike $commentLike): static
+    {
+        if ($this->commentLikes->removeElement($commentLike)) {
+            // set the owning side to null (unless already changed)
+            if ($commentLike->getCommentID() === $this) {
+                $commentLike->setCommentID(null);
             }
         }
 
