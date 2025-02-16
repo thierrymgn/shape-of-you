@@ -31,7 +31,6 @@ class PartnerOrderTest extends TestCase
 
     public function testSetAndGetCommissionAmount(): void
     {
-        // Ce champ est nullable, mais nous testons ici la valeur assignée.
         $this->partnerOrder->setCommissionAmount('15.00');
         $this->assertEquals('15.00', $this->partnerOrder->getCommissionAmount());
     }
@@ -59,7 +58,6 @@ class PartnerOrderTest extends TestCase
     public function testSetAndGetUserId(): void
     {
         $user = new User();
-        // Pour le test, nous assignons les valeurs minimales requises pour l'entité User
         $user->setEmail('user@example.com')
              ->setFirstName('John')
              ->setLastName('Doe')
@@ -71,7 +69,6 @@ class PartnerOrderTest extends TestCase
     public function testSetAndGetPartnerId(): void
     {
         $partner = new Partner();
-        // Pour le test, nous assignons les valeurs minimales requises pour l'entité Partner
         $partner->setName('Partner One')
                 ->setWebsiteUrl('https://partnerone.com');
         $this->partnerOrder->setPartnerId($partner);
