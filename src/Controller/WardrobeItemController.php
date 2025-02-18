@@ -76,6 +76,7 @@ final class WardrobeItemController extends AbstractController
     #[Route('/{id}', name: 'app_wardrobe_item_delete', methods: ['POST'])]
     public function delete(Request $request, WardrobeItem $wardrobeItem, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('delete', $wardrobeItem);
         if ($this->isCsrfTokenValid('delete'.$wardrobeItem->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($wardrobeItem);
             $entityManager->flush();
