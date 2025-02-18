@@ -56,10 +56,8 @@ final class WardrobeItemController extends AbstractController
     #[Route('/{id}/edit', name: 'app_wardrobe_item_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, WardrobeItem $wardrobeItem, EntityManagerInterface $entityManager): Response
     {
-
         $this->denyAccessUnlessGranted('edit', $wardrobeItem);
 
-        
         $form = $this->createForm(WardrobeItemType::class, $wardrobeItem);
         $form->handleRequest($request);
 
