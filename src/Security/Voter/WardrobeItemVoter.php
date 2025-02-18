@@ -29,13 +29,12 @@ class WardrobeItemVoter extends Voter
         $user = $token->getUser();
 
         if (!$user instanceof User) {
-            return false; // L'utilisateur doit être connecté
+            return false;
         }
 
         /** @var WardrobeItem $wardrobeItem */
         $wardrobeItem = $subject;
 
-        // Vérifie si l'utilisateur est bien le propriétaire du vêtement
         return $wardrobeItem->getCustomer() === $user;
     }
 }
