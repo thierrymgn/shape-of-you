@@ -68,6 +68,9 @@ final class GoogleController extends AbstractController
             /* @phpstan-ignore-next-line */
             $user->setLastName($googleUser->getLastName());
 
+            $user->setRoles(['ROLE_USER']);
+            
+
             // Générer un mot de passe aléatoire et le hacher
             $randomPassword = bin2hex(random_bytes(10)); // 20 caractères aléatoires
             $hashedPassword = $this->passwordHasher->hashPassword($user, $randomPassword);

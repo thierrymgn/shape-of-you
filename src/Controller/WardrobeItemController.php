@@ -45,7 +45,7 @@ final class WardrobeItemController extends AbstractController
     #[Route('/{id}', name: 'app_wardrobe_item_show', methods: ['GET'])]
     public function show(WardrobeItem $wardrobeItem, WardrobeItemRepository $wardrobeItemRepository): Response
     {
-        $wardrobe_items = $wardrobeItemRepository->findBy(['customer' => $wardrobeItem->getCustomer()]);
+        $wardrobe_items = $wardrobeItemRepository->findBy(['customer' => $this->getUser()]);
 
         return $this->render('wardrobe_item/show.html.twig', [
             'wardrobe_item' => $wardrobeItem,
