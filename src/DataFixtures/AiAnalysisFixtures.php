@@ -18,7 +18,7 @@ class AiAnalysisFixtures extends Fixture
     {
         // Création d'un utilisateur (customer)
         $customer = new User();
-        $customer->setEmail('customer@example.com')
+        $customer->setEmail('aianalysis@example.com')
             ->setFirstName('John')
             ->setLastName('Doe')
             ->setPassword('password'); // Pour le test, en clair (mais à hasher en production)
