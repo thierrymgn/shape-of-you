@@ -16,7 +16,7 @@ class PartnerOrderFixtures extends Fixture
     {
         // Création d'un utilisateur minimal (pour la relation userId)
         $user = new User();
-        $user->setEmail('user@example.com')
+        $user->setEmail('partnerOrder@example.com')
              ->setFirstName('John')
              ->setLastName('Doe')
              ->setPassword('password'); // Pour le test, en clair (à hasher en production)
