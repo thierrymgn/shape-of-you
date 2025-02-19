@@ -256,7 +256,6 @@ class Outfit
     public function removeOutfitId(AiAnalysis $outfitId): static
     {
         if ($this->OutfitId->removeElement($outfitId)) {
-            // set the owning side to null (unless already changed)
             if ($outfitId->getOutfitId() === $this) {
                 $outfitId->setOutfitId(null);
             }

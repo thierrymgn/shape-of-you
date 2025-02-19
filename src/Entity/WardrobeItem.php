@@ -83,6 +83,12 @@ class WardrobeItem
     #[ORM\OneToMany(targetEntity: AiAnalysis::class, mappedBy: 'wardrobeItemId')]
     private Collection $WardrobeItemId;
 
+    /**
+     * @var Collection<int, WardrobeItemPartnerProduct>
+     */
+    #[ORM\OneToMany(targetEntity: WardrobeItemPartnerProduct::class, mappedBy: 'wardrobeItemId')]
+    private Collection $wardrobeItemPartnerProducts;
+
     public function __construct()
     {
         $this->status = WardrobeStatus::ACTIVE;
@@ -90,6 +96,7 @@ class WardrobeItem
         $this->outfitItems = new ArrayCollection();
         $this->wardrobeItemTags = new ArrayCollection();
         $this->WardrobeItemId = new ArrayCollection();
+        $this->wardrobeItemPartnerProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -316,6 +323,36 @@ class WardrobeItem
             // set the owning side to null (unless already changed)
             if ($wardrobeItemTag->getWardrobeItem() === $this) {
                 $wardrobeItemTag->setWardrobeItem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WardrobeItemPartnerProduct>
+     */
+    public function getWardrobeItemPartnerProducts(): Collection
+    {
+        return $this->wardrobeItemPartnerProducts;
+    }
+
+    public function addWardrobeItemPartnerProduct(WardrobeItemPartnerProduct $wardrobeItemPartnerProduct): static
+    {
+        if (!$this->wardrobeItemPartnerProducts->contains($wardrobeItemPartnerProduct)) {
+            $this->wardrobeItemPartnerProducts->add($wardrobeItemPartnerProduct);
+            $wardrobeItemPartnerProduct->setWardrobeItemId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWardrobeItemPartnerProduct(WardrobeItemPartnerProduct $wardrobeItemPartnerProduct): static
+    {
+        if ($this->wardrobeItemPartnerProducts->removeElement($wardrobeItemPartnerProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($wardrobeItemPartnerProduct->getWardrobeItemId() === $this) {
+                $wardrobeItemPartnerProduct->setWardrobeItemId(null);
             }
         }
 

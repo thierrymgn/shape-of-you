@@ -50,7 +50,6 @@ class AiAnalysisTest extends TestCase
     public function testSetAndGetOutfitId(): void
     {
         $outfit = new Outfit();
-        // Pour le test, nous créons une instance minimaliste d'Outfit
         $this->aiAnalysis->setOutfitId($outfit);
         $this->assertSame($outfit, $this->aiAnalysis->getOutfitId());
     }
@@ -58,7 +57,6 @@ class AiAnalysisTest extends TestCase
     public function testSetAndGetWardrobeItemId(): void
     {
         $wardrobeItem = new WardrobeItem();
-        // Pour le test, nous créons une instance minimaliste de WardrobeItem
         $this->aiAnalysis->setWardrobeItemId($wardrobeItem);
         $this->assertSame($wardrobeItem, $this->aiAnalysis->getWardrobeItemId());
     }

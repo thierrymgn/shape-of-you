@@ -16,6 +16,7 @@ class AiAnalysisFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+
         // Création d'un utilisateur (customer)
         $customer = new User();
         $customer->setEmail('aianalysis@example.com')
@@ -43,9 +44,8 @@ class AiAnalysisFixtures extends Fixture
         $category->setName('Default Category');
         $manager->persist($category);
 
-        // Création d'un WardrobeItem pour l'analyse de type ITEM
         $wardrobeItem = new WardrobeItem();
-        // Exemple d'initialisation minimaliste pour le WardrobeItem
+
         $wardrobeItem->setName('Basic T-Shirt')
                      ->setSize('M')
                      ->setColor('Blue')
@@ -53,10 +53,9 @@ class AiAnalysisFixtures extends Fixture
                      ->setUpdatedAt(new \DateTimeImmutable())
                      ->setCustomer($customer)
                      ->setCategory($category);
-        // Vous pouvez ajouter d'autres propriétés requises ici
+
         $manager->persist($wardrobeItem);
 
-        // Création de l'analyse pour un outfit
         $analysisOutfit = new AiAnalysis();
         $analysisOutfit->setAnalysisType(AnalysisType::OUTFIT)
             ->setResults([
