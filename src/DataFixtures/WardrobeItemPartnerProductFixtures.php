@@ -17,7 +17,7 @@ class WardrobeItemPartnerProductFixtures extends Fixture
     {
         // Création d'un utilisateur minimal pour le WardrobeItem
         $user = new User();
-        $user->setEmail('user@example.com')
+        $user->setEmail('wardrobeItemPartnerProduct@example.com')
              ->setFirstName('Alice')
              ->setLastName('Dupont')
              ->setPassword('password'); // En clair pour le test
