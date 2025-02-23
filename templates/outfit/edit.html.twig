@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Outfit{% endblock %}
+
+{% block body %}
+    <h1>Edit Outfit</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.occasion) }}
+    {{ form_row(form.season) }}
+    {{ form_row(form.public) }}
+    {{ form_row(form.imageFile) }}
+
+    <h3>Vêtements</h3>
+    <div id="outfitItems"
+         data-prototype="{{ form_widget(form.outfitItems.vars.prototype)|e('html_attr') }}"
+         data-index="{{ form.outfitItems|length }}"
+         data-token="{{ csrf_token('outfit_item') }}">
+        {% for outfitItem in form.outfitItems %}
+            <div class="item">
+                {{ form_widget(outfitItem) }}
+            </div>
+        {% endfor %}
+        <button type="button" id="add-another-item" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+            Ajouter un vêtement
+        </button>
+    </div>
+
+    {{ form_row(form._token) }}
+    <button type="submit">Update</button>
+    {{ form_end(form, {'render_rest': false}) }}
+
+    <a href="{{ path('app_outfit_index') }}">back to list</a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('outfit-collection') }}
+{% endblock %}

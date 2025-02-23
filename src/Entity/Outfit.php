@@ -54,7 +54,7 @@ class Outfit
     /**
      * @var Collection<int, OutfitItem>
      */
-    #[ORM\OneToMany(targetEntity: OutfitItem::class, mappedBy: 'outfit', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: OutfitItem::class, mappedBy: 'outfit', cascade: ['persist'], orphanRemoval: true)]
     private Collection $outfitItems;
 
     #[ORM\Column]
