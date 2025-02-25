@@ -1,5 +1,6 @@
 vich_uploader:
     db_driver: orm
+    twig: true
 
     mappings:
         wardrobe_items:

@@ -22,6 +22,9 @@
         {% for outfitItem in form.outfitItems %}
             <div class="item">
                 {{ form_widget(outfitItem) }}
+                <button type="button" class="remove-item bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded mt-2">
+                    Supprimer ce vêtement
+                </button>
             </div>
         {% endfor %}
         <button type="button" id="add-another-item" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">Ajouter un vêtement</button>

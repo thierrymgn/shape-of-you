@@ -22,6 +22,7 @@ final class OutfitController extends AbstractController
         ]);
     }
 
+    #[Route('/new', name: 'app_outfit_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $outfit = new Outfit();

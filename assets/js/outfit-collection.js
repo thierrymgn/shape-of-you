@@ -4,21 +4,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('outfitItems');
 
     if (addButton && container) {
-        let index = container.dataset.index || 0;
+        let index = parseInt(container.dataset.index || 0);
+
+        const addRemoveButton = (item) => {
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'Supprimer ce vêtement';
+            removeBtn.classList.add('remove-item', 'bg-red-500', 'hover:bg-red-700', 'text-white', 'font-bold', 'py-1', 'px-3', 'rounded', 'mt-2');
+            removeBtn.type = 'button';
+
+            removeBtn.addEventListener('click', function() {
+                item.remove();
+            });
+
+            item.appendChild(removeBtn);
+        };
+
+        document.querySelectorAll('.remove-item').forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.item').remove();
+            });
+        });
 
         addButton.addEventListener('click', () => {
-            console.log('Button clicked');
             const prototype = container.dataset.prototype;
-            const token = container.dataset.token;
             let newForm = prototype.replace(/__name__/g, index);
 
-            newForm += `<input type="hidden" name="_token" value="${token}">`;
-
             const div = document.createElement('div');
-            div.classList.add('item');
+            div.classList.add('item', 'mb-4', 'p-3', 'border', 'rounded');
             div.innerHTML = newForm;
 
-            addButton.parentNode.insertBefore(div, addButton);
+            addRemoveButton(div);
+
+            container.insertBefore(div, addButton);
 
             index++;
         });
