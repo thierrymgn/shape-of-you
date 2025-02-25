@@ -91,9 +91,19 @@ final class OutfitController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        if ($this->isCsrfTokenValid('delete'.$outfit->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($outfit);
-            $entityManager->flush();
+        $token = $request->request->get('_token');
+        $expectedToken = 'delete'.$outfit->getId();
+
+        if ($this->isCsrfTokenValid($expectedToken, $token)) {
+            try {
+                $entityManager->remove($outfit);
+                $entityManager->flush();
+                $this->addFlash('success', 'La tenue a été supprimée avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Erreur lors de la suppression : '.$e->getMessage());
+            }
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide.');
         }
 
         return $this->redirectToRoute('app_outfit_index', [], Response::HTTP_SEE_OTHER);
