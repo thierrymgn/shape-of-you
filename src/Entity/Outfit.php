@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OutfitRepository::class)]
 #[Vich\Uploadable]
@@ -22,21 +23,44 @@ class Outfit
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom de la tenue ne peut pas être vide")]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: "Le nom doit faire au moins {{ limit }} caractères",
+        maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères"
+    )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(
+        max: 1000,
+        maxMessage: "La description ne peut pas dépasser {{ limit }} caractères"
+    )]
     private ?string $description = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: "L'occasion ne peut pas être vide")]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: "L'occasion ne peut pas dépasser {{ limit }} caractères"
+    )]
     private ?string $occasion = null;
 
     #[ORM\Column(enumType: WardrobeSeason::class)]
+    #[Assert\NotNull(message: "La saison doit être spécifiée")]
     private ?WardrobeSeason $season = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
     #[Vich\UploadableField(mapping: 'outfits', fileNameProperty: 'image')]
+    #[Assert\Image(
+        maxSize: "5M",
+        mimeTypes: ["image/jpeg", "image/png"],
+        maxSizeMessage: "L'image ne doit pas dépasser 5 Mo",
+        mimeTypesMessage: "Formats acceptés : JPEG, PNG"
+    )]
     private ?File $imageFile = null;
 
     #[ORM\Column]
@@ -49,12 +73,14 @@ class Outfit
 
     #[ORM\ManyToOne(inversedBy: 'outfits')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: "L'utilisateur doit être spécifié")]
     private ?User $customer = null;
 
     /**
      * @var Collection<int, OutfitItem>
      */
     #[ORM\OneToMany(targetEntity: OutfitItem::class, mappedBy: 'outfit', cascade: ['persist'], orphanRemoval: true)]
+    #[Assert\Valid]
     private Collection $outfitItems;
 
     #[ORM\Column]
