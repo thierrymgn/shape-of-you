@@ -17,17 +17,17 @@ class OutfitItem
 
     #[ORM\ManyToOne(inversedBy: 'outfitItems')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull(message: "La tenue doit être spécifiée")]
+    #[Assert\NotNull(message: 'La tenue doit être spécifiée')]
     private ?Outfit $outfit = null;
 
     #[ORM\ManyToOne(inversedBy: 'outfitItems')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull(message: "Le vêtement doit être spécifié")]
+    #[Assert\NotNull(message: 'Le vêtement doit être spécifié')]
     private ?WardrobeItem $wardrobeItem = null;
 
     #[ORM\Column]
-    #[Assert\NotNull(message: "La position doit être spécifiée")]
-    #[Assert\Positive(message: "La position doit être un nombre positif")]
+    #[Assert\NotNull(message: 'La position doit être spécifiée')]
+    #[Assert\Positive(message: 'La position doit être un nombre positif')]
     private ?int $position = null;
 
     #[ORM\Column]

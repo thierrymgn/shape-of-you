@@ -1,85 +1,122 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Outfit{% endblock %}
+{% block title %}Modifier la tenue{% endblock %}
 
 {% block body %}
-    <h1>Edit Outfit</h1>
-
-    {{ form_start(form) }}
-    <div class="mb-4">
-        {{ form_label(form.name, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-        {{ form_widget(form.name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' ~ (form.name.vars.valid ? '' : ' border-red-500')}}) }}
-        {{ form_errors(form.name, {'attr': {'class': 'text-red-500 text-xs italic mt-1'}}) }}
-    </div>
-    <div class="mb-4">
-        {{ form_label(form.description, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-        {{ form_widget(form.description, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' ~ (form.description.vars.valid ? '' : ' border-red-500')}}) }}
-        {{ form_errors(form.description, {'attr': {'class': 'text-red-500 text-xs italic mt-1'}}) }}
-    </div>
-    <div class="mb-4">
-        {{ form_label(form.occasion, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-        {{ form_widget(form.occasion, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' ~ (form.description.vars.valid ? '' : ' border-red-500')}}) }}
-        {{ form_errors(form.occasion, {'attr': {'class': 'text-red-500 text-xs italic mt-1'}}) }}
-    </div>
-    <div class="mb-4">
-        {{ form_label(form.season, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-        {{ form_widget(form.season, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' ~ (form.description.vars.valid ? '' : ' border-red-500')}}) }}
-        {{ form_errors(form.season, {'attr': {'class': 'text-red-500 text-xs italic mt-1'}}) }}
-    </div>
-    <div class="mb-4">
-        {{ form_label(form.public, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-        {{ form_widget(form.public, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' ~ (form.description.vars.valid ? '' : ' border-red-500')}}) }}
-        {{ form_errors(form.public, {'attr': {'class': 'text-red-500 text-xs italic mt-1'}}) }}
-    </div>
-    {% if outfit.image %}
-        <div class="current-image mb-4">
-            <p>Image actuelle :</p>
-            <img src="{{ vich_uploader_asset(outfit, 'imageFile') }}" alt="{{ outfit.name }}" class="max-w-xs">
+    <div class="container mx-auto px-4 py-8">
+        <div class="mb-6">
+            <a href="{{ path('app_outfit_index') }}" class="text-blue-500 hover:underline">
+                &larr; Retour à la liste
+            </a>
         </div>
-    {% endif %}
-    <div class="mb-4">
-        {{ form_label(form.imageFile, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-        {{ form_widget(form.imageFile, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' ~ (form.description.vars.valid ? '' : ' border-red-500')}}) }}
-        {{ form_errors(form.imageFile, {'attr': {'class': 'text-red-500 text-xs italic mt-1'}}) }}
-    </div>
 
-    <div id="outfitItems"
-         data-prototype="{{ form_widget(form.outfitItems.vars.prototype)|e('html_attr') }}"
-         data-index="{{ form.outfitItems|length }}">
-        <h3 class="block text-gray-700 font-bold mb-2">Vêtements</h3>
-        {% if form.outfitItems.vars.errors|length > 0 %}
-            <div class="text-red-500 text-xs italic mb-2">
-                {{ form_errors(form.outfitItems) }}
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h1 class="text-2xl font-bold mb-6">Modifier la tenue : {{ outfit.name }}</h1>
+
+            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <div class="mb-4">
+                        {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                        {{ form_errors(form.name, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500', 'rows': 3}}) }}
+                        {{ form_errors(form.description, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_label(form.occasion, 'Occasion', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(form.occasion, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                        {{ form_errors(form.occasion, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="mb-4">
+                        {{ form_label(form.season, 'Saison', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(form.season, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                        {{ form_errors(form.season, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_label(form.imageFile, 'Modifier l\'image', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(form.imageFile, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                        {{ form_errors(form.imageFile, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex items-center">
+                            {{ form_widget(form.public, {'attr': {'class': 'h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2'}}) }}
+                            {{ form_label(form.public, 'Rendre cette tenue publique', {'label_attr': {'class': 'text-sm font-medium text-gray-700'}}) }}
+                        </div>
+                        {{ form_errors(form.public, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                    </div>
+                </div>
             </div>
-        {% endif %}
-        {% for outfitItem in form.outfitItems %}
-            <div class="item mb-4 p-3 border rounded">
-                {% if not outfitItem.vars.valid %}
-                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-2 mb-2">
-                        {{ form_errors(outfitItem) }}
+
+            <div class="mt-8 mb-4">
+                <h2 class="text-xl font-semibold mb-4">Vêtements de la tenue</h2>
+
+                <div id="outfitItems"
+                     data-prototype="{{ form_widget(form.outfitItems.vars.prototype)|e('html_attr') }}"
+                     data-index="{{ form.outfitItems|length }}"
+                     class="space-y-4">
+                    {% if form.outfitItems|length == 0 %}
+                        <p class="text-gray-500 italic">Aucun vêtement ajouté. Cliquez sur "Ajouter un vêtement" ci-dessous.</p>
+                    {% else %}
+                        {% for outfitItem in form.outfitItems %}
+                            <div class="item p-4 border border-gray-200 rounded-md bg-gray-50">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        {{ form_label(outfitItem.wardrobeItem, 'Vêtement', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                                        {{ form_widget(outfitItem.wardrobeItem, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                                        {{ form_errors(outfitItem.wardrobeItem, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                                    </div>
+                                    <div>
+                                        {{ form_label(outfitItem.position, 'Position', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                                        {{ form_widget(outfitItem.position, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                                        {{ form_errors(outfitItem.position, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                                    </div>
+                                </div>
+                                <button type="button" class="remove-item mt-3 px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm">
+                                    Supprimer ce vêtement
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="mt-4">
+                    <button type="button" id="add-another-item" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                        <i class="fas fa-plus mr-1"></i> Ajouter un vêtement
+                    </button>
+                </div>
+
+                {% if form.outfitItems.vars.errors|length > 0 %}
+                    <div class="mt-2 text-red-500 text-sm">
+                        {{ form_errors(form.outfitItems) }}
                     </div>
                 {% endif %}
-                {{ form_widget(outfitItem) }}
-                <button type="button" class="remove-item bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded mt-2">
-                    Supprimer ce vêtement
-                </button>
             </div>
-        {% endfor %}
-        <button type="button" id="add-another-item" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
-            Ajouter un vêtement
-        </button>
-    </div>
 
-    {{ form_row(form._token) }}
-    <div class="flex items-center justify-between">
-        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            {{ button_label|default('Enregistrer') }}
-        </button>
-        <a href="{{ path('app_outfit_index') }}" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-            Retour à la liste
-        </a>
+            {{ form_row(form._token) }}
+            <div class="mt-8 flex justify-between">
+                <button type="submit" class="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                    Enregistrer les modifications
+                </button>
+                <a href="{{ path('app_outfit_index') }}" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                    Annuler
+                </a>
+            </div>
+
+            {{ form_end(form, {'render_rest': false}) }}
+        </div>
     </div>
-    {{ form_end(form, {'render_rest': false}) }}
 {% endblock %}
 
 {% block javascripts %}

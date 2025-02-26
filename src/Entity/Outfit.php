@@ -10,8 +10,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: OutfitRepository::class)]
 #[Vich\Uploadable]
@@ -23,19 +23,19 @@ class Outfit
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le nom de la tenue ne peut pas être vide")]
+    #[Assert\NotBlank(message: 'Le nom de la tenue ne peut pas être vide')]
     #[Assert\Length(
         min: 3,
         max: 255,
-        minMessage: "Le nom doit faire au moins {{ limit }} caractères",
-        maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères"
+        minMessage: 'Le nom doit faire au moins {{ limit }} caractères',
+        maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
     )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(
         max: 1000,
-        maxMessage: "La description ne peut pas dépasser {{ limit }} caractères"
+        maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères'
     )]
     private ?string $description = null;
 
@@ -48,7 +48,7 @@ class Outfit
     private ?string $occasion = null;
 
     #[ORM\Column(enumType: WardrobeSeason::class)]
-    #[Assert\NotNull(message: "La saison doit être spécifiée")]
+    #[Assert\NotNull(message: 'La saison doit être spécifiée')]
     private ?WardrobeSeason $season = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -56,10 +56,10 @@ class Outfit
 
     #[Vich\UploadableField(mapping: 'outfits', fileNameProperty: 'image')]
     #[Assert\Image(
-        maxSize: "5M",
-        mimeTypes: ["image/jpeg", "image/png"],
+        maxSize: '5M',
+        mimeTypes: ['image/jpeg', 'image/png'],
         maxSizeMessage: "L'image ne doit pas dépasser 5 Mo",
-        mimeTypesMessage: "Formats acceptés : JPEG, PNG"
+        mimeTypesMessage: 'Formats acceptés : JPEG, PNG'
     )]
     private ?File $imageFile = null;
 
