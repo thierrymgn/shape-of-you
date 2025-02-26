@@ -34,7 +34,7 @@ class WardrobeItemType extends AbstractType
             ])
             ->add('customer', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'id',
+                'choice_label' => 'firstName',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
