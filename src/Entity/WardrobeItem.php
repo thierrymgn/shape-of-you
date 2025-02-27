@@ -77,6 +77,18 @@ class WardrobeItem
     #[ORM\OneToMany(targetEntity: WardrobeItemTag::class, mappedBy: 'wardrobeItem', orphanRemoval: true)]
     private Collection $wardrobeItemTags;
 
+    /**
+     * @var Collection<int, AiAnalysis>
+     */
+    #[ORM\OneToMany(targetEntity: AiAnalysis::class, mappedBy: 'wardrobeItemId')]
+    private Collection $WardrobeItemId;
+
+    /**
+     * @var Collection<int, WardrobeItemPartnerProduct>
+     */
+    #[ORM\OneToMany(targetEntity: WardrobeItemPartnerProduct::class, mappedBy: 'wardrobeItemId')]
+    private Collection $wardrobeItemPartnerProducts;
+
     public function __construct()
     {
         $this->status = WardrobeStatus::ACTIVE;
@@ -91,6 +103,8 @@ class WardrobeItem
     public function preUpdate(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+        $this->WardrobeItemId = new ArrayCollection();
+        $this->wardrobeItemPartnerProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -317,6 +331,66 @@ class WardrobeItem
             // set the owning side to null (unless already changed)
             if ($wardrobeItemTag->getWardrobeItem() === $this) {
                 $wardrobeItemTag->setWardrobeItem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WardrobeItemPartnerProduct>
+     */
+    public function getWardrobeItemPartnerProducts(): Collection
+    {
+        return $this->wardrobeItemPartnerProducts;
+    }
+
+    public function addWardrobeItemPartnerProduct(WardrobeItemPartnerProduct $wardrobeItemPartnerProduct): static
+    {
+        if (!$this->wardrobeItemPartnerProducts->contains($wardrobeItemPartnerProduct)) {
+            $this->wardrobeItemPartnerProducts->add($wardrobeItemPartnerProduct);
+            $wardrobeItemPartnerProduct->setWardrobeItemId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWardrobeItemPartnerProduct(WardrobeItemPartnerProduct $wardrobeItemPartnerProduct): static
+    {
+        if ($this->wardrobeItemPartnerProducts->removeElement($wardrobeItemPartnerProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($wardrobeItemPartnerProduct->getWardrobeItemId() === $this) {
+                $wardrobeItemPartnerProduct->setWardrobeItemId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AiAnalysis>
+     */
+    public function getWardrobeItemId(): Collection
+    {
+        return $this->WardrobeItemId;
+    }
+
+    public function addWardrobeItemId(AiAnalysis $wardrobeItemId): static
+    {
+        if (!$this->WardrobeItemId->contains($wardrobeItemId)) {
+            $this->WardrobeItemId->add($wardrobeItemId);
+            $wardrobeItemId->setWardrobeItemId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWardrobeItemId(AiAnalysis $wardrobeItemId): static
+    {
+        if ($this->WardrobeItemId->removeElement($wardrobeItemId)) {
+            // set the owning side to null (unless already changed)
+            if ($wardrobeItemId->getWardrobeItemId() === $this) {
+                $wardrobeItemId->setWardrobeItemId(null);
             }
         }
 
