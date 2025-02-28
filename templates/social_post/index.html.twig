@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SocialPost index{% endblock %}
+
+{% block body %}
+    <h1>SocialPost index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Image</th>
+                <th>Likes_count</th>
+                <th>Comments_count</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for social_post in social_posts %}
+            <tr>
+                <td>{{ social_post.id }}</td>
+                <td>{{ social_post.title }}</td>
+                <td>{{ social_post.content }}</td>
+                <td>{{ social_post.image }}</td>
+                <td>{{ social_post.likesCount }}</td>
+                <td>{{ social_post.commentsCount }}</td>
+                <td>{{ social_post.createdAt ? social_post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ social_post.updatedAt ? social_post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_social_post_show', {'id': social_post.id}) }}">show</a>
+                    <a href="{{ path('app_social_post_edit', {'id': social_post.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_social_post_new') }}">Create new</a>
+{% endblock %}
