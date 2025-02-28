@@ -78,6 +78,8 @@
 									<a href="{{ path('app_wardrobe_item_edit', {'id': wardrobe_item.id}) }}" class="flex max-w-40 flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 focus:outline-hidden sm:w-full mr-4">Edit
 									</a>
 									{{ include('wardrobe_item/_delete_form.html.twig') }}
+								{% else %}
+									<button type="button" class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 focus:outline-hidden sm:w-full mr-4">Buy
 								{% endif %}
 								<button type="button" class="flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
 									<svg class="size-6 shrink-0" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
@@ -95,17 +97,25 @@
 								<div>
 									<h3>
 										<button type="button" class="group relative flex w-full items-center justify-between py-6 text-left" aria-controls="disclosure-1" aria-expanded="false">
-											<span class="text-sm font-medium text-gray-900">Features</span>
-											<span
-												class="ml-6 flex items-center">
-												<!-- Open: "hidden", Closed: "block" -->
-												<svg class="block size-6 text-gray-400 group-hover:text-gray-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-													<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-												</svg>
-												<!-- Open: "block", Closed: "hidden" -->
-												<svg class="hidden size-6 text-indigo-400 group-hover:text-indigo-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-													<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
-												</svg>
+											<span class="text-sm font-medium text-gray-900">Informations complémentaire</span>
+											<span class="ml-6 flex items-center">
+												{% if wardrobe_item.customer == app.user %}
+												<a href="{{ path('app_wardrobe_item_edit', {'id': wardrobe_item.id}) }}">
+													<svg class="block size-6 text-gray-400 group-hover:text-gray-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+														<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+													</svg>
+													<svg class="hidden size-6 text-indigo-400 group-hover:text-indigo-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+														<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
+													</svg>
+												</a>
+												{% else %}
+													<svg class="block size-6 text-gray-400 group-hover:text-gray-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+														<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+													</svg>
+													<svg class="hidden size-6 text-indigo-400 group-hover:text-indigo-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+														<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
+													</svg>
+												{% endif %}
 											</span>
 										</button>
 									</h3>
@@ -128,7 +138,7 @@
 				</div>
 
 				<section aria-labelledby="related-heading" class="mt-10 border-t border-gray-200 px-4 py-16 sm:px-0">
-					<h2 id="related-heading" class="text-xl font-bold text-gray-900">More product</h2>
+					<h2 id="related-heading" class="text-xl font-bold text-gray-900">Plus de produit</h2>
 					{% if wardrobe_items is empty %}
 						<div class="rounded-md bg-blue-50 p-4 mt-4">
 							<div class="flex">
@@ -152,31 +162,32 @@
 						</div>
 
 					{% else %}
-						{% for wardrobe_item in wardrobe_items %}
-							<div class="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+						<div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8">
+							{% for wardrobe_item in wardrobe_items %}
 								<div>
 									<div class="relative">
 										<div class="relative h-72 w-full overflow-hidden rounded-lg">
+											{# <img src="{{ wardrobe_item.image }}" alt="{{ wardrobe_item.name }}" class="w-full h-full object-cover"> #}
 											<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-03-related-product-01.jpg" alt="Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls." class="size-full object-cover">
 										</div>
 										<div class="relative mt-4">
 											<h3 class="text-sm font-medium text-gray-900">{{ wardrobe_item.name }}</h3>
 											<p class="mt-1 text-sm text-gray-500">{{ wardrobe_item.brand }}</p>
-											<p>Appartient à :
-												{{ wardrobe_item.customer.firstName }}
-												{{ wardrobe_item.customer.lastName }}</p>
+											<p>{{ wardrobe_item.customer.firstName }} {{ wardrobe_item.customer.lastName }}</p>
 										</div>
 										<div class="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
-											<div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-36 bg-linear-to-t from-black opacity-50"></div>
+											<div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"></div>
 											<p class="relative text-lg font-semibold text-white">$140</p>
 										</div>
 									</div>
 									<div class="mt-6">
-										<a href="{{ path('app_wardrobe_item_show', {'id': wardrobe_item.id}) }}" class="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200">View more</a>
+										<a href="{{ path('app_wardrobe_item_show', {'id': wardrobe_item.id}) }}" class="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200">
+											Voir plus
+										</a>
 									</div>
 								</div>
-							</div>
-						{% endfor %}
+							{% endfor %}
+						</div>
 					{% endif %}
 				</section>
 			</div>
