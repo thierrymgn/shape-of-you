@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Category;
-use App\Entity\User;
 use App\Entity\WardrobeItem;
 use App\Enum\WardrobeSeason;
 use App\Enum\WardrobeStatus;
@@ -31,10 +30,6 @@ class WardrobeItemType extends AbstractType
             ->add('season', EnumType::class, [
                 'class' => WardrobeSeason::class,
                 'choice_label' => fn (WardrobeSeason $wardrobeSeason) => $wardrobeSeason->name, // ou getLabel() si défini
-            ])
-            ->add('customer', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'firstName',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
