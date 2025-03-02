@@ -22,6 +22,8 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    .addEntry('outfit-collection', './assets/js/outfit-collection.js')
+    .addEntry('outfit-delete-modal', './assets/js/outfit-delete-modal.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

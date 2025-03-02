@@ -33,3 +33,20 @@ App\Entity\WardrobeItem:
         category:
             - NotNull:
                   message: 'La catégorie est obligatoire'
+
+App\Entity\Outfit:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+              fields: [name, customer]
+              message: 'Vous avez déjà une tenue avec ce nom'
+    properties:
+        outfitItems:
+            - Count:
+                  min: 1
+                  minMessage: 'Une tenue doit contenir au moins un vêtement'
+
+App\Entity\OutfitItem:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+              fields: [outfit, wardrobeItem]
+              message: 'Ce vêtement est déjà présent dans cette tenue'

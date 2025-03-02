@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ outfit.name }}{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <div class="mb-6">
+            <a href="{{ path('app_outfit_index') }}" class="text-blue-500 hover:underline">
+                &larr; Retour à la liste
+            </a>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="md:flex">
+                <div class="md:w-1/2">
+                    {% if outfit.image %}
+                        <img src="{{ vich_uploader_asset(outfit, 'imageFile') }}" alt="{{ outfit.name }}" class="w-full h-auto">
+                    {% else %}
+                        <div class="bg-gray-200 flex items-center justify-center h-64 md:h-full">
+                            <span class="text-gray-400">Pas d'image</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="md:w-1/2 p-6">
+                    <h1 class="text-3xl font-bold mb-4">{{ outfit.name }}</h1>
+
+                    <div class="flex items-center mb-4">
+                        <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                            {{ outfit.season.value|capitalize }}
+                        </span>
+                        {% if outfit.public %}
+                            <span class="ml-2 inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                                Public
+                            </span>
+                        {% else %}
+                            <span class="ml-2 inline-block bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">
+                                Privé
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="text-xl font-semibold mb-2">Occasion</h2>
+                        <p class="text-gray-700">{{ outfit.occasion }}</p>
+                    </div>
+
+                    {% if outfit.description %}
+                        <div class="mb-4">
+                            <h2 class="text-xl font-semibold mb-2">Description</h2>
+                            <p class="text-gray-700">{{ outfit.description }}</p>
+                        </div>
+                    {% endif %}
+
+                    <div class="flex space-x-4 mt-6">
+                        <a href="{{ path('app_outfit_edit', {'id': outfit.id}) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Modifier
+                        </a>
+
+                        <button type="button"
+                                class="delete-trigger bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                data-outfit-id="{{ outfit.id }}"
+                                data-outfit-name="{{ outfit.name }}"
+                                data-csrf-token="{{ csrf_token('delete' ~ outfit.id) }}">
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 border-t">
+                <h2 class="text-2xl font-bold mb-4">Vêtements dans cette tenue</h2>
+
+                {% if outfit.outfitItems|length > 0 %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {% for item in outfit.outfitItems|sort((a, b) => a.position <=> b.position) %}
+                            <div class="border rounded p-4 flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center mr-4">
+                                    <span class="font-bold text-gray-700">{{ item.position }}</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold">{{ item.wardrobeItem.name }}</h3>
+                                    <p class="text-sm text-gray-600">{{ item.wardrobeItem.brand }}</p>
+                                    <p class="text-xs bg-gray-100 inline-block px-2 py-1 rounded">{{ item.wardrobeItem.color }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-gray-500">Aucun vêtement dans cette tenue.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+            <h3 class="text-xl font-bold mb-4">Confirmer la suppression</h3>
+            <p id="deleteMessage" class="mb-6"></p>
+            <div class="flex justify-end space-x-3">
+                <button id="cancelDelete" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+                    Annuler
+                </button>
+                <form id="deleteForm" method="post" action="" data-base-url="{{ path('app_outfit_delete', {'id': 'OUTFIT_ID'}) }}">
+                    <input type="hidden" name="_token" id="csrfToken" value="">
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('outfit-delete-modal') }}
+{% endblock %}

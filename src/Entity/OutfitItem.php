@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\OutfitItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OutfitItemRepository::class)]
 class OutfitItem
@@ -16,13 +17,17 @@ class OutfitItem
 
     #[ORM\ManyToOne(inversedBy: 'outfitItems')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'La tenue doit être spécifiée')]
     private ?Outfit $outfit = null;
 
     #[ORM\ManyToOne(inversedBy: 'outfitItems')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Le vêtement doit être spécifié')]
     private ?WardrobeItem $wardrobeItem = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'La position doit être spécifiée')]
+    #[Assert\Positive(message: 'La position doit être un nombre positif')]
     private ?int $position = null;
 
     #[ORM\Column]
