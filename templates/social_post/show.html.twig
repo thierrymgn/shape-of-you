@@ -3,48 +3,102 @@
 {% block title %}SocialPost{% endblock %}
 
 {% block body %}
-    <h1>SocialPost</h1>
+<div class="flex justify-between py-5 px-3 border-b-2 border-gray-900/10">
+    <a href="{{ path('app_social_post_index') }}">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>          
+    </a>
+    {% if social_post.author and social_post.author.id %}
+        {% if social_post.author.id == app.user.id %}
+        <a href="{{ path('app_social_post_edit', {'id': social_post.id}) }}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>          
+        </a>
+        {% endif %}
+    {% endif %}
+</div>
+    <h1 class="text-2xl text-center font-bold my-10 first-letter:uppercase">{{ social_post.title }}</h1>
+    <div class="mx-10">
+        <div>
+            <div>
+                <p class="first-letter:uppercase">{{ social_post.content }}</p>
+            </div>
+            <div>
+                <img src="{{ asset('uploads/images/social_post/' ~ social_post.image)}}" alt="{{ social_post.title }} image" onload="adjustOrientation(this)">
+            </div>
+            <div>
+                <h2 class="text-gray-500 first-letter:uppercase">
+                    {% if social_post.author %}
+                        {# <a href="{{ path('app_user_show', {'id': social_post.author.id}) }}"> #}
+                            {{ social_post.author.firstName }} {{ social_post.author.lastName }}
+                        {# </a>     #}
+                    {% else %}
+                        Unknown
+                    {% endif %}
+                </h2>
+            </div>
+        </div>
+        <div >
+            <div class="flex">
+                <div class="w-full">
+                    <div class="flex items-center">
+                        <div class="flex-1 text-center">
+                            <a href="{{ path('app_social_post_show', {'id': social_post.id}) }}" class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-indigo-800">
+                                <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            </a>
+                        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ social_post.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ social_post.title }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ social_post.content }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ social_post.image }}</td>
-            </tr>
-            <tr>
-                <th>Likes_count</th>
-                <td>{{ social_post.likesCount }}</td>
-            </tr>
-            <tr>
-                <th>Comments_count</th>
-                <td>{{ social_post.commentsCount }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ social_post.createdAt ? social_post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ social_post.updatedAt ? social_post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+                        <div class="flex-1 text-center">
+                            <a href="#" class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-indigo-800">
+                                <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                            </a>
+                        </div>
 
-    <a href="{{ path('app_social_post_index') }}">back to list</a>
+                        <div class="flex-1 text-center">
+                            <a id="copy-link-btn" class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-indigo-800">
+                                <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            </a>
+                        </div>
+                        {% if social_post.author and social_post.author.id %}
+                            {% if social_post.author.id == app.user.id %}
+                            <div class="flex-1 text-center">
+                                {{ include('social_post/_delete_form.html.twig') }}
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div>
+            {% for comment in social_post.comments %}
+                {% if comment.commentId is null %}
+                    <div class="comment p-4 border rounded mb-4">
+                        <p class="text-gray-700">{{ comment.content }}</p>
+                        <p class="text-sm text-gray-500">
+                            By: {{ comment.userId.firstName }} {{ comment.userId.lastName }} on {{ comment.createdAt|date('d/m/Y H:i') }}
+                        </p>
 
-    <a href="{{ path('app_social_post_edit', {'id': social_post.id}) }}">edit</a>
-
-    {{ include('social_post/_delete_form.html.twig') }}
+                        {% if comment.comments|length > 0 %}
+                            <div class="replies ml-6 mt-2">
+                                <h4 class="text-sm font-semibold">Replies:</h4>
+                                {% for reply in comment.comments %}
+                                    <div class="reply p-2 border rounded mt-2">
+                                        <p>{{ reply.content }}</p>
+                                        <p class="text-xs text-gray-400">
+                                            By: {{ reply.userId.firstName }} {{ reply.userId.lastName }} on {{ reply.createdAt|date('d/m/Y H:i') }}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

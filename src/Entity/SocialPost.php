@@ -37,6 +37,10 @@ class SocialPost
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $author = null;
+
     /**
      * @var Collection<int, Comment>
      */
@@ -132,9 +136,9 @@ class SocialPost
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = $createdAt ?? new \DateTimeImmutable();
 
         return $this;
     }
@@ -144,9 +148,9 @@ class SocialPost
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = $updatedAt ?? new \DateTimeImmutable();
 
         return $this;
     }
@@ -202,11 +206,22 @@ class SocialPost
     public function removePostLike(PostLike $postLike): static
     {
         if ($this->postLikes->removeElement($postLike)) {
-            // set the owning side to null (unless already changed)
             if ($postLike->getPostId() === $this) {
                 $postLike->setPostId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

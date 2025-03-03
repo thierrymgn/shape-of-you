@@ -6,6 +6,7 @@
 parameters:
     timezone: '%env(APP_TIMEZONE)%'
     wardrobe_images_directory: '%kernel.project_dir%/public/images/wardrobe'
+    social_post_images_directory: '%kernel.project_dir%/public/uploads/images/social_post'
 
 services:
     # default configuration for services in *this* file

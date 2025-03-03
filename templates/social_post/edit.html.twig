@@ -3,11 +3,7 @@
 {% block title %}Edit SocialPost{% endblock %}
 
 {% block body %}
-    <h1>Edit SocialPost</h1>
 
     {{ include('social_post/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_social_post_index') }}">back to list</a>
-
-    {{ include('social_post/_delete_form.html.twig') }}
 {% endblock %}

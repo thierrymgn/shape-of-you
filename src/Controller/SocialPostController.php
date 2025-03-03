@@ -7,6 +7,7 @@ use App\Form\SocialPostType;
 use App\Repository\SocialPostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,11 +26,32 @@ final class SocialPostController extends AbstractController
     #[Route('/new', name: 'app_social_post_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $socialPost = new SocialPost();
         $form = $this->createForm(SocialPostType::class, $socialPost);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // image upload
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                try {
+                    $imageFile->move(
+                        $this->getParameter('social_post_images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+                }
+                $socialPost->setImage($newFilename);
+            }
+
+            /** @var \App\Entity\User $user */
+            $user = $this->getUser();
+            $socialPost->setAuthor($user);
+
             $entityManager->persist($socialPost);
             $entityManager->flush();
 
