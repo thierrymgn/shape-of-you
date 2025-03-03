@@ -4,6 +4,13 @@
 {% endblock %}
 
 {% block body %}
+{# {% if app.user %}
+	<div class="mb-3">
+		You are logged in as
+		{{ app.user.userIdentifier }},
+		<a href="{{ path('app_logout') }}">Logout</a>
+	</div>
+{% endif %} #}
 <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
 	<div class="sm:mx-auto sm:w-full sm:max-w-md">
 	  <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company">
@@ -19,14 +26,14 @@
 		  <div>
 			<label for="inputEmail" class="block text-sm/6 font-medium text-gray-900">Email address</label>
 			<div class="mt-2">				
-			  <input type="email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+			  <input type="email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required class="block w-full border-2 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
 			</div>
 		  </div>
   
 		  <div>
 			<label for="inputPassword" class="block text-sm/6 font-medium text-gray-900">Password</label>
 			<div class="mt-2">
-			  <input type="password" name="password" id="inputPassword" autocomplete="current-password" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+			  <input type="password" name="password" id="inputPassword" autocomplete="current-password" required class="block w-full border-2 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
 			</div>
 		  </div>
   
@@ -80,11 +87,4 @@
 		</div>
 	</div>
 </div>
-{# {% if app.user %}
-	<div class="mb-3">
-		You are logged in as
-		{{ app.user.userIdentifier }},
-		<a href="{{ path('app_logout') }}">Logout</a>
-	</div>
-{% endif %} #}
 {% endblock %}
