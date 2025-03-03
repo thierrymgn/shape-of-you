@@ -30,7 +30,12 @@ final class WardrobeItemController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $wardrobeItem->setCustomer($this->getUser());
+            /** @var \App\Entity\User|null $user */
+            $user = $this->getUser();
+            if (!$user) {
+                throw new \LogicException('L\'utilisateur doit être authentifié.');
+            }
+            $wardrobeItem->setCustomer($user);
             $entityManager->persist($wardrobeItem);
             $entityManager->flush();
 
