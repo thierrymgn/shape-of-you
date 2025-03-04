@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Profile
+{% endblock %}
+
+{% block body %}
+	<div class="max-w-5xl mx-auto py-10">
+		<div class="bg-white shadow-md rounded-lg p-6">
+			<div class="flex items-center space-x-4">
+				<img src="https://ui-avatars.com/api/?name={{ userProfile.firstName }}+{{ userProfile.lastName }}&size=128" alt="Avatar" class="w-24 h-24 rounded-full">
+				<div>
+					<h1 class="text-3xl font-bold">{{ userProfile.firstName }}
+						{{ userProfile.lastName }}</h1>
+					<p class="text-gray-600">{{ userProfile.email }}</p>
+					<p class="text-gray-500">Joined on
+						{{ userProfile.createdAt|date('F j, Y') }}</p>
+				</div>
+			</div>
+
+			<div class="mt-6 flex space-x-6">
+				<div>
+					<span class="text-lg font-semibold">{{ followers|length }}</span>
+					<p class="text-gray-500">Followers</p>
+				</div>
+				<div>
+					<span class="text-lg font-semibold">{{ following|length }}</span>
+					<p class="text-gray-500">Following</p>
+				</div>
+			</div>
+
+			<div class="mt-10">
+				<h2 class="text-2xl font-semibold">Following</h2>
+				<ul class="mt-4 space-y-2">
+					{% for follow in following %}
+						<li class="flex items-center space-x-4">
+							<img src="https://ui-avatars.com/api/?name={{ follow.following.firstName }}+{{ follow.following.lastName }}&size=64" alt="Avatar" class="w-10 h-10 rounded-full">
+							<a href="{{ path('app_user_profile', {id: follow.following.id}) }}" class="text-lg font-medium text-indigo-600 hover:underline">
+								{{ follow.following.firstName }}
+								{{ follow.following.lastName }}
+							</a>
+						</li>
+					{% else %}
+						<p class="text-gray-500">You are not following anyone yet.</p>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+{% endblock %}

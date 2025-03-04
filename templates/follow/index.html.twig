@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Following
+{% endblock %}
+
+{% block body %}
+	<div class="max-w-3xl mx-auto py-8">
+		<h1 class="text-2xl font-bold mb-4">Following</h1>
+
+		{% if follows is not empty %}
+			<ul class="space-y-4">
+				{% for follow in follows %}
+					<li class="flex items-center justify-between p-4 bg-gray-100 rounded-lg">
+						<div class="flex items-center space-x-4">
+							<img src="{{ follow.following.avatar ?: 'https://via.placeholder.com/50' }}" alt="{{ follow.following.firstName }}" class="w-12 h-12 rounded-full">
+							<div>
+								<p class="font-semibold">{{ follow.following.firstName }}
+									{{ follow.following.lastName }}</p>
+								<p class="text-sm text-gray-500">{{ follow.following.email }}</p>
+							</div>
+						</div>
+
+						<form method="post" action="{{ path('app_unfollow', {'id': follow.following.id}) }}">
+							<button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Unfollow</button>
+						</form>
+					</li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<p class="text-gray-600">You are not following anyone yet.</p>
+		{% endif %}
+	</div>
+{% endblock %}
