@@ -95,6 +95,14 @@ class WardrobeItem
         $this->season = WardrobeSeason::ALL;
         $this->outfitItems = new ArrayCollection();
         $this->wardrobeItemTags = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
         $this->WardrobeItemId = new ArrayCollection();
         $this->wardrobeItemPartnerProducts = new ArrayCollection();
     }
