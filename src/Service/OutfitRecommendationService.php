@@ -28,9 +28,9 @@ class OutfitRecommendationService
         WardrobeItemRepository $wardrobeItemRepository,
         OutfitRepository $outfitRepository,
         string $openaiApiKey,
-        string $openaiModelId = 'gpt-4o-mini'
+        string $openaiModelId = 'gpt-4o-mini',
     ) {
-        $this->client = OpenAI::client($openaiApiKey);
+        $this->client = \OpenAI::client($openaiApiKey);
         $this->entityManager = $entityManager;
         $this->wardrobeItemRepository = $wardrobeItemRepository;
         $this->outfitRepository = $outfitRepository;
@@ -38,12 +38,12 @@ class OutfitRecommendationService
     }
 
     /**
-     * Génère des suggestions de tenues pour un utilisateur
+     * Génère des suggestions de tenues pour un utilisateur.
      *
-     * @param User $user L'utilisateur pour lequel générer des suggestions
-     * @param string $occasion L'occasion pour laquelle générer une tenue (casual, formel, sport, etc.)
-     * @param WardrobeSeason|null $season La saison pour laquelle générer une tenue
-     * @param int $count Le nombre de suggestions à générer
+     * @param User                $user     L'utilisateur pour lequel générer des suggestions
+     * @param string              $occasion L'occasion pour laquelle générer une tenue (casual, formel, sport, etc.)
+     * @param WardrobeSeason|null $season   La saison pour laquelle générer une tenue
+     * @param int                 $count    Le nombre de suggestions à générer
      *
      * @return array<Outfit> Les tenues suggérées
      */
@@ -51,11 +51,11 @@ class OutfitRecommendationService
         User $user,
         string $occasion,
         ?WardrobeSeason $season = null,
-        int $count = 3
+        int $count = 3,
     ): array {
         if (!$season) {
             $month = (int) date('n');
-            $season = match(true) {
+            $season = match (true) {
                 $month >= 3 && $month <= 5 => WardrobeSeason::SPRING,
                 $month >= 6 && $month <= 8 => WardrobeSeason::SUMMER,
                 $month >= 9 && $month <= 11 => WardrobeSeason::AUTUMN,
@@ -69,7 +69,7 @@ class OutfitRecommendationService
         ]);
 
         $seasonItems = array_filter($userItems, function (WardrobeItem $item) use ($season) {
-            return $item->getSeason() === $season || $item->getSeason() === WardrobeSeason::ALL;
+            return $item->getSeason() === $season || WardrobeSeason::ALL === $item->getSeason();
         });
 
         if (empty($seasonItems)) {
@@ -100,14 +100,14 @@ class OutfitRecommendationService
             }
         }
 
-        $systemPrompt = "Tu es un styliste expert qui crée des tenues harmonieuses et adaptées aux occasions. " .
-            "Analyse les vêtements disponibles et propose des combinaisons optimales.";
+        $systemPrompt = 'Tu es un styliste expert qui crée des tenues harmonieuses et adaptées aux occasions. '.
+            'Analyse les vêtements disponibles et propose des combinaisons optimales.';
 
         $userPrompt = json_encode([
             'occasion' => $occasion,
             'season' => $season->value,
             'count' => $count,
-            'items' => $itemsData
+            'items' => $itemsData,
         ]);
 
         $response = $this->client->chat()->create([
@@ -115,14 +115,14 @@ class OutfitRecommendationService
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => $systemPrompt
+                    'content' => $systemPrompt,
                 ],
                 [
                     'role' => 'user',
-                    'content' => "Crée $count tenues pour l'occasion \"$occasion\" pendant la saison " .
-                        strtolower($season->value) . " en utilisant les vêtements suivants: " .
-                        $userPrompt
-                ]
+                    'content' => "Crée $count tenues pour l'occasion \"$occasion\" pendant la saison ".
+                        strtolower($season->value).' en utilisant les vêtements suivants: '.
+                        $userPrompt,
+                ],
             ],
             'response_format' => [
                 'type' => 'json_schema',
@@ -156,9 +156,9 @@ class OutfitRecommendationService
                             ],
                         ],
                         'required' => ['outfits'],
-                        'additionalProperties' => false
-                    ]
-                ]
+                        'additionalProperties' => false,
+                    ],
+                ],
             ],
             'max_tokens' => 2000,
         ]);
@@ -222,7 +222,10 @@ class OutfitRecommendationService
     }
 
     /**
-     * Trouve le vêtement correspondant à l'ID spécifié
+     * Trouve le vêtement correspondant à l'ID spécifié.
+     *
+     * @param array<WardrobeItem> $items Tableau des vêtements à parcourir
+     * @param int                 $id    ID du vêtement à rechercher
      */
     private function findItemById(array $items, int $id): ?WardrobeItem
     {
@@ -236,10 +239,10 @@ class OutfitRecommendationService
     }
 
     /**
-     * Suggère des tenues en fonction des tendances actuelles
+     * Suggère des tenues en fonction des tendances actuelles.
      *
-     * @param User $user L'utilisateur pour lequel générer des suggestions
-     * @param int $count Le nombre de suggestions à générer
+     * @param User $user  L'utilisateur pour lequel générer des suggestions
+     * @param int  $count Le nombre de suggestions à générer
      *
      * @return array<Outfit> Les tenues suggérées
      */
@@ -265,22 +268,22 @@ class OutfitRecommendationService
     }
 
     /**
-     * Récupère les tendances actuelles
+     * Récupère les tendances actuelles.
      *
-     * @return array Les tendances actuelles
+     * @return array<int, array{occasion: string, season: WardrobeSeason}>
      */
     private function getCurrentTrends(): array
     {
         // Cette méthode pourrait être étendue pour appeler une API externe ou consulter une base de données de tendances
         $month = (int) date('n');
-        $currentSeason = match(true) {
+        $currentSeason = match (true) {
             $month >= 3 && $month <= 5 => WardrobeSeason::SPRING,
             $month >= 6 && $month <= 8 => WardrobeSeason::SUMMER,
             $month >= 9 && $month <= 11 => WardrobeSeason::AUTUMN,
             default => WardrobeSeason::WINTER,
         };
 
-        return match($currentSeason) {
+        return match ($currentSeason) {
             WardrobeSeason::SPRING => [
                 ['occasion' => 'Casual printanier', 'season' => WardrobeSeason::SPRING],
                 ['occasion' => 'Brunch en terrasse', 'season' => WardrobeSeason::SPRING],
@@ -296,24 +299,20 @@ class OutfitRecommendationService
                 ['occasion' => 'Week-end à la campagne', 'season' => WardrobeSeason::AUTUMN],
                 ['occasion' => 'Rentrée professionnelle', 'season' => WardrobeSeason::AUTUMN],
             ],
-            WardrobeSeason::WINTER => [
+            default => [
                 ['occasion' => 'Tenue chaleureuse quotidienne', 'season' => WardrobeSeason::WINTER],
                 ['occasion' => 'Fêtes de fin d\'année', 'season' => WardrobeSeason::WINTER],
                 ['occasion' => 'Soirée cocooning', 'season' => WardrobeSeason::WINTER],
-            ],
-            default => [
-                ['occasion' => 'Casual', 'season' => $currentSeason],
-                ['occasion' => 'Sortie', 'season' => $currentSeason],
-                ['occasion' => 'Travail', 'season' => $currentSeason],
             ],
         };
     }
 
     /**
-     * Analyse le style personnel d'un utilisateur
+     * Analyse le style personnel d'un utilisateur.
      *
      * @param User $user L'utilisateur dont on analyse le style
-     * @return array Les résultats de l'analyse
+     *
+     * @return array<string, mixed> Les résultats de l'analyse
      */
     public function analyzeUserStyle(User $user): array
     {
@@ -323,7 +322,7 @@ class OutfitRecommendationService
         if (empty($outfits) && empty($items)) {
             return [
                 'status' => 'insufficient_data',
-                'message' => 'Pas assez de données pour analyser le style.'
+                'message' => 'Pas assez de données pour analyser le style.',
             ];
         }
 
@@ -359,25 +358,25 @@ class OutfitRecommendationService
 
         $analysisData = [
             'wardrobe' => $itemDescriptions,
-            'outfits' => $outfitDescriptions
+            'outfits' => $outfitDescriptions,
         ];
 
-        $systemPrompt = "Tu es un expert en analyse de style vestimentaire qui donne des conseils personnalisés. " .
-            "Analyse l'ensemble des vêtements et des tenues pour déterminer le style dominant, les préférences " .
-            "de couleurs, et fournir des recommandations pertinentes.";
+        $systemPrompt = 'Tu es un expert en analyse de style vestimentaire qui donne des conseils personnalisés. '.
+            "Analyse l'ensemble des vêtements et des tenues pour déterminer le style dominant, les préférences ".
+            'de couleurs, et fournir des recommandations pertinentes.';
 
         $response = $this->client->chat()->create([
             'model' => $this->modelId,
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => $systemPrompt
+                    'content' => $systemPrompt,
                 ],
                 [
                     'role' => 'user',
-                    'content' => "Analyse le style vestimentaire de cette personne en fonction de sa garde-robe et de ses tenues: " .
-                        json_encode($analysisData)
-                ]
+                    'content' => 'Analyse le style vestimentaire de cette personne en fonction de sa garde-robe et de ses tenues: '.
+                        json_encode($analysisData),
+                ],
             ],
             'response_format' => [
                 'type' => 'json_schema',
@@ -389,26 +388,26 @@ class OutfitRecommendationService
                         'properties' => [
                             'styles' => [
                                 'type' => 'array',
-                                'items' => ['type' => 'string']
+                                'items' => ['type' => 'string'],
                             ],
                             'colors' => [
                                 'type' => 'array',
-                                'items' => ['type' => 'string']
+                                'items' => ['type' => 'string'],
                             ],
                             'combinations' => [
                                 'type' => 'array',
-                                'items' => ['type' => 'string']
+                                'items' => ['type' => 'string'],
                             ],
                             'recommendations' => [
                                 'type' => 'array',
-                                'items' => ['type' => 'string']
+                                'items' => ['type' => 'string'],
                             ],
                             'coherence_score' => ['type' => 'integer'],
                         ],
                         'required' => ['styles', 'colors', 'recommendations', 'coherence_score'],
-                        'additionalProperties' => false
-                    ]
-                ]
+                        'additionalProperties' => false,
+                    ],
+                ],
             ],
             'max_tokens' => 2000,
         ]);
@@ -418,7 +417,7 @@ class OutfitRecommendationService
         if (empty($analysisResult)) {
             return [
                 'status' => 'analysis_failed',
-                'message' => 'L\'analyse du style a échoué. Veuillez réessayer.'
+                'message' => 'L\'analyse du style a échoué. Veuillez réessayer.',
             ];
         }
 

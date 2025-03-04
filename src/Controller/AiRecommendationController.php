@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Enum\WardrobeSeason;
 use App\Service\OutfitRecommendationService;
-use App\Service\SimilarProductsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,14 +14,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class AiRecommendationController extends AbstractController
 {
     private OutfitRecommendationService $recommendationService;
-    private SimilarProductsService $similarProductsService;
 
     public function __construct(
         OutfitRecommendationService $recommendationService,
-        SimilarProductsService $similarProductsService
     ) {
         $this->recommendationService = $recommendationService;
-        $this->similarProductsService = $similarProductsService;
     }
 
     #[Route('/recommend-outfits', name: 'app_ai_recommend_outfits', methods: ['GET', 'POST'])]
@@ -30,6 +27,10 @@ class AiRecommendationController extends AbstractController
         $user = $this->getUser();
         if (!$user) {
             return $this->redirectToRoute('app_login');
+        }
+
+        if (!$user instanceof User) {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas une instance valide de User.');
         }
 
         $occasion = null;
@@ -55,7 +56,7 @@ class AiRecommendationController extends AbstractController
                     $this->addFlash('warning', 'Nous n\'avons pas pu générer de suggestions. Essayez avec d\'autres critères ou ajoutez plus de vêtements.');
                 }
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la génération des suggestions: ' . $e->getMessage());
+                $this->addFlash('error', 'Une erreur est survenue lors de la génération des suggestions: '.$e->getMessage());
             }
         }
 
@@ -77,6 +78,10 @@ class AiRecommendationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
+        if (!$user instanceof User) {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas une instance valide de User.');
+        }
+
         $outfits = [];
 
         try {
@@ -86,7 +91,7 @@ class AiRecommendationController extends AbstractController
                 $this->addFlash('info', 'Nous n\'avons pas trouvé de tendances adaptées à votre garde-robe pour le moment.');
             }
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Une erreur est survenue lors de la génération des tendances: ' . $e->getMessage());
+            $this->addFlash('error', 'Une erreur est survenue lors de la génération des tendances: '.$e->getMessage());
         }
 
         return $this->render('ai/trending_outfits.html.twig', [
@@ -102,13 +107,17 @@ class AiRecommendationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
+        if (!$user instanceof User) {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas une instance valide de User.');
+        }
+
         try {
             $styleAnalysis = $this->recommendationService->analyzeUserStyle($user);
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Une erreur est survenue lors de l\'analyse de style: ' . $e->getMessage());
+            $this->addFlash('error', 'Une erreur est survenue lors de l\'analyse de style: '.$e->getMessage());
             $styleAnalysis = [
                 'status' => 'analysis_failed',
-                'message' => 'L\'analyse a échoué. Veuillez réessayer plus tard.'
+                'message' => 'L\'analyse a échoué. Veuillez réessayer plus tard.',
             ];
         }
 
@@ -125,20 +134,26 @@ class AiRecommendationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
+        if (!$user instanceof User) {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas une instance valide de User.');
+        }
+
         try {
             // Ici, on peut implémenter la logique pour sauvegarder la tenue générée
             // Par exemple, copier la tenue temporaire vers une tenue permanente de l'utilisateur
 
             $this->addFlash('success', 'La tenue a été enregistrée dans votre garde-robe.');
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement de la tenue: ' . $e->getMessage());
+            $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement de la tenue: '.$e->getMessage());
         }
 
         return $this->redirectToRoute('app_outfit_index');
     }
 
     /**
-     * Retourne la liste des occasions disponibles
+     * Retourne la liste des occasions disponibles.
+     *
+     * @return array<string, string>
      */
     private function getOccasions(): array
     {
@@ -155,7 +170,9 @@ class AiRecommendationController extends AbstractController
     }
 
     /**
-     * Retourne la liste des saisons formatées pour le formulaire
+     * Retourne la liste des saisons formatées pour le formulaire.
+     *
+     * @return array<string, string>
      */
     private function getFormattedSeasons(): array
     {
@@ -163,6 +180,7 @@ class AiRecommendationController extends AbstractController
         foreach (WardrobeSeason::cases() as $season) {
             $formattedSeasons[ucfirst($season->value)] = $season->value;
         }
+
         return $formattedSeasons;
     }
 }
