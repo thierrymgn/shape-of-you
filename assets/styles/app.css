@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.landscape {
+    height: 18rem;
+}
+
+.portrait {
+    height: 52rem;
+}
