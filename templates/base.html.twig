@@ -38,7 +38,7 @@
 					<a href="{{path('app_outfit_index')}}" class=" {{ currentRoute == 'app_outfit_index' ? 'text-gray-900 border-indigo-500' : 'text-gray-500 border-transparent' }} inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700">Outfit</a>
 					<a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Social</a>
 					{% if 'ROLE_ADMIN' in app.user.roles %}
-					<a href="{{path('app_dashboard')}}" class=" {{ currentRoute == 'app_dashboard' ? 'text-gray-900 border-indigo-500' : ' text-gray-500 border-transparent' }} inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700">Dashboard</a>
+					<a href="{{path('app_dashboard_index')}}" class=" {{ currentRoute == 'app_dashboard_index' ? 'text-gray-900 border-indigo-500' : ' text-gray-500 border-transparent' }} inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700">Dashboard</a>
 					{% endif %}
 					</div>
 				</div>

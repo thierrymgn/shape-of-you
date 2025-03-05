@@ -15,7 +15,7 @@
                             <p class="text-base text-gray-600" >{{ user.roles|join(', ') }}</p>
                             <p class="text-sm text-gray-600" >{{ user.createdAt|date('Y-m-d H:i') }}</p>
                         </div>
-                        <div class="flex items-center">
+                        <div class="flex max-w-36 items-center">
                             <a href="{{ path('app_user_profile', {'id': user.id}) }}" class="p-3 bg-blue-500 text-white font-bold rounded-lg hover:underline">
                                 Voir les détails
                             </a>
