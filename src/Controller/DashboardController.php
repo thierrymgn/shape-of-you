@@ -8,9 +8,7 @@ use App\Form\CategoryType;
 use App\Form\RegistrationFormType;
 use App\Repository\CategoryRepository;
 use App\Repository\OutfitRepository;
-use App\Repository\SocialPostRepository;
 use App\Repository\UserRepository;
-use App\Repository\WardrobeItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,8 +21,6 @@ class DashboardController extends AbstractController
 {
     public function __construct(
         private UserRepository $userRepository,
-        private SocialPostRepository $socialPostRepository,
-        private WardrobeItemRepository $wardrobeItemRepository,
         private OutfitRepository $outfitRepository,
         private CategoryRepository $categoryRepository,
     ) {
