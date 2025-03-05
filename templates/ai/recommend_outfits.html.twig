@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recommandations d'IA{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6">Recommandations de tenues</h1>
+
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 p-4 rounded-md {% if type == 'success' %}bg-green-100 text-green-700{% elseif type == 'error' %}bg-red-100 text-red-700{% elseif type == 'warning' %}bg-yellow-100 text-yellow-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Générer des suggestions</h2>
+
+            <form method="post" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="occasion" class="block text-sm font-medium text-gray-700 mb-1">Occasion</label>
+                        <select id="occasion" name="occasion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Sélectionnez une occasion</option>
+                            {% for label, value in occasions %}
+                                <option value="{{ value }}" {% if occasion == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="season" class="block text-sm font-medium text-gray-700 mb-1">Saison</label>
+                        <select id="season" name="season" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Sélectionnez une saison</option>
+                            {% for label, value in seasons %}
+                                <option value="{{ value }}" {% if season is defined and season is not null and season.value == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        Générer des suggestions
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {% if formSubmitted %}
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-4">Suggestions pour "{{ occasion }}" ({{ season.value }})</h2>
+
+                {% if outfits|length > 0 %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {% for outfit in outfits %}
+                            <div class="bg-white rounded-lg shadow overflow-hidden">
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold mb-2">{{ outfit.name }}</h3>
+                                    <p class="text-gray-600 mb-4">{{ outfit.description }}</p>
+
+                                    <div class="mt-3">
+                                        <h4 class="font-medium text-gray-700 mb-2">Vêtements:</h4>
+                                        <ul class="list-disc pl-5 space-y-1">
+                                            {% for item in outfit.outfitItems|sort((a, b) => a.position <=> b.position) %}
+                                                <li>{{ item.wardrobeItem.name }} ({{ item.wardrobeItem.color }})</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+
+                                    <form method="post" action="{{ path('app_ai_save_outfit', {'id': outfit.id}) }}" class="mt-4">
+                                        <button type="submit" class="w-full px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                            Enregistrer cette tenue
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+{#                {% else %}#}
+{#                    <div class="bg-white rounded-lg shadow p-6 text-center">#}
+{#                        <p class="text-gray-600">Aucune suggestion n'a pu être générée. Essayez avec d'autres critères ou ajoutez plus de vêtements à votre garde-robe.</p>#}
+{#                        <a href="{{ path('app_wardrobe_new') }}" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">#}
+{#                            Ajouter des vêtements#}
+{#                        </a>#}
+{#                    </div>#}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
