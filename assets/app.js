@@ -1,8 +1,20 @@
 import './styles/app.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+document.addEventListener('DOMContentLoaded', function(){
+    console.log(document.querySelector('#sort-button-wardrobe-item'));
+    document.addEventListener('click', (event) => {
+        const button = event.target.closest('button[id]');
+        if (!button) return;
+        console.log('Clicked button id:', button.id);
+        revealPopUp(button.id);
+    });
+})
 
-console.log('test');
+function revealPopUp(idTarget){
+    const targetDiv = document.querySelector(`div[id-target="${idTarget}"]`);
+    console.log(targetDiv)
+    targetDiv.classList.toggle('hidden');
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     const userMenuButton = document.querySelector('#user-menu-button');

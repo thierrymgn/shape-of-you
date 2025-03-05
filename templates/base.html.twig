@@ -10,6 +10,9 @@
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
+    {% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
 		{% set currentRoute = app.request.attributes.get('_route') %}
 	</head>
 	<body>
@@ -84,7 +87,39 @@
 				</div>
 			</div>
 		</nav>
-		{% endif %}		  
+		{% endif %}
 		{% block body %}{% endblock %}
 	</body>
 </html>
+
+<script>
+	function adjustOrientation(img) {
+if (img.naturalWidth > img.naturalHeight) {
+img.classList.add('landscape');
+img.classList.remove('portrait');
+} else {
+img.classList.add('portrait');
+img.classList.remove('landscape');
+}
+}
+
+document.getElementById('copy-link-btn').addEventListener('click', function (e) {
+e.preventDefault();
+const linkToCopy = this.getAttribute('data-link') || window.location.href;
+navigator.clipboard.writeText(linkToCopy).then(() => {
+showNotification("Link copied!");
+}).catch((error) => {
+console.error("Failed to copy: ", error);
+});
+});
+
+function showNotification(message) {
+const notification = document.createElement('div');
+notification.textContent = message;
+notification.className = "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50";
+document.body.appendChild(notification);
+setTimeout(() => {
+notification.remove();
+}, 3000);
+}
+</script>
