@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\OutfitRepository;
-use App\Repository\SocialPostRepository;
 use App\Repository\UserRepository;
-use App\Repository\WardrobeItemRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
