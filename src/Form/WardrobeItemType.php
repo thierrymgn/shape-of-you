@@ -29,7 +29,7 @@ class WardrobeItemType extends AbstractType
             ])
             ->add('season', EnumType::class, [
                 'class' => WardrobeSeason::class,
-                'choice_label' => fn (WardrobeSeason $wardrobeSeason) => $wardrobeSeason->name, 
+                'choice_label' => fn (WardrobeSeason $wardrobeSeason) => $wardrobeSeason->name,
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,

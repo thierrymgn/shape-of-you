@@ -80,118 +80,122 @@
 									{{ include('wardrobe_item/_delete_form.html.twig') }}
 								{% else %}
 									<button type="button" class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 focus:outline-hidden sm:w-full mr-4">Buy
-								{% endif %}
-								<button type="button" class="flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
-									<svg class="size-6 shrink-0" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-										<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/>
-									</svg>
-									<span class="sr-only">Add to favorites</span>
-								</button>
-							</div>
-						</form>
+									{% endif %}
+									<button type="button" class="flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
+										<svg class="size-6 shrink-0" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/>
+										</svg>
+										<span class="sr-only">Add to favorites</span>
+									</button>
+								</div>
+							</form>
 
-						<section aria-labelledby="details-heading" class="mt-12">
-							<h2 id="details-heading" class="sr-only">Additional details</h2>
+							<section aria-labelledby="details-heading" class="mt-12">
+								<h2 id="details-heading" class="sr-only">Additional details</h2>
 
-							<div class="divide-y divide-gray-200 border-t">
-								<div>
-									<h3>
-										<button type="button" class="group relative flex w-full items-center justify-between py-6 text-left" aria-controls="disclosure-1" aria-expanded="false">
-											<span class="text-sm font-medium text-gray-900">Informations complémentaire</span>
-											<span class="ml-6 flex items-center">
-												{% if wardrobe_item.customer == app.user %}
-												<a href="{{ path('app_wardrobe_item_edit', {'id': wardrobe_item.id}) }}">
-													<svg class="block size-6 text-gray-400 group-hover:text-gray-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-														<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-													</svg>
-													<svg class="hidden size-6 text-indigo-400 group-hover:text-indigo-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-														<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
-													</svg>
-												</a>
-												{% else %}
-													<svg class="block size-6 text-gray-400 group-hover:text-gray-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-														<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-													</svg>
-													<svg class="hidden size-6 text-indigo-400 group-hover:text-indigo-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-														<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
-													</svg>
-												{% endif %}
-											</span>
-										</button>
-									</h3>
-									<div class="pb-6" id="disclosure-1">
-										<ul role="list" class="list-disc space-y-1 pl-5 text-sm/6 text-gray-700 marker:text-gray-300">
-											<li class="pl-2">Size :
-												{{ wardrobe_item.size }}</li>
-											<li class="pl-2">Color :
-												{{ wardrobe_item.color }}</li>
-											<li class="pl-2">Status :
-												{{ wardrobe_item.status.value }}</li>
-											<li class="pl-2">Season :
-												{{ wardrobe_item.season.value }}</li>
-										</ul>
+								<div class="divide-y divide-gray-200 border-t">
+									<div>
+										<h3>
+											<button type="button" class="group relative flex w-full items-center justify-between py-6 text-left" aria-controls="disclosure-1" aria-expanded="false">
+												<span class="text-sm font-medium text-gray-900">Informations complémentaire</span>
+												<span class="ml-6 flex items-center">
+													{% if wardrobe_item.customer == app.user %}
+														<a href="{{ path('app_wardrobe_item_edit', {'id': wardrobe_item.id}) }}">
+															<svg class="block size-6 text-gray-400 group-hover:text-gray-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+																<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+															</svg>
+															<svg class="hidden size-6 text-indigo-400 group-hover:text-indigo-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+																<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
+															</svg>
+														</a>
+													{% else %}
+														<svg class="block size-6 text-gray-400 group-hover:text-gray-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+															<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+														</svg>
+														<svg class="hidden size-6 text-indigo-400 group-hover:text-indigo-500" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+															<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
+														</svg>
+													{% endif %}
+												</span>
+											</button>
+										</h3>
+										<div class="pb-6" id="disclosure-1">
+											<ul role="list" class="list-disc space-y-1 pl-5 text-sm/6 text-gray-700 marker:text-gray-300">
+												<li class="pl-2">Category :
+													{{ wardrobe_item.category.name }}</li>
+												<li class="pl-2">Size :
+													{{ wardrobe_item.size }}</li>
+												<li class="pl-2">Color :
+													{{ wardrobe_item.color }}</li>
+												<li class="pl-2">Status :
+													{{ wardrobe_item.status.value }}</li>
+												<li class="pl-2">Season :
+													{{ wardrobe_item.season.value }}</li>
+											</ul>
+										</div>
 									</div>
 								</div>
-							</div>
-						</section>
+							</section>
+						</div>
 					</div>
-				</div>
 
-				<section aria-labelledby="related-heading" class="mt-10 border-t border-gray-200 px-4 py-16 sm:px-0">
-					<h2 id="related-heading" class="text-xl font-bold text-gray-900">Plus de produit</h2>
-					{% if wardrobe_items is empty %}
-						<div class="rounded-md bg-blue-50 p-4 mt-4">
-							<div class="flex">
-								<div class="shrink-0">
-									<svg class="size-5 text-blue-400" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-										<path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd"/>
-									</svg>
-								</div>
-								<div class="ml-3 flex-1 md:flex md:justify-between">
-									<p class="text-sm text-blue-700">You don't have any product in your wardrobe.
-									</p>
-									<p class="mt-3 text-sm md:mt-0 md:ml-6">
-										<a href="#" class="font-medium whitespace-nowrap text-blue-700 hover:text-blue-600">
-											Add product
-											<span aria-hidden="true">
-												&rarr;</span>
-										</a>
-									</p>
+					<section aria-labelledby="related-heading" class="mt-10 border-t border-gray-200 px-4 py-16 sm:px-0">
+						<h2 id="related-heading" class="text-xl font-bold text-gray-900">Plus de produit</h2>
+						{% if wardrobe_items is empty %}
+							<div class="rounded-md bg-blue-50 p-4 mt-4">
+								<div class="flex">
+									<div class="shrink-0">
+										<svg class="size-5 text-blue-400" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+											<path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd"/>
+										</svg>
+									</div>
+									<div class="ml-3 flex-1 md:flex md:justify-between">
+										<p class="text-sm text-blue-700">You don't have any product in your wardrobe.
+										</p>
+										<p class="mt-3 text-sm md:mt-0 md:ml-6">
+											<a href="#" class="font-medium whitespace-nowrap text-blue-700 hover:text-blue-600">
+												Add product
+												<span aria-hidden="true">
+													&rarr;</span>
+											</a>
+										</p>
+									</div>
 								</div>
 							</div>
-						</div>
 
-					{% else %}
-						<div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8">
-							{% for wardrobe_item in wardrobe_items %}
-								<div>
-									<div class="relative">
-										<div class="relative h-72 w-full overflow-hidden rounded-lg">
-											{# <img src="{{ wardrobe_item.image }}" alt="{{ wardrobe_item.name }}" class="w-full h-full object-cover"> #}
-											<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-03-related-product-01.jpg" alt="Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls." class="size-full object-cover">
+						{% else %}
+							<div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8">
+								{% for wardrobe_item in wardrobe_items %}
+									<div>
+										<div class="relative">
+											<div
+												class="relative h-72 w-full overflow-hidden rounded-lg">
+												{# <img src="{{ wardrobe_item.image }}" alt="{{ wardrobe_item.name }}" class="w-full h-full object-cover"> #}
+												<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-03-related-product-01.jpg" alt="Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls." class="size-full object-cover">
+											</div>
+											<div class="relative mt-4">
+												<h3 class="text-sm font-medium text-gray-900">{{ wardrobe_item.name }}</h3>
+												<p class="mt-1 text-sm text-gray-500">{{ wardrobe_item.brand }}</p>
+												<p>{{ wardrobe_item.customer.firstName }}
+													{{ wardrobe_item.customer.lastName }}</p>
+											</div>
+											<div class="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
+												<div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"></div>
+												<p class="relative text-lg font-semibold text-white">$140</p>
+											</div>
 										</div>
-										<div class="relative mt-4">
-											<h3 class="text-sm font-medium text-gray-900">{{ wardrobe_item.name }}</h3>
-											<p class="mt-1 text-sm text-gray-500">{{ wardrobe_item.brand }}</p>
-											<p>{{ wardrobe_item.customer.firstName }} {{ wardrobe_item.customer.lastName }}</p>
-										</div>
-										<div class="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
-											<div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"></div>
-											<p class="relative text-lg font-semibold text-white">$140</p>
+										<div class="mt-6">
+											<a href="{{ path('app_wardrobe_item_show', {'id': wardrobe_item.id}) }}" class="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200">
+												Voir plus
+											</a>
 										</div>
 									</div>
-									<div class="mt-6">
-										<a href="{{ path('app_wardrobe_item_show', {'id': wardrobe_item.id}) }}" class="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200">
-											Voir plus
-										</a>
-									</div>
-								</div>
-							{% endfor %}
-						</div>
-					{% endif %}
-				</section>
-			</div>
-		</main>
+								{% endfor %}
+							</div>
+						{% endif %}
+					</section>
+				</div>
+			</main>
 
-	</div>
-{% endblock %}
+		</div>
+	{% endblock %}
