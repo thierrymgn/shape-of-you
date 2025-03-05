@@ -6,5 +6,5 @@ services:
 
     App\Service\OutfitRecommendationService:
         arguments:
-            $openaiApiKey: 'test_dummy_key'
-            $openaiModelId: 'test_model'
+            $openaiApiKey: '%env(OPENAI_API_KEY)%'
+            $openaiModelId: 'gpt-4o-mini'
