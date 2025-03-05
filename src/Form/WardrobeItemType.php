@@ -25,15 +25,15 @@ class WardrobeItemType extends AbstractType
             ->add('image')
             ->add('status', EnumType::class, [
                 'class' => WardrobeStatus::class,
-                'choice_label' => fn (WardrobeStatus $wardrobeStatus) => $wardrobeStatus->name, // ou getLabel() si défini
+                'choice_label' => fn (WardrobeStatus $wardrobeStatus) => $wardrobeStatus->name,
             ])
             ->add('season', EnumType::class, [
                 'class' => WardrobeSeason::class,
-                'choice_label' => fn (WardrobeSeason $wardrobeSeason) => $wardrobeSeason->name, // ou getLabel() si défini
+                'choice_label' => fn (WardrobeSeason $wardrobeSeason) => $wardrobeSeason->name, 
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'name',
+                'choice_label' => 'Name',
             ])
         ;
     }

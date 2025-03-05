@@ -7,7 +7,10 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20250301230215 extends AbstractMigration
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20250305134427 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -16,6 +19,7 @@ final class Version20250301230215 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE acquisition (id SERIAL NOT NULL, purchase_date DATE NOT NULL, price NUMERIC(10, 2) NOT NULL, store VARCHAR(255) NOT NULL, condition VARCHAR(255) NOT NULL, warrenty_end DATE NOT NULL, receipt_image VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN acquisition.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN acquisition.updated_at IS \'(DC2Type:datetime_immutable)\'');
@@ -66,7 +70,7 @@ final class Version20250301230215 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_653627B8E85F12B8 ON post_like (post_id_id)');
         $this->addSql('COMMENT ON COLUMN post_like.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE profile (id SERIAL NOT NULL, height NUMERIC(5, 2) DEFAULT NULL, weight NUMERIC(5, 2) DEFAULT NULL, body_type VARCHAR(50) DEFAULT NULL, style_preferences JSON NOT NULL, color_preferences JSON NOT NULL, size_preferences JSON NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE social_post (id SERIAL NOT NULL, author_id INT NOT NULL, title VARCHAR(255) NOT NULL, content TEXT NOT NULL, image VARCHAR(255) NOT NULL, likes_count INT DEFAULT NULL, comments_count INT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE social_post (id SERIAL NOT NULL, author_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content TEXT NOT NULL, image VARCHAR(255) NOT NULL, likes_count INT DEFAULT NULL, comments_count INT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_159BBFE9F675F31B ON social_post (author_id)');
         $this->addSql('COMMENT ON COLUMN social_post.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN social_post.updated_at IS \'(DC2Type:datetime_immutable)\'');
@@ -135,6 +139,7 @@ final class Version20250301230215 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
+        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE ai_analysis DROP CONSTRAINT FK_1FD54150ED808AAB');
         $this->addSql('ALTER TABLE ai_analysis DROP CONSTRAINT FK_1FD541504A7BE2EB');
