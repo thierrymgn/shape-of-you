@@ -137,7 +137,7 @@ final class SocialPostController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'Post liké !');
         }
-
+        
         return $this->redirectToRoute('app_social_post_index');
     }
 }
