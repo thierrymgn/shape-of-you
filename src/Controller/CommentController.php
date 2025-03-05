@@ -22,11 +22,14 @@ class CommentController extends AbstractController
 
         if (empty($content)) {
             $this->addFlash('error', 'Comment cannot be empty.');
+
             return $this->redirectToRoute('app_social_post_show', ['id' => $socialPost->getId()]);
         }
 
         $comment = new Comment();
-        $comment->setUserId($this->getUser());
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $comment->setUserId($user);
         $comment->setPostId($socialPost);
         $comment->setContent($content);
         $comment->setCreatedAt(new \DateTimeImmutable());
@@ -41,8 +44,9 @@ class CommentController extends AbstractController
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function deleteComment(Comment $comment, EntityManagerInterface $entityManager): Response
     {
-        if ($comment->getUser() !== $this->getUser()) {
+        if ($comment->getUserId() !== $this->getUser()) {
             $this->addFlash('error', 'You can only delete your own comments.');
+
             return $this->redirectToRoute('app_social_post_show', ['id' => $comment->getPostId()->getId()]);
         }
 
