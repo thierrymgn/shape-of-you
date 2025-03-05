@@ -49,7 +49,7 @@ class AiRecommendationController extends AbstractController
                     $user,
                     $occasion,
                     $season,
-                    3 // Nombre de suggestions
+                    3
                 );
 
                 if (empty($outfits)) {

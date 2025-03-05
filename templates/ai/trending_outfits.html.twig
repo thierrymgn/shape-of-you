@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tenues tendance{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6">Tenues tendance</h1>
+
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 p-4 rounded-md {% if type == 'success' %}bg-green-100 text-green-700{% elseif type == 'error' %}bg-red-100 text-red-700{% elseif type == 'warning' %}bg-yellow-100 text-yellow-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% if outfits|length > 0 %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for outfit in outfits %}
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="p-4">
+                            <div class="mb-3">
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">
+                                    Tendance
+                                </span>
+                                <span class="ml-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                                    {{ outfit.season.value|capitalize }}
+                                </span>
+                            </div>
+
+                            <h3 class="text-lg font-semibold mb-2">{{ outfit.name }}</h3>
+                            <p class="text-gray-600 mb-4">{{ outfit.description }}</p>
+
+                            <div class="mt-3">
+                                <h4 class="font-medium text-gray-700 mb-2">Vêtements:</h4>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    {% for item in outfit.outfitItems|sort((a, b) => a.position <=> b.position) %}
+                                        <li>{{ item.wardrobeItem.name }} ({{ item.wardrobeItem.color }})</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <form method="post" action="{{ path('app_ai_save_outfit', {'id': outfit.id}) }}" class="mt-4">
+                                <button type="submit" class="w-full px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                    Enregistrer cette tenue
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <p class="text-gray-600">Aucune tendance n'a pu être générée pour votre garde-robe. Essayez d'ajouter plus de vêtements différents.</p>
+                <a href="{{ path('app_wardrobe_new') }}" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    Ajouter des vêtements
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

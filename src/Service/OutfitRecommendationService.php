@@ -148,10 +148,12 @@ class OutfitRecommendationService
                                                     'position' => ['type' => 'integer'],
                                                 ],
                                                 'required' => ['id', 'position'],
+                                                'additionalProperties' => false,
                                             ],
                                         ],
                                     ],
                                     'required' => ['name', 'description', 'items'],
+                                    'additionalProperties' => false,
                                 ],
                             ],
                         ],
@@ -216,7 +218,7 @@ class OutfitRecommendationService
             $outfits[] = $outfit;
         }
 
-        $this->entityManager->flush();
+//        $this->entityManager->flush();
 
         return $outfits;
     }

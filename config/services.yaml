@@ -8,8 +8,7 @@ parameters:
     wardrobe_images_directory: '%kernel.project_dir%/public/images/wardrobe'
     social_post_images_directory: '%kernel.project_dir%/public/uploads/images/social_post'
     outfits_images_directory: '%kernel.project_dir%/public/images/outfits'
-    openai_api_key: '%env(default:default_openai_api_key:OPENAI_API_KEY)%'
-    default_openai_api_key: 'test_key_for_development'
+    openai_api_key: '%env(OPENAI_API_KEY)%'
     openai_model_id: '%env(default:default_openai_model:OPENAI_MODEL_ID)%'
     default_openai_model: 'gpt-4o-mini'
     wardrobeItem_images_directory: '%kernel.project_dir%/public/images/wardrobeItem'
@@ -28,12 +27,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    # IA Services configuration
-    App\Service\OutfitRecommendationService:
-        arguments:
-            $openaiApiKey: '%openai_api_key%'
-            $openaiModelId: '%openai_model_id%'
-
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -49,3 +42,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # IA Services configuration
+    App\Service\OutfitRecommendationService:
+        arguments:
+            $openaiApiKey: '%openai_api_key%'
+            $openaiModelId: '%openai_model_id%'
