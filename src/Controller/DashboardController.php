@@ -2,30 +2,27 @@
 
 namespace App\Controller;
 
-use App\Repository\UserRepository;
-use App\Repository\SocialPostRepository;
-use App\Repository\WardrobeItemRepository;
 use App\Repository\OutfitRepository;
-use DateTimeImmutable;
+use App\Repository\SocialPostRepository;
+use App\Repository\UserRepository;
+use App\Repository\WardrobeItemRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class DashboardController extends AbstractController
 {
-
     public function __construct(
         private UserRepository $userRepository,
-        private SocialPostRepository $socialPostRepository,
-        private WardrobeItemRepository $wardrobeItemRepository,
-        private OutfitRepository $outfitRepository
-    ) {}
+        private OutfitRepository $outfitRepository,
+    ) {
+    }
 
     #[Route('/dashboard', name: 'app_dashboard')]
     public function index(): Response
     {
-        $now = new DateTimeImmutable();
-        $today = new DateTimeImmutable('today');
+        $now = new \DateTimeImmutable();
+        $today = new \DateTimeImmutable('today');
 
         $userCount = $this->userRepository->count([]);
         $outfitCount = $this->outfitRepository->count([]);
@@ -64,16 +61,15 @@ class DashboardController extends AbstractController
 
         $combinedToday = $outfitsToday;
 
-
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
-            'userCount'              => $userCount,
-            'outfitCount'            => $outfitCount,
-            'combinedCount'          => $combinedCount,
-            'averageOutfitsPerDay'   => $averageOutfitsPerDay,
-            'averageCombinedPerDay'  => $averageCombinedPerDay,
-            'outfitsToday'           => $outfitsToday,
-            'combinedToday'          => $combinedToday,
+            'userCount' => $userCount,
+            'outfitCount' => $outfitCount,
+            'combinedCount' => $combinedCount,
+            'averageOutfitsPerDay' => $averageOutfitsPerDay,
+            'averageCombinedPerDay' => $averageCombinedPerDay,
+            'outfitsToday' => $outfitsToday,
+            'combinedToday' => $combinedToday,
         ]);
     }
 
