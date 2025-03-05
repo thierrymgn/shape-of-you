@@ -57,6 +57,7 @@ class SocialPost
     {
         $this->comments = new ArrayCollection();
         $this->postLikes = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -224,5 +225,16 @@ class SocialPost
         $this->author = $author;
 
         return $this;
+    }
+
+    public function isLikedByUser(User $user): bool
+    {
+        foreach ($this->postLikes as $like) {
+            if ($like->getUserId() === $user) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
