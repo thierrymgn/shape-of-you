@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/social/post')]
 final class SocialPostController extends AbstractController
@@ -110,30 +109,35 @@ final class SocialPostController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
-    
+
         $likeRepository = $entityManager->getRepository(PostLike::class);
-    
+
         // Vérifie si l'utilisateur a déjà liké le post
         $existingLike = $likeRepository->findOneBy([
             'userId' => $user,
             'postId' => $socialPost,
         ]);
-    
+
         if ($existingLike) {
             $entityManager->remove($existingLike);
             $entityManager->flush();
             $this->addFlash('success', 'Like retiré.');
         } else {
             $like = new PostLike();
+            $user = $this->getUser();
+            if (!$user instanceof \App\Entity\User) {
+                throw new \LogicException('Only authenticated users can like a post.');
+            }
+
             $like->setUserId($user);
             $like->setPostId($socialPost);
             $like->setCreatedAt(new \DateTimeImmutable());
-    
+
             $entityManager->persist($like);
             $entityManager->flush();
             $this->addFlash('success', 'Post liké !');
         }
-    
+
         return $this->redirectToRoute('app_social_post_index');
     }
 }
