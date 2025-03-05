@@ -26,7 +26,15 @@ services:
       - "127.0.0.1:5432:5432"
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+  ###< doctrine/doctrine-bundle ###
+
+  ###> symfony/mailhog ###
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+  ###< symfony/mailhog ###
 
 volumes:
   ###> doctrine/doctrine-bundle ###
