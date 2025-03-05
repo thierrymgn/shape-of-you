@@ -2,21 +2,20 @@
 
 namespace App\Controller;
 
-use App\Repository\UserRepository;
-use App\Repository\SocialPostRepository;
-use App\Repository\WardrobeItemRepository;
-use App\Repository\OutfitRepository;
-use App\Repository\CategoryRepository;
 use App\Entity\Category;
-use App\Form\CategoryType;
 use App\Entity\User;
+use App\Form\CategoryType;
 use App\Form\RegistrationFormType;
+use App\Repository\CategoryRepository;
+use App\Repository\OutfitRepository;
+use App\Repository\SocialPostRepository;
+use App\Repository\UserRepository;
+use App\Repository\WardrobeItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/dashboard', name: 'app_dashboard_')]
@@ -27,14 +26,15 @@ class DashboardController extends AbstractController
         private SocialPostRepository $socialPostRepository,
         private WardrobeItemRepository $wardrobeItemRepository,
         private OutfitRepository $outfitRepository,
-        private CategoryRepository $categoryRepository
-    ) {}
+        private CategoryRepository $categoryRepository,
+    ) {
+    }
 
     #[Route('', name: 'index')]
     public function index(): Response
     {
-        $now = new DateTimeImmutable();
-        $today = new DateTimeImmutable('today');
+        $now = new \DateTimeImmutable();
+        $today = new \DateTimeImmutable('today');
 
         $userCount = $this->userRepository->count([]);
         $outfitCount = $this->outfitRepository->count([]);
@@ -75,14 +75,14 @@ class DashboardController extends AbstractController
 
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
-            'userCount'              => $userCount,
-            'outfitCount'            => $outfitCount,
-            'categoryCount'          => $categoryCount,
-            'combinedCount'          => $combinedCount,
-            'averageOutfitsPerDay'   => $averageOutfitsPerDay,
-            'averageCombinedPerDay'  => $averageCombinedPerDay,
-            'outfitsToday'           => $outfitsToday,
-            'combinedToday'          => $combinedToday,
+            'userCount' => $userCount,
+            'outfitCount' => $outfitCount,
+            'categoryCount' => $categoryCount,
+            'combinedCount' => $combinedCount,
+            'averageOutfitsPerDay' => $averageOutfitsPerDay,
+            'averageCombinedPerDay' => $averageCombinedPerDay,
+            'outfitsToday' => $outfitsToday,
+            'combinedToday' => $combinedToday,
         ]);
     }
 
@@ -97,7 +97,8 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/user/new', name: 'user_new')]
-    public function newUser( Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager ): Response {
+    public function newUser(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $user = new User();
@@ -112,6 +113,7 @@ class DashboardController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Utilisateur créé avec succès.');
+
             return $this->redirectToRoute('app_dashboard_user');
         }
 
@@ -155,6 +157,7 @@ class DashboardController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Catégorie créée avec succès.');
+
             return $this->redirectToRoute('app_dashboard_category');
         }
 
@@ -168,7 +171,7 @@ class DashboardController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        if ($this->isCsrfTokenValid('delete' . $category->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
             $entityManager->remove($category);
             $entityManager->flush();
 
