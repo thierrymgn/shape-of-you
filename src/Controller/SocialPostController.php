@@ -19,8 +19,9 @@ final class SocialPostController extends AbstractController
     #[Route(name: 'app_social_post_index', methods: ['GET'])]
     public function index(SocialPostRepository $socialPostRepository): Response
     {
+
         return $this->render('social_post/index.html.twig', [
-            'social_posts' => $socialPostRepository->findAll(),
+            'social_posts' => $socialPostRepository->findBy([], ['createdAt' => 'DESC']),
         ]);
     }
 
