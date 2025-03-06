@@ -5,8 +5,8 @@
 {% block body %}
     <div class="container mx-auto px-4 py-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Mes tenues</h1>
-            <a href="{{ path('app_outfit_new') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 flex items-center">
+            <h1 class="text-3xl font-bold text-gray-800">Mes tenues</h1>
+            <a href="{{ path('app_outfit_new') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
@@ -40,7 +40,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {% for outfit in outfits %}
                     <div class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
-                        <div class="h-36 sm:h-48 overflow-hidden bg-gray-100">
+                        <div class="h-40 sm:h-48 overflow-hidden bg-gray-100">
                             {% if outfit.image %}
                                 <img src="{{ vich_uploader_asset(outfit, 'imageFile') }}" alt="{{ outfit.name }}" class="w-full h-full object-cover">
                             {% else %}
@@ -51,10 +51,10 @@
                                 </div>
                             {% endif %}
                         </div>
-                        <div class="p-3 sm:p-4">
+                        <div class="p-4">
                             <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2 truncate">{{ outfit.name }}</h2>
 
-                            <div class="flex flex-wrap gap-1 sm:gap-2 mb-3">
+                            <div class="flex flex-wrap gap-2 mb-3">
                                 <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
                                     {{ outfit.occasion }}
                                 </span>
@@ -79,8 +79,8 @@
                                 <span class="text-xs sm:text-sm">{{ outfit.outfitItems|length }} vêtement{{ outfit.outfitItems|length > 1 ? 's' : '' }}</span>
                             </div>
 
-                            <div class="flex flex-wrap justify-between items-center gap-2 mt-4">
-                                <a href="{{ path('app_outfit_show', {'id': outfit.id}) }}" class="text-blue-600 hover:text-blue-800 flex items-center text-xs sm:text-sm">
+                            <div class="flex justify-between items-center">
+                                <a href="{{ path('app_outfit_show', {'id': outfit.id}) }}" class="text-indigo-600 hover:text-indigo-800 flex items-center text-xs sm:text-sm">
                                     <svg class="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -114,7 +114,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
                 <p class="text-gray-600 mb-4 text-sm sm:text-base">Vous n'avez pas encore créé de tenues.</p>
-                <a href="{{ path('app_outfit_new') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 inline-flex items-center">
+                <a href="{{ path('app_outfit_new') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 inline-flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                     </svg>
