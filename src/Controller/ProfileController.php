@@ -12,11 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/profile')]
+#[Route('/settings')]
 #[IsGranted('ROLE_USER')]
 class ProfileController extends AbstractController
 {
-    #[Route('/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit', name: 'app_settings_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -59,15 +59,15 @@ class ProfileController extends AbstractController
 
             $this->addFlash('success', 'Profil mis à jour avec succès!');
 
-            return $this->redirectToRoute('app_profile_show');
+            return $this->redirectToRoute('app_settings_show');
         }
 
-        return $this->render('profile/edit.html.twig', [
+        return $this->render('settings/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/', name: 'app_profile_show', methods: ['GET'])]
+    #[Route('/', name: 'app_settings_show', methods: ['GET'])]
     public function show(): Response
     {
         $user = $this->getUser();
@@ -82,13 +82,14 @@ class ProfileController extends AbstractController
 
         $profile = $user->getProfile();
 
-        $this->denyAccessUnlessGranted('view', $profile);
-
         if (!$profile) {
-            return $this->redirectToRoute('app_profile_edit');
+            $profile = new Profile();
+            $profile->setCustomer($user);
+        } else {
+            $this->denyAccessUnlessGranted('edit', $profile);
         }
 
-        return $this->render('profile/show.html.twig', [
+        return $this->render('settings/show.html.twig', [
             'profile' => $profile,
             'user' => $user,
         ]);
