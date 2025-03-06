@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-8">Dashboard</h1>
+    <div>
+        <h2 class="text-2xl font-bold mb-8">Admin action</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
+        <a href="{{ path('app_dashboard_user_new') }}">
+            <div class="p-6 bg-white shadow rounded">
+                <h2 class="text-xl font-semibold">Create User</h2>
+            </div>
+        </a>
+
+        <a href="{{ path('app_dashboard_category_new') }}">
+            <div class="p-6 bg-white shadow rounded">
+                <h2 class="text-xl font-semibold">Create Category</h2>
+            </div>
+        </a>
+
+        <a href="{{ path('app_dashboard_wardrobe_new') }}">
+            <div class="p-6 bg-white shadow rounded">
+                <h2 class="text-xl font-semibold">Create Wardrobe</h2>
+            </div>
+        </a>
+    </div>
+    <div>
+        <h2 class="text-2xl font-bold mb-8">Data</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="{{path('app_dashboard_user')}}">
+            <div class="p-6 bg-white shadow rounded">
+                <h2 class="text-xl font-semibold">Utilisateurs</h2>
+                <p class="text-2xl">{{ userCount }}</p>
+            </div>
+        </a>
+        <a href="{{path('app_dashboard_category')}}">
+            <div class="p-6 bg-white shadow rounded">
+                <h2 class="text-xl font-semibold">Category</h2>
+                <p class="text-2xl">{{ categoryCount }}</p>
+            </div>
+        </a>
+        <a href="{{path('app_dashboard_outfit')}}">
+            <div class="p-6 bg-white shadow rounded">
+                <h2 class="text-xl font-semibold">Tenues (Outfits)</h2>
+                <p class="text-2xl">{{ outfitCount }}</p>
+            </div>
+        </a>
+        <a href="{{path('app_dashboard_wardrobe')}}">
+            <div class="p-6 bg-white shadow rounded">
+                <h2 class="text-xl font-semibold">Wardrobe</h2>
+                <p class="text-2xl">{{ wardrobeCount }}</p>
+            </div>
+        </a>
+
+        <div class="p-6 bg-white shadow rounded">
+            <h2 class="text-xl font-semibold">Total combiné</h2>
+            <p class="text-2xl">{{ combinedCount }}</p>
+        </div>
+
+        <div class="p-6 bg-white shadow rounded">
+            <h2 class="text-xl font-semibold">Moyenne de tenues par jour</h2>
+            <p class="text-2xl">{{ averageOutfitsPerDay }}</p>
+        </div>
+
+        <div class="p-6 bg-white shadow rounded">
+            <h2 class="text-xl font-semibold">Moyenne combinée par jour</h2>
+            <p class="text-2xl">{{ averageCombinedPerDay }}</p>
+        </div>
+
+        <div class="p-6 bg-white shadow rounded">
+            <h2 class="text-xl font-semibold">Tenues aujourd'hui</h2>
+            <p class="text-2xl">{{ outfitsToday }}</p>
+        </div>
+
+        <div class="p-6 bg-white shadow rounded">
+            <h2 class="text-xl font-semibold">Total combiné aujourd'hui</h2>
+            <p class="text-2xl">{{ combinedToday }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
