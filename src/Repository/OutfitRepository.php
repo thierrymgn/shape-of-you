@@ -18,8 +18,6 @@ class OutfitRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $query
-     * @param User $user
      * @return array<Outfit>
      */
     public function search(string $query, User $user): array
@@ -27,7 +25,7 @@ class OutfitRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
             ->andWhere('o.name LIKE :query OR o.description LIKE :query OR o.occasion LIKE :query')
             ->andWhere('o.customer = :user')
-            ->setParameter('query', '%' . $query . '%')
+            ->setParameter('query', '%'.$query.'%')
             ->setParameter('user', $user)
             ->orderBy('o.name', 'ASC')
             ->setMaxResults(20)
@@ -36,10 +34,11 @@ class OutfitRepository extends ServiceEntityRepository
     }
 
     /**
-     * Recherche de tenues par mot-clé (celles de l'utilisateur et les tenues publiques)
+     * Recherche de tenues par mot-clé (celles de l'utilisateur et les tenues publiques).
      *
      * @param string $query Terme de recherche
-     * @param User $user Utilisateur actuel
+     * @param User   $user  Utilisateur actuel
+     *
      * @return array<Outfit>
      */
     public function searchAllAccessible(string $query, User $user): array
@@ -56,7 +55,7 @@ class OutfitRepository extends ServiceEntityRepository
                     )
                 )
             )
-            ->setParameter('query', '%' . $query . '%')
+            ->setParameter('query', '%'.$query.'%')
             ->setParameter('user', $user)
             ->setParameter('isPublic', true)
             ->orderBy('o.name', 'ASC')

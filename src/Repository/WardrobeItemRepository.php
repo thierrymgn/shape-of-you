@@ -19,8 +19,6 @@ class WardrobeItemRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $query
-     * @param User $user
      * @return array<WardrobeItem>
      */
     public function search(string $query, User $user): array
@@ -28,7 +26,7 @@ class WardrobeItemRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('w')
             ->andWhere('w.name LIKE :query OR w.description LIKE :query OR w.brand LIKE :query OR w.color LIKE :query')
             ->andWhere('w.customer = :user')
-            ->setParameter('query', '%' . $query . '%')
+            ->setParameter('query', '%'.$query.'%')
             ->setParameter('user', $user)
             ->orderBy('w.name', 'ASC')
             ->setMaxResults(20)
@@ -37,8 +35,6 @@ class WardrobeItemRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $query
-     * @param User $user
      * @return array<WardrobeItem>
      */
     public function searchAllAccessible(string $query, User $user): array
@@ -55,7 +51,7 @@ class WardrobeItemRepository extends ServiceEntityRepository
                     )
                 )
             )
-            ->setParameter('query', '%' . $query . '%')
+            ->setParameter('query', '%'.$query.'%')
             ->setParameter('user', $user)
             ->setParameter('active_status', WardrobeStatus::ACTIVE)
             ->orderBy('w.name', 'ASC')
