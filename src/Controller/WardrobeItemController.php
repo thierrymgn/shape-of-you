@@ -58,13 +58,17 @@ final class WardrobeItemController extends AbstractController
             $wardrobeItem->setCustomer($user);
             $entityManager->persist($wardrobeItem);
             $entityManager->flush();
+            
 
             return $this->redirectToRoute('app_wardrobe_item_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        $apiKey = $_ENV['OPENAI_API_KEY_WARDROBE'];
+
         return $this->render('wardrobe_item/new.html.twig', [
             'wardrobe_item' => $wardrobeItem,
             'form' => $form,
+            'apiKey' => $apiKey,
         ]);
     }
 
