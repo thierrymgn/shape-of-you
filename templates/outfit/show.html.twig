@@ -5,8 +5,11 @@
 {% block body %}
     <div class="container mx-auto px-4 py-8">
         <div class="mb-6">
-            <a href="{{ path('app_outfit_index') }}" class="text-blue-500 hover:underline">
-                &larr; Retour à la liste
+            <a href="{{ path('app_outfit_index') }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                Retour à la liste
             </a>
         </div>
 
@@ -17,92 +20,102 @@
                         <img src="{{ vich_uploader_asset(outfit, 'imageFile') }}" alt="{{ outfit.name }}" class="w-full h-auto">
                     {% else %}
                         <div class="bg-gray-200 flex items-center justify-center h-64 md:h-full">
-                            <span class="text-gray-400">Pas d'image</span>
+                            <svg class="h-20 w-20 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
                         </div>
                     {% endif %}
                 </div>
                 <div class="md:w-1/2 p-6">
-                    <h1 class="text-3xl font-bold mb-4">{{ outfit.name }}</h1>
+                    <h1 class="text-3xl font-bold mb-4 text-gray-800">{{ outfit.name }}</h1>
 
-                    <div class="flex items-center mb-4">
+                    <div class="flex items-center mb-4 flex-wrap gap-2">
                         <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
                             {{ outfit.season.value|capitalize }}
                         </span>
                         {% if outfit.public %}
-                            <span class="ml-2 inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                            <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
                                 Public
                             </span>
                         {% else %}
-                            <span class="ml-2 inline-block bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">
+                            <span class="inline-block bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">
                                 Privé
                             </span>
                         {% endif %}
                     </div>
 
                     <div class="mb-4">
-                        <h2 class="text-xl font-semibold mb-2">Occasion</h2>
+                        <h2 class="text-xl font-semibold mb-2 text-gray-700">Occasion</h2>
                         <p class="text-gray-700">{{ outfit.occasion }}</p>
                     </div>
 
                     {% if outfit.description %}
                         <div class="mb-4">
-                            <h2 class="text-xl font-semibold mb-2">Description</h2>
-                            <p class="text-gray-700">{{ outfit.description }}</p>
+                            <h2 class="text-xl font-semibold mb-2 text-gray-700">Description</h2>
+                            <p class="text-gray-600">{{ outfit.description }}</p>
                         </div>
                     {% endif %}
 
-                    <div class="flex space-x-4 mt-6">
-                        <a href="{{ path('app_outfit_edit', {'id': outfit.id}) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    <div class="flex gap-4 mt-6">
+                        <a href="{{ path('app_outfit_edit', {'id': outfit.id}) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded shadow transition duration-200 inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                            </svg>
                             Modifier
                         </a>
 
                         <button type="button"
-                                class="delete-trigger bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                class="delete-trigger bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded shadow transition duration-200 inline-flex items-center"
                                 data-outfit-id="{{ outfit.id }}"
                                 data-outfit-name="{{ outfit.name }}"
                                 data-csrf-token="{{ csrf_token('delete' ~ outfit.id) }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
                             Supprimer
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div class="p-6 border-t">
-                <h2 class="text-2xl font-bold mb-4">Vêtements dans cette tenue</h2>
+            <div class="p-6 border-t border-gray-200">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">Vêtements dans cette tenue</h2>
 
                 {% if outfit.outfitItems|length > 0 %}
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {% for item in outfit.outfitItems|sort((a, b) => a.position <=> b.position) %}
-                            <div class="border rounded p-4 flex items-center">
-                                <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center mr-4">
-                                    <span class="font-bold text-gray-700">{{ item.position }}</span>
+                            <a href="{{ path('app_wardrobe_item_show', {'id': item.wardrobeItem.id}) }}" class="border rounded-lg bg-gray-50 p-4 flex items-center shadow-sm hover:shadow transition duration-200">
+                                <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mr-4 text-indigo-600 font-bold">
+                                    {{ item.position }}
                                 </div>
                                 <div>
-                                    <h3 class="font-semibold">{{ item.wardrobeItem.name }}</h3>
+                                    <h3 class="font-semibold text-gray-800">{{ item.wardrobeItem.name }}</h3>
                                     <p class="text-sm text-gray-600">{{ item.wardrobeItem.brand }}</p>
-                                    <p class="text-xs bg-gray-100 inline-block px-2 py-1 rounded">{{ item.wardrobeItem.color }}</p>
+                                    <span class="text-xs bg-gray-100 inline-block px-2 py-1 rounded mt-1 text-gray-700">{{ item.wardrobeItem.color }}</span>
                                 </div>
-                            </div>
+                            </a>
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p class="text-gray-500">Aucun vêtement dans cette tenue.</p>
+                    <p class="text-gray-500 italic">Aucun vêtement dans cette tenue.</p>
                 {% endif %}
             </div>
         </div>
     </div>
 
-    <div id="deleteModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-            <h3 class="text-xl font-bold mb-4">Confirmer la suppression</h3>
-            <p id="deleteMessage" class="mb-6"></p>
+    <!-- Modal de confirmation de suppression -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white p-5 sm:p-6 rounded-lg shadow-xl max-w-md w-full">
+            <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-gray-800">Confirmer la suppression</h3>
+            <p id="deleteMessage" class="mb-4 sm:mb-6 text-gray-600 text-sm sm:text-base"></p>
             <div class="flex justify-end space-x-3">
-                <button id="cancelDelete" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+                <button id="cancelDelete" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-3 sm:px-4 rounded-md transition duration-200 text-sm">
                     Annuler
                 </button>
                 <form id="deleteForm" method="post" action="" data-base-url="{{ path('app_outfit_delete', {'id': 'OUTFIT_ID'}) }}">
                     <input type="hidden" name="_token" id="csrfToken" value="">
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    <button class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-3 sm:px-4 rounded-md transition duration-200 text-sm">
                         Supprimer
                     </button>
                 </form>
