@@ -58,6 +58,8 @@ class Comment
         $this->updatedAt = new \DateTimeImmutable();
         $this->comments = new ArrayCollection();
         $this->commentLikes = new ArrayCollection();
+        $this->level = 1;
+        $this->repliesCount = 0;
     }
 
     public function setId(int $id): static
