@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[Route('/wardrobe/item')]
 final class WardrobeItemController extends AbstractController
@@ -89,5 +90,70 @@ final class WardrobeItemController extends AbstractController
         }
 
         return $this->redirectToRoute('app_wardrobe_item_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/recommend', name: 'app_wardrobe_item_recommend', methods: ['POST'])]
+    public function recommend(WardrobeItem $wardrobeItem, HttpClientInterface $httpClient): Response
+    {
+        // Détails du vêtement sélectionné
+        $itemDetails = [
+            'name' => $wardrobeItem->getName(),
+            'brand' => $wardrobeItem->getBrand(),
+            'color' => $wardrobeItem->getColor(),
+            'category' => $wardrobeItem->getCategory()->getName(),
+            'season' => $wardrobeItem->getSeason()->value,
+        ];
+
+        // Génération de la requête pour OpenAI
+        $prompt = 'Je cherche des vêtements similaires à celui-ci : '.json_encode($itemDetails).
+        ". Peux-tu me recommander 9 vêtements similaires ? Réponds uniquement sous forme de liste JSON avec :
+        - 'name' (nom du vêtement)
+        - 'brand' (marque)
+        - 'color' (couleur)
+        - 'category' (catégorie)
+        
+        Assure-toi que les liens d'images sont corrects et existants en ligne.";
+
+        try {
+            $response = $httpClient->request('POST', 'https://api.openai.com/v1/chat/completions', [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$_ENV['OPENAI_API_KEY'],
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'model' => 'gpt-3.5-turbo',
+                    'messages' => [['role' => 'user', 'content' => $prompt]],
+                    'temperature' => 0.7,
+                ],
+            ]);
+
+            // Vérification du statut de la réponse
+            $statusCode = $response->getStatusCode();
+            $responseData = $response->getContent(false);
+
+            if (200 !== $statusCode) {
+                throw new \Exception('Erreur OpenAI: '.$statusCode.' - '.$responseData);
+            }
+
+            $responseData = $response->toArray();
+
+            // Correction des guillemets pour éviter les erreurs de parsing JSON
+            $recommendationsRaw = $responseData['choices'][0]['message']['content'] ?? '[]';
+            $recommendationsJson = str_replace("'", '"', $recommendationsRaw);
+            $recommendations = json_decode($recommendationsJson, true);
+
+            if (JSON_ERROR_NONE !== json_last_error()) {
+                throw new \Exception('Erreur de décodage JSON: '.json_last_error_msg());
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erreur lors de la récupération des recommandations : '.$e->getMessage());
+
+            return $this->redirectToRoute('app_wardrobe_item_show', ['id' => $wardrobeItem->getId()]);
+        }
+
+        return $this->render('wardrobe_item/recommend.html.twig', [
+            'wardrobe_item' => $wardrobeItem,
+            'recommended_items' => $recommendations,
+        ]);
     }
 }
