@@ -24,6 +24,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('outfit-collection', './assets/js/outfit-collection.js')
     .addEntry('outfit-delete-modal', './assets/js/outfit-delete-modal.js')
+    .addEntry('profile-collections', './assets/js/profile-collections.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
