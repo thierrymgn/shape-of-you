@@ -29,13 +29,10 @@
 						<input id="image" name="{{ field_name(form.image) }}" type="file" accept="image/*" class="hidden">
 					</label>
 				</div>
-				<button id="analyze-btn">Analyser avec l'IA</button>
+				<div class="flex justify-center mt-4">
+					<button id="analyze-btn" class="relative overflow-hidden px-6 py-3 font-bold text-white bg-yellow-500 rounded shadow-md shimmer">Analyser avec l'IA</button>
+				</div>
 			</div>
-			{# <div class="mt-6 flex items-center justify-end gap-x-6 max-w-2xl m-auto">
-				<button type="button" id="ai-analyze-button" class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
-				  Analyser avec l'IA
-				</button>
-			</div> #}
 			<div class="sm:col-span-full">
 				<label for="description" class="block text-sm/6 font-medium text-gray-900">Description</label>
 				<div class="mt-2">
@@ -139,102 +136,29 @@
 		return;
 	  }
 	  const file = imageInput.files[0];
-	  const reader = new FileReader();
-	  
-	  reader.onload = function(event) {
-		// La donnée est au format dataURL : "data:image/png;base64,...."
-		const dataUrl = event.target.result;
-		const base64Data = dataUrl.split(',')[1]; // On récupère uniquement la partie base64
-		const sampleImageData = base64Data.substring(0, 100) + '...';
-		
-		const prompt = "Analyse the following clothing item image data (base64 snippet): " + sampleImageData + "\n\n" +
-		  "Determine the following attributes of the garment and return a valid JSON object with these keys:\n" +
-		  "- name (the name of the garment),\n" +
-		  "- brand (the brand of the garment),\n" +
-		  "- color (the main color),\n" +
-		  "- category (e.g., shirt, pants, dress, etc.),\n" +
-		  "- description (a brief description of the garment).\n" +
-		  "If any information is missing, return an empty string for that key.";
+
+	  const formData = new FormData();
+	  formData.append('image', file);
 	
-		// Attention : NE PAS exposer votre clé API en production
-		
-
-		fetch("https://api.openai.com/v1/chat/completions", {
-		// fetch("https://api.openai.com/v1/completions", {
-		  method: "POST",
-		  headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + apikey
-		  },
-		  body: JSON.stringify({
-			model: "gpt-3.5-turbo-0125", // ou "gpt-3.5-turbo" si nécessaire
-			messages: [
-			  {
-				role: "system",
-				content: "You are an expert in clothing analysis. Extract garment details from image data."
-			  },
-			  {
-				role: "user",
-				content: prompt
-			  }
-			],
-			temperature: 0.7
-		  })
-		})
-		.then(response => {
-		  if (!response.ok) {
-			return response.text().then(text => { throw new Error("HTTP error " + response.status + ": " + text); });
-		  }
-		  return response.json();
-		})
-		.then(data => {
-		  console.log("Réponse OpenAI:", data);
-		  console.log(data.choices[0].message.content);
-
-		  const contentString = data.choices[0].message.content;
-
-		  const cleanContent = contentString.replace(/```json/g, '').replace(/```/g, '').trim();
-
-		   let wardrobeData;
-		   try {
-			wardrobeData = JSON.parse(cleanContent);
-		   } catch (error) {
-		   	console.error("Erreur lors du parsing JSON :", error);
-		   }   
-
-		   let Wname, Wbrand, Wcolor, Wcategory, Wdescription;
-		   if (wardrobeData) {
-			Wname = wardrobeData.name;        
-			Wbrand = wardrobeData.brand;        
-			Wcolor = wardrobeData.color;        
-			Wcategory = wardrobeData.category;  
-			Wdescription = wardrobeData.description;
-			
-			console.log("Name:", Wname);
-			console.log("Brand:", Wbrand);
-			console.log("Color:", Wcolor);
-			console.log("Description:", Wdescription);
-		   }
-		  if(data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content){
-			  try {
-				  console.log("try is here")
-				  // const result = JSON.parse(data.choices[0].message.content);
-				  
-				  document.getElementById('name').value = Wname;
-				  document.getElementById('brand').value = Wbrand;
-				  document.getElementById('color').value = Wcolor;
-				document.getElementById('description').value = Wdescription;
-			 } catch(e) {
-			   console.error("Erreur lors du parsing du résultat JSON:", e);
-			 }
-		  }
-		})
-		.catch(error => {
-		  console.error("Erreur lors de l'analyse:", error);
-		  alert("Erreur lors de l'analyse avec l'IA: " + error.message);
-		});
-	  };
-	  
-	  reader.readAsDataURL(file);
+	  fetch('{{ path("app_ai_analyze") }}', {
+		method: 'POST',
+		body: formData
+	  })
+	  .then(response => {
+		if (!response.ok) {
+		  return response.text().then(text => { throw new Error("HTTP error " + response.status + ": " + text); });
+		}
+		return response.json();
+	  })
+	  .then(data => {
+		if(data.name) document.getElementById('name').value = data.name;
+		if(data.brand) document.getElementById('brand').value = data.brand;
+		if(data.color) document.getElementById('color').value = data.color;
+		if(data.description) document.getElementById('description').value = data.description;
+	  })
+	  .catch(error => {
+		console.error("Erreur lors de l'analyse:", error);
+		alert("Erreur lors de l'analyse avec l'IA: " + error.message);
+	  });
 	});
 </script>
