@@ -42,6 +42,18 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $sizePreferences = [
+                'haut' => $form->get('topSize')->getData(),
+                'bas' => $form->get('bottomSize')->getData(),
+                'chaussures' => $form->get('shoeSize')->getData(),
+            ];
+
+            $sizePreferences = array_filter($sizePreferences, function ($value) {
+                return null !== $value && '' !== $value;
+            });
+
+            $profile->setSizePreferences($sizePreferences);
+
             $entityManager->persist($profile);
             $entityManager->flush();
 

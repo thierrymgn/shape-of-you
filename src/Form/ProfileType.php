@@ -50,7 +50,6 @@ class ProfileType extends AbstractType
                     'attr' => ['class' => 'form-control'],
                 ],
             ])
-            // Gestion des préférences de couleur
             ->add('colorPreferences', CollectionType::class, [
                 'entry_type' => TextType::class,
                 'allow_add' => true,
@@ -62,6 +61,29 @@ class ProfileType extends AbstractType
                     'attr' => ['class' => 'form-control'],
                 ],
             ]);
+
+        $sizePreferences = $builder->getData()->getSizePreferences() ?? [];
+
+        $builder->add('topSize', TextType::class, [
+            'label' => 'Haut',
+            'required' => false,
+            'mapped' => false,
+            'data' => $sizePreferences['haut'] ?? null,
+        ]);
+
+        $builder->add('bottomSize', TextType::class, [
+            'label' => 'Bas',
+            'required' => false,
+            'mapped' => false,
+            'data' => $sizePreferences['bas'] ?? null,
+        ]);
+
+        $builder->add('shoeSize', TextType::class, [
+            'label' => 'Chaussures',
+            'required' => false,
+            'mapped' => false,
+            'data' => $sizePreferences['chaussures'] ?? null,
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
