@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Outfit;
+use App\Entity\User;
 use App\Form\OutfitType;
 use App\Repository\OutfitRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +29,7 @@ final class OutfitController extends AbstractController
         $outfit = new Outfit();
         $customer = $this->getUser();
 
-        if (!$customer instanceof \App\Entity\User) {
+        if (!$customer instanceof User) {
             throw new \LogicException('The logged in user is not a valid customer.');
         }
 
@@ -53,9 +54,7 @@ final class OutfitController extends AbstractController
     #[Route('/{id}', name: 'app_outfit_show', methods: ['GET'])]
     public function show(Outfit $outfit): Response
     {
-        if ($outfit->getCustomer() !== $this->getUser()) {
-            throw $this->createAccessDeniedException();
-        }
+        $this->denyAccessUnlessGranted('view', $outfit);
 
         return $this->render('outfit/show.html.twig', [
             'outfit' => $outfit,
@@ -65,9 +64,7 @@ final class OutfitController extends AbstractController
     #[Route('/{id}/edit', name: 'app_outfit_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Outfit $outfit, EntityManagerInterface $entityManager): Response
     {
-        if ($outfit->getCustomer() !== $this->getUser()) {
-            throw $this->createAccessDeniedException();
-        }
+        $this->denyAccessUnlessGranted('edit', $outfit);
 
         $form = $this->createForm(OutfitType::class, $outfit);
         $form->handleRequest($request);
@@ -87,9 +84,7 @@ final class OutfitController extends AbstractController
     #[Route('/{id}', name: 'app_outfit_delete', methods: ['POST'])]
     public function delete(Request $request, Outfit $outfit, EntityManagerInterface $entityManager): Response
     {
-        if ($outfit->getCustomer() !== $this->getUser()) {
-            throw $this->createAccessDeniedException();
-        }
+        $this->denyAccessUnlessGranted('delete', $outfit);
 
         $token = $request->request->get('_token');
         $expectedToken = 'delete'.$outfit->getId();
