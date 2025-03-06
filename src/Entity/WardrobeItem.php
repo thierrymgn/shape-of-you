@@ -37,6 +37,12 @@ class WardrobeItem
     #[ORM\Column(length: 50)]
     private ?string $color = null;
 
+    #[ORM\Column(name: 'ref_references', length: 255, nullable: true)]
+    private ?string $references = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $partnerLinks = null;
+
     #[Vich\UploadableField(mapping: 'wardrobe_items', fileNameProperty: 'image')]
     private ?File $imageFile = null;
 
@@ -175,6 +181,30 @@ class WardrobeItem
     public function setColor(string $color): static
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    public function getReferences(): ?string
+    {
+        return $this->references;
+    }
+
+    public function setReferences(?string $references): self
+    {
+        $this->references = $references;
+
+        return $this;
+    }
+
+    public function getPartnerLinks(): ?string
+    {
+        return $this->partnerLinks;
+    }
+
+    public function setPartnerLinks(?string $partnerLinks): self
+    {
+        $this->partnerLinks = $partnerLinks;
 
         return $this;
     }

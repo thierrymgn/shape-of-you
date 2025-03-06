@@ -1,0 +1,24 @@
+{# templates/dashboard/category/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard - Catégories{% endblock %}
+
+{% block body %}
+<div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">Liste des Catégories</h1>
+
+    {% for category in categories %}
+        <div class="flex items-center justify-between p-4 bg-white shadow rounded mb-2">
+            <span class="text-lg">{{ category.name }}</span>
+            <form method="post" action="{{ path('app_dashboard_category_delete', {'id': category.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                    Supprimer
+                </button>
+            </form>
+        </div>
+    {% else %}
+        <p>Aucune catégorie trouvée.</p>
+    {% endfor %}
+</div>
+{% endblock %}
