@@ -38,7 +38,7 @@
 							</div>
 							<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
 								<a href="#" class="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900">Accueil</a>
-								<a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Outfit</a>
+								<a href="{{ path('app_outfit_index') }}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 {% if app.current_route == 'app_outfit_index' %} border-b-2 border-indigo-500 text-gray-900 {% endif %}">Tenues</a>
 								<a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Social</a>
 								{% if 'ROLE_ADMIN' in app.user.roles %}
 									<a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Dashboard</a>
@@ -57,9 +57,8 @@
 									</button>
 								</div>
 								<div id="user-menu-item" class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-									<a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-									<a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-									<a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+									<a href="{{ path('app_profile_show') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Mon Profil</a>
+									<a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Déconnexion</a>
 								</div>
 							</div>
 						</div>
@@ -67,8 +66,8 @@
 				</div>
 				<div class="sm:hidden" id="mobile-menu">
 					<div class="space-y-1 pt-2 pb-4">
-						<a href="#" class="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pr-4 pl-3 text-base font-medium text-indigo-700">Accueil</a>
-						<a href="#" class="block border-l-4 border-transparent py-2 pr-4 pl-3 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">Outfit</a>
+						<a href="#" class="block border-l-4 border-transparent py-2 pr-4 pl-3 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">Accueil</a>
+						<a href="{{ path('app_outfit_index') }}" class="block py-2 pr-4 pl-3 text-base font-medium text-gray-500 {% if app.current_route == 'app_outfit_index' %} border-l-4 border-indigo-500 bg-indigo-50 text-indigo-700 {% else %} hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 {% endif %}">Tenues</a>
 						<a href="#" class="block border-l-4 border-transparent py-2 pr-4 pl-3 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">Social</a>
 						{% if 'ROLE_ADMIN' in app.user.roles %}
 							<a href="#" class="block border-l-4 border-transparent py-2 pr-4 pl-3 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">Dashboard</a>
