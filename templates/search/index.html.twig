@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <h1 class="text-2xl font-bold mb-6">Résultats de recherche pour "{{ query }}"</h1>
+
+        {% if results.wardrobeItems is empty and results.outfits is empty %}
+            <div class="bg-gray-50 p-6 rounded-lg shadow-sm text-center">
+                <p class="text-gray-600">Aucun résultat trouvé pour votre recherche.</p>
+            </div>
+        {% else %}
+            {% if results.wardrobeItems is not empty %}
+                <div class="mb-10">
+                    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Vêtements ({{ results.wardrobeItems|length }})</h2>
+
+                    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+                        {% for wardrobe_item in results.wardrobeItems %}
+                            <a href="{{ path('app_wardrobe_item_show', {'id': wardrobe_item.id}) }}" class="group relative">
+                                <div class="aspect-square w-full overflow-hidden rounded-lg bg-gray-200">
+                                    {% if wardrobe_item.image %}
+                                        <img src="{{ wardrobe_item.image }}" alt="{{ wardrobe_item.name }}" class="h-full w-full object-cover object-center group-hover:opacity-75">
+                                    {% else %}
+                                        <div class="flex h-full items-center justify-center bg-gray-200">
+                                            <span class="text-gray-400">Pas d'image</span>
+                                        </div>
+                                    {% endif %}
+
+                                    <!-- Badge indiquant si l'item est à l'utilisateur ou public -->
+                                    {% if wardrobe_item.customer.id == app.user.id %}
+                                        <span class="absolute top-2 right-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                        À vous
+                                    </span>
+                                    {% else %}
+                                        <span class="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                        Public
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <div class="mt-4">
+                                    <h3 class="text-lg font-medium text-gray-900">{{ wardrobe_item.name }}</h3>
+                                    <p class="mt-1 text-sm text-gray-500">{{ wardrobe_item.brand }}</p>
+                                    <p class="mt-1 text-sm text-gray-500">{{ wardrobe_item.color }}</p>
+                                    {% if wardrobe_item.customer.id != app.user.id %}
+                                        <p class="mt-1 text-xs text-gray-500">Par {{ wardrobe_item.customer.firstName }} {{ wardrobe_item.customer.lastName }}</p>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if results.outfits is not empty %}
+                <div>
+                    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Tenues ({{ results.outfits|length }})</h2>
+
+                    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+                        {% for outfit in results.outfits %}
+                            <a href="{{ path('app_outfit_show', {'id': outfit.id}) }}" class="group relative">
+                                <div class="aspect-square w-full overflow-hidden rounded-lg bg-gray-200">
+                                    {% if outfit.image %}
+                                        <img src="{{ outfit.image }}" alt="{{ outfit.name }}" class="h-full w-full object-cover object-center group-hover:opacity-75">
+                                    {% else %}
+                                        <div class="flex h-full items-center justify-center bg-gray-200">
+                                            <span class="text-gray-400">Pas d'image</span>
+                                        </div>
+                                    {% endif %}
+
+                                    <!-- Badge indiquant si la tenue est à l'utilisateur ou publique -->
+                                    {% if outfit.customer.id == app.user.id %}
+                                        <span class="absolute top-2 right-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                        À vous
+                                    </span>
+                                    {% else %}
+                                        <span class="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                        Public
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <div class="mt-4">
+                                    <h3 class="text-lg font-medium text-gray-900">{{ outfit.name }}</h3>
+                                    <p class="mt-1 text-sm text-gray-500">{{ outfit.occasion }}</p>
+                                    <p class="mt-1 text-sm text-gray-500">{{ outfit.season.value }}</p>
+                                    {% if outfit.customer.id != app.user.id %}
+                                        <p class="mt-1 text-xs text-gray-500">Par {{ outfit.customer.firstName }} {{ outfit.customer.lastName }}</p>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
