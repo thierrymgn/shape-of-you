@@ -17,10 +17,8 @@
 			<div class="px-16">
 				<h2 class="text-sm font-semibold text-gray-900">
 					{% if social_post.author %}
-						{# <a href="{{ path('app_user_show', {'id': social_post.author.id}) }}"> #}
 						{{ social_post.author.firstName }}
 						{{ social_post.author.lastName }}
-						{# </a>     #}
 					{% else %}
 						Unknown
 					{% endif %}
@@ -33,7 +31,7 @@
 				</a>
 				{% if social_post.image %}
 					<div class="md:flex-shrink pr-6 pt-3">
-						<img class="rounded-lg w-full object-cover" src="{{ asset('uploads/images/social_post/' ~ social_post.image)}}" alt="{{ social_post.title }} image" onload="adjustOrientation(this)">
+						<img class="rounded-lg w-full object-contain max-h-96" src="{{ asset('uploads/images/social_post/' ~ social_post.image)}}" alt="{{ social_post.title }} image" onload="adjustOrientation(this)">
 					</div>
 				{% endif %}
 				<div class="flex">
@@ -70,23 +68,7 @@
 					</div>
 				</div>
 			</div>
-			<hr
-			class="my-4">
-			{# <tr>
-															                    <img src="{{ asset('uploads/images/social_post/' ~ social_post.image) }}" alt="{{ social_post.title }}">
-															                    <td>{{ social_post.id }}</td>
-															                    <td>{{ social_post.title }}</td>
-															                    <td>{{ social_post.content }}</td>
-															                    <td>{{ social_post.image }}</td>
-															                    <td>{{ social_post.likesCount }}</td>
-															                    <td>{{ social_post.commentsCount }}</td>
-															                    <td>{{ social_post.createdAt ? social_post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-															                    <td>{{ social_post.updatedAt ? social_post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-															                    <td>
-															                        <a href="{{ path('app_social_post_show', {'id': social_post.id}) }}">show</a>
-															                        <a href="{{ path('app_social_post_edit', {'id': social_post.id}) }}">edit</a>
-															                    </td>
-															                </tr> #}
+			<hr class="my-4">
 		{% else %}
 			<div>
 				<p>Feed vide</p>
