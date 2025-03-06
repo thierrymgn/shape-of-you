@@ -9,9 +9,33 @@
 			<div class="sm:col-span-full">
 				<label for="image" class="block text-sm/6 font-medium text-gray-900">Image</label>
 				<div class="mt-2">
-					<input id="image" name="{{ field_name(form.image) }}" value="{{ field_value(form.image) }}" placeholder="{{ field_label(form.image) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
+					<label for="image" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+						<div class="flex flex-col items-center justify-center pt-5 pb-6">
+							<svg class="w-10 h-10 mb-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0l5 5m-5-5l5-5M17 16v-1a2 2 0 00-2-2H9a2 2 0 00-2 2v1"/>
+							</svg>
+							<p class="mb-2 text-sm text-gray-500">
+								<span class="font-semibold">Cliquez pour uploader</span>
+								ou faites glisser et déposer
+							</p>
+							<p class="text-xs text-gray-500">PNG, JPG, GIF (MAX. 800x400px)</p>
+							{% if wardrobe_item is defined and wardrobe_item.id %}
+								{% if form.image %}
+									<p class="text-xs text-gray-500">Votre image actuelle :
+										{{form.image}}</p>
+								{% endif %}
+							{% endif %}
+						</div>
+						<input id="image" name="{{ field_name(form.image) }}" type="file" accept="image/*" class="hidden">
+					</label>
 				</div>
+				<button id="analyze-btn">Analyser avec l'IA</button>
 			</div>
+			{# <div class="mt-6 flex items-center justify-end gap-x-6 max-w-2xl m-auto">
+				<button type="button" id="ai-analyze-button" class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
+				  Analyser avec l'IA
+				</button>
+			</div> #}
 			<div class="sm:col-span-full">
 				<label for="description" class="block text-sm/6 font-medium text-gray-900">Description</label>
 				<div class="mt-2">
@@ -88,6 +112,7 @@
 		</div>
 	</div>
 </div>
+<pre id="result"></pre>
 
 {% if wardrobe_item is defined and wardrobe_item.id %}
 	<div class="mt-6 flex items-center justify-end gap-x-6 max-w-2xl m-auto">
@@ -106,3 +131,43 @@
 {% endif %}
 {{ form_row(form._token) }}
 {{ form_end(form, {'render_rest': false}) }}
+<script>
+	document.getElementById('analyze-btn').addEventListener('click', function(e) {
+	  e.preventDefault();
+	  const imageInput = document.getElementById('image');
+	  if (!imageInput.files || imageInput.files.length === 0) {
+		alert("Veuillez sélectionner une image à analyser.");
+		return;
+	  }
+	  const file = imageInput.files[0];
+	  // Créer un FormData pour envoyer le fichier
+	  const formData = new FormData();
+	  formData.append('image', file);
+	
+	  // Appeler le endpoint de notre contrôleur qui fait l'appel à OpenAI
+	  fetch('{{ path("app_ai_analyze") }}', {
+		method: 'POST',
+		body: formData
+	  })
+	  .then(response => {
+		if (!response.ok) {
+		  return response.text().then(text => { throw new Error("HTTP error " + response.status + ": " + text); });
+		}
+		return response.json();
+	  })
+	  .then(data => {
+		console.log("Réponse AI:", data);
+		document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+		// Remplir les champs du formulaire avec les données retournées
+		if(data.name) document.getElementById('name').value = data.name;
+		if(data.brand) document.getElementById('brand').value = data.brand;
+		if(data.color) document.getElementById('color').value = data.color;
+		if(data.category) document.getElementById('category').value = data.category;
+		if(data.description) document.getElementById('description').value = data.description;
+	  })
+	  .catch(error => {
+		console.error("Erreur lors de l'analyse:", error);
+		alert("Erreur lors de l'analyse avec l'IA: " + error.message);
+	  });
+	});
+</script>
