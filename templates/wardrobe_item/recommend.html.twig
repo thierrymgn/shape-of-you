@@ -5,12 +5,12 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="text-2xl font-bold mb-5">Vêtements similaires à "{{ wardrobe_item.name }}"</h1>
+	<h1 class="text-2xl font-bold py-5 text-center">Vêtements similaires à "{{ wardrobe_item.name }}"</h1>
 
 	{% if recommended_items is empty %}
 		<p>Aucune recommandation trouvée.</p>
 	{% else %}
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
 			{% for item in recommended_items %}
 				<div class="border rounded-lg p-4 shadow-lg">
 					<h2 class="text-lg font-semibold">{{ item.name }}</h2>
@@ -20,6 +20,14 @@
 						{{ item.color }}</p>
 					<p>Catégorie :
 						{{ item.category }}</p>
+
+					{# Génération de l'URL de recherche Google Images #}
+					{% set search_query = item.name ~ ' ' ~ item.brand ~ ' ' ~ item.color %}
+					{% set google_search_url = 'https://www.google.com/search?tbm=isch&q=' ~ search_query|url_encode %}
+
+					<a href="{{ google_search_url }}" target="_blank" class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700">
+						🔍 Voir sur Google Images
+					</a>
 				</div>
 			{% endfor %}
 		</div>

@@ -95,6 +95,7 @@ final class WardrobeItemController extends AbstractController
     #[Route('/{id}/recommend', name: 'app_wardrobe_item_recommend', methods: ['POST'])]
     public function recommend(WardrobeItem $wardrobeItem, HttpClientInterface $httpClient): Response
     {
+        // Détails du vêtement sélectionné
         $itemDetails = [
             'name' => $wardrobeItem->getName(),
             'brand' => $wardrobeItem->getBrand(),
@@ -103,8 +104,15 @@ final class WardrobeItemController extends AbstractController
             'season' => $wardrobeItem->getSeason()->value,
         ];
 
+        // Génération de la requête pour OpenAI
         $prompt = 'Je cherche des vêtements similaires à celui-ci : '.json_encode($itemDetails).
-                  ". Peux-tu me recommander 5 vêtements similaires ? Donne-moi uniquement une liste JSON avec des objets contenant 'name', 'brand', 'color' et 'category'.";
+        ". Peux-tu me recommander 9 vêtements similaires ? Réponds uniquement sous forme de liste JSON avec :
+        - 'name' (nom du vêtement)
+        - 'brand' (marque)
+        - 'color' (couleur)
+        - 'category' (catégorie)
+        
+        Assure-toi que les liens d'images sont corrects et existants en ligne.";
 
         try {
             $response = $httpClient->request('POST', 'https://api.openai.com/v1/chat/completions', [
@@ -113,21 +121,30 @@ final class WardrobeItemController extends AbstractController
                     'Content-Type' => 'application/json',
                 ],
                 'json' => [
-                    'model' => 'gpt-4',
+                    'model' => 'gpt-3.5-turbo',
                     'messages' => [['role' => 'user', 'content' => $prompt]],
                     'temperature' => 0.7,
                 ],
             ]);
 
+            // Vérification du statut de la réponse
             $statusCode = $response->getStatusCode();
             $responseData = $response->getContent(false);
 
             if (200 !== $statusCode) {
-                dd('Erreur OpenAI:', $statusCode, $responseData);
+                throw new \Exception('Erreur OpenAI: '.$statusCode.' - '.$responseData);
             }
 
             $responseData = $response->toArray();
-            $recommendations = json_decode($responseData['choices'][0]['message']['content'], true);
+
+            // Correction des guillemets pour éviter les erreurs de parsing JSON
+            $recommendationsRaw = $responseData['choices'][0]['message']['content'] ?? '[]';
+            $recommendationsJson = str_replace("'", '"', $recommendationsRaw);
+            $recommendations = json_decode($recommendationsJson, true);
+
+            if (JSON_ERROR_NONE !== json_last_error()) {
+                throw new \Exception('Erreur de décodage JSON: '.json_last_error_msg());
+            }
         } catch (\Exception $e) {
             $this->addFlash('error', 'Erreur lors de la récupération des recommandations : '.$e->getMessage());
 
