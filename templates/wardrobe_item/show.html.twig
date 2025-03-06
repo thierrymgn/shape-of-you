@@ -5,7 +5,12 @@
 
 {% block body %}
 	<div class="bg-white">
-
+		<form action="{{ path('app_wardrobe_item_recommend', {'id': wardrobe_item.id}) }}" method="POST">
+			<input type="hidden" name="_token" value="{{ csrf_token('recommend' ~ wardrobe_item.id) }}">
+			<button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+				🔍 Obtenir des recommandations IA
+			</button>
+		</form>
 
 		<main class="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
 			<div

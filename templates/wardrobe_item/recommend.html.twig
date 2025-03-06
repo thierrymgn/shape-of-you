@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recommandations pour
+	{{ wardrobe_item.name }}
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-2xl font-bold mb-5">Vêtements similaires à "{{ wardrobe_item.name }}"</h1>
+
+	{% if recommended_items is empty %}
+		<p>Aucune recommandation trouvée.</p>
+	{% else %}
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{% for item in recommended_items %}
+				<div class="border rounded-lg p-4 shadow-lg">
+					<h2 class="text-lg font-semibold">{{ item.name }}</h2>
+					<p>Marque :
+						{{ item.brand }}</p>
+					<p>Couleur :
+						{{ item.color }}</p>
+					<p>Catégorie :
+						{{ item.category }}</p>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+{% endblock %}
