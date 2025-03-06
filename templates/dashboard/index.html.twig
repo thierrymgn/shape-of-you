@@ -20,6 +20,12 @@
                 <h2 class="text-xl font-semibold">Create Category</h2>
             </div>
         </a>
+
+        <a href="{{ path('app_dashboard_wardrobe_new') }}">
+            <div class="p-6 bg-white shadow rounded">
+                <h2 class="text-xl font-semibold">Create Wardrobe</h2>
+            </div>
+        </a>
     </div>
     <div>
         <h2 class="text-2xl font-bold mb-8">Data</h2>
@@ -41,6 +47,12 @@
             <div class="p-6 bg-white shadow rounded">
                 <h2 class="text-xl font-semibold">Tenues (Outfits)</h2>
                 <p class="text-2xl">{{ outfitCount }}</p>
+            </div>
+        </a>
+        <a href="{{path('app_dashboard_wardrobe')}}">
+            <div class="p-6 bg-white shadow rounded">
+                <h2 class="text-xl font-semibold">Wardrobe</h2>
+                <p class="text-2xl">{{ wardrobeCount }}</p>
             </div>
         </a>
 

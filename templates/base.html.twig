@@ -37,9 +37,9 @@
 					<img class="h-8 w-auto" src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company">
 					</div>
 					<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-					<a href="#" class="inline-flex items-center border-b-2 px-1 pt-1 border-transparent text-sm font-medium">Wardrobe</a>
+					<a href="{{path('app_wardrobe_item_index')}}" class=" {{ currentRoute == 'app_outfit_index' ? 'text-gray-900 border-indigo-500' : 'text-gray-500 border-transparent' }} inline-flex items-center border-b-2 px-1 pt-1 border-transparent text-sm font-medium">Wardrobe</a>
 					<a href="{{path('app_outfit_index')}}" class=" {{ currentRoute == 'app_outfit_index' ? 'text-gray-900 border-indigo-500' : 'text-gray-500 border-transparent' }} inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700">Outfit</a>
-					<a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Social</a>
+					<a href="{{path('app_social_post_index')}}" class="{{ currentRoute == 'app_social_post_index' ? 'text-gray-900 border-indigo-500' : ' text-gray-500 border-transparent' }} inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700">Social</a>
 					{% if 'ROLE_ADMIN' in app.user.roles %}
 					<a href="{{path('app_dashboard_index')}}" class=" {{ currentRoute == 'app_dashboard_index' ? 'text-gray-900 border-indigo-500' : ' text-gray-500 border-transparent' }} inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700">Dashboard</a>
 					{% endif %}

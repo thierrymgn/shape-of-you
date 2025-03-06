@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\User;
+use App\Entity\WardrobeItem;
 use App\Form\CategoryType;
 use App\Form\RegistrationFormType;
+use App\Form\WardrobeItemAdminType;
 use App\Repository\CategoryRepository;
 use App\Repository\OutfitRepository;
 use App\Repository\UserRepository;
+use App\Repository\WardrobeItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +24,7 @@ class DashboardController extends AbstractController
 {
     public function __construct(
         private UserRepository $userRepository,
+        private WardrobeItemRepository $wardrobeItemRepository,
         private OutfitRepository $outfitRepository,
         private CategoryRepository $categoryRepository,
     ) {
@@ -35,7 +39,8 @@ class DashboardController extends AbstractController
         $userCount = $this->userRepository->count([]);
         $outfitCount = $this->outfitRepository->count([]);
         $categoryCount = $this->categoryRepository->count([]);
-        $combinedCount = $outfitCount;
+        $wardrobeCount = $this->wardrobeItemRepository->count([]);
+        $combinedCount = $outfitCount + $wardrobeCount;
 
         $firstOutfit = $this->outfitRepository->createQueryBuilder('o')
             ->select('o.createdAt')
@@ -46,6 +51,16 @@ class DashboardController extends AbstractController
 
         $daysOutfits = $firstOutfit ? $firstOutfit['createdAt']->diff($now)->days : 0;
         $averageOutfitsPerDay = ($daysOutfits > 0) ? round($outfitCount / $daysOutfits, 2) : $outfitCount;
+
+        $firstWardrobe = $this->wardrobeItemRepository->createQueryBuilder('o')
+            ->select('o.createdAt')
+            ->orderBy('o.createdAt', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        $daysWardrobe = $firstWardrobe ? $firstWardrobe['createdAt']->diff($now)->days : 0;
+        $averageWardrobePerDay = ($daysWardrobe > 0) ? round($wardrobeCount / $daysWardrobe, 2) : $wardrobeCount;
 
         $firstDates = [];
         if ($firstOutfit) {
@@ -67,7 +82,14 @@ class DashboardController extends AbstractController
             ->getQuery()
             ->getSingleScalarResult();
 
-        $combinedToday = $outfitsToday;
+        $wardrobeToday = $this->wardrobeItemRepository->createQueryBuilder('o')
+            ->select('COUNT(o.id)')
+            ->where('o.createdAt >= :today')
+            ->setParameter('today', $today)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $combinedToday = $outfitsToday + $wardrobeToday;
 
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
@@ -75,6 +97,8 @@ class DashboardController extends AbstractController
             'outfitCount' => $outfitCount,
             'categoryCount' => $categoryCount,
             'combinedCount' => $combinedCount,
+            'wardrobeCount' => $wardrobeCount,
+            'averageWardrobePerDay' => $averageWardrobePerDay,
             'averageOutfitsPerDay' => $averageOutfitsPerDay,
             'averageCombinedPerDay' => $averageCombinedPerDay,
             'outfitsToday' => $outfitsToday,
@@ -116,6 +140,23 @@ class DashboardController extends AbstractController
         return $this->render('dashboard/user_new.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    #[Route('/user/{id}/delete', name: 'user_delete', methods: ['POST'])]
+    public function deleteUser(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide.');
+        }
+
+        return $this->redirectToRoute('app_dashboard_user');
     }
 
     #[Route('/outfit', name: 'outfit', methods: ['GET'])]
@@ -177,5 +218,82 @@ class DashboardController extends AbstractController
         }
 
         return $this->redirectToRoute('app_dashboard_category');
+    }
+
+    #[Route('/wardrobe', name: 'wardrobe')]
+    public function dashboardWardrobeItems(WardrobeItemRepository $wardrobeItemRepository): Response
+    {
+        $wardrobeItems = $wardrobeItemRepository->findBy(['customer' => $this->getUser()]);
+
+        return $this->render('dashboard/wardrobeDashboard.html.twig', [
+            'wardrobe_items' => $wardrobeItems,
+        ]);
+    }
+
+    #[Route('/wardrobe/new', name: 'wardrobe_new', methods: ['GET', 'POST'])]
+    public function newWardrobeItem(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $wardrobeItem = new WardrobeItem();
+        $form = $this->createForm(WardrobeItemAdminType::class, $wardrobeItem);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var User|null $user */
+            $user = $this->getUser();
+            if (!$user) {
+                throw new \LogicException('L\'utilisateur doit être authentifié.');
+            }
+            $wardrobeItem->setCustomer($user);
+            $entityManager->persist($wardrobeItem);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Wardrobe item créé avec succès.');
+
+            return $this->redirectToRoute('app_dashboard_wardrobe', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('dashboard/wardrobe_new.html.twig', [
+            'wardrobe_item' => $wardrobeItem,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/wardrobe/{id}/edit', name: 'wardrobe_edit', methods: ['GET', 'POST'])]
+    public function editWardrobeItem(Request $request, WardrobeItem $wardrobeItem, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('edit', $wardrobeItem);
+
+        $form = $this->createForm(WardrobeItemAdminType::class, $wardrobeItem);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Wardrobe item mis à jour avec succès.');
+
+            return $this->redirectToRoute('app_dashboard_wardrobe', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('dashboard/wardrobe_edit.html.twig', [
+            'wardrobe_item' => $wardrobeItem,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/wardrobe/{id}/delete', name: 'wardrobe_delete', methods: ['POST'])]
+    public function deleteWardrobeItem(Request $request, WardrobeItem $wardrobeItem, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('delete', $wardrobeItem);
+
+        if ($this->isCsrfTokenValid('delete'.$wardrobeItem->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($wardrobeItem);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Wardrobe item supprimé avec succès.');
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide.');
+        }
+
+        return $this->redirectToRoute('app_dashboard_wardrobe', [], Response::HTTP_SEE_OTHER);
     }
 }

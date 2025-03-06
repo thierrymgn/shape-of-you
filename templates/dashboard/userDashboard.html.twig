@@ -16,6 +16,12 @@
                             <p class="text-sm text-gray-600" >{{ user.createdAt|date('Y-m-d H:i') }}</p>
                         </div>
                         <div class="flex max-w-36 items-center">
+                            <form method="post" action="{{ path('app_dashboard_user_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                <button type="submit" class="p-3 bg-red-500 text-white font-bold rounded-lg hover:underline">
+                                    Supprimer
+                                </button>
+                            </form>
                             <a href="{{ path('app_user_profile', {'id': user.id}) }}" class="p-3 bg-blue-500 text-white font-bold rounded-lg hover:underline">
                                 Voir les détails
                             </a>
