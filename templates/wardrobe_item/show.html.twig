@@ -43,20 +43,21 @@
 						</div>
 
 						<form class="mt-6">
-							<div
-								class="mt-10 mr-4 flex">
+							<div class="mt-10 mr-4 flex">
 								{% if wardrobe_item.customer == app.user %}
 									<a href="{{ path('app_wardrobe_item_edit', {'id': wardrobe_item.id}) }}" class="flex max-w-40 flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 focus:outline-hidden sm:w-full mr-4">Edit
 									</a>
 									{{ include('wardrobe_item/_delete_form.html.twig') }}
 								{% endif %}
-								</div>
-								{% if wardrobe_item.partnerLinks is not null %}
+							</div>
+							{% if wardrobe_item.partnerLinks is not null %}
 								<div class="mt-6">
-									<a href="{{ wardrobe_item.partnerLinks }}" class="flex items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base font-medium text-white hover:bg-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50 focus:outline-hidden sm:w-full mr-4"> Visit the store </a>
+									<a href="{{ wardrobe_item.partnerLinks }}" class="flex items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base font-medium text-white hover:bg-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50 focus:outline-hidden sm:w-full mr-4">
+										Visit the store
+									</a>
 								</div>
-								{% endif %}
-							</form>
+							{% endif %}
+						</form>
 
 						<section aria-labelledby="details-heading" class="mt-12">
 							<h2 id="details-heading" class="sr-only">Additional details</h2>
@@ -119,7 +120,7 @@
 								<div>
 									<div class="relative">
 										<div class="relative h-72 w-full overflow-hidden rounded-lg">
-											<img src="https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-03-related-product-01.jpg" alt="Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls." class="size-full object-cover">
+											<img src="{{ wardrobe_item.image }}" alt="picture" class="size-full object-cover">
 										</div>
 										<div class="relative mt-4">
 											<h3 class="text-sm font-medium text-gray-900">{{ wardrobe_item.name }}</h3>
@@ -129,7 +130,7 @@
 										</div>
 										<div class="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
 											<div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"></div>
-											<p class="relative text-lg font-semibold text-white">$140</p>
+											<p class="relative text-lg font-semibold text-white">{{ wardrobe_item.size }}</p>
 										</div>
 									</div>
 									<div class="mt-6">

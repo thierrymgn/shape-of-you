@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -37,7 +38,7 @@ class UserProfileController extends AbstractController
         /** @var ?User $currentUser */
         $currentUser = $this->getUser();
 
-        $isFollowing = $currentUser ? 
+        $isFollowing = $currentUser ?
             $followRepository->findOneBy([
                 'follower' => $currentUser,
                 'following' => $user,
