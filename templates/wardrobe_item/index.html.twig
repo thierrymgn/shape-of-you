@@ -24,7 +24,7 @@
 			<div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
 				{% for wardrobe_item in wardrobe_items %}
 					<a href="{{ path('app_wardrobe_item_show', {'id': wardrobe_item.id}) }}" class="group relative">
-						<img src="{{ wardrobe_item.image }}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="aspect-square w-full rounded-lg bg-gray-200 object-cover group-hover:opacity-75 xl:aspect-7/8">
+						<img src="{{ asset('images/wardrobeItem/' ~ wardrobe_item.image) }}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="aspect-square w-full rounded-lg bg-gray-200 object-cover group-hover:opacity-75 xl:aspect-7/8">
 						<span class="absolute top-2 right-2 bg-white/30 text-black text-xs font-bold px-3 py-1 rounded-full shadow-md backdrop-blur-sm">
 							{{ wardrobe_item.size }}
 						</span>

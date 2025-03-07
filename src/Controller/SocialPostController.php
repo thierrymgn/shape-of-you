@@ -81,6 +81,26 @@ final class SocialPostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                if ($socialPost->getImage()) {
+                    $oldImagePath = $this->getParameter('social_post_images_directory').'/'.$socialPost->getImage();
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                try {
+                    $imageFile->move(
+                        $this->getParameter('social_post_images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+                }
+                $socialPost->setImage($newFilename);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('app_social_post_index', [], Response::HTTP_SEE_OTHER);
