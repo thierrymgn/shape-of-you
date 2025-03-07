@@ -22,7 +22,7 @@
 							{% if wardrobe_item is defined and wardrobe_item.id %}
 								{% if form.image %}
 									<p class="text-xs text-gray-500">Votre image actuelle :
-										{{form.image}}</p>
+										{{ form_widget(form.image) }}</p>
 								{% endif %}
 							{% endif %}
 						</div>
