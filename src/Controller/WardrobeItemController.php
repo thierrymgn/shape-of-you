@@ -91,6 +91,27 @@ final class WardrobeItemController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                if ($wardrobeItem->getImage()) {
+                    $oldImagePath = $this->getParameter('wardrobeItem_images_directory').'/'.$wardrobeItem->getImage();
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                try {
+                    $imageFile->move(
+                        $this->getParameter('wardrobeItem_images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+                }
+                $wardrobeItem->setImage($newFilename);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_wardrobe_item_index', [], Response::HTTP_SEE_OTHER);

@@ -12,7 +12,6 @@ use App\Repository\CategoryRepository;
 use App\Repository\OutfitRepository;
 use App\Repository\UserRepository;
 use App\Repository\WardrobeItemRepository;
-use App\Security\DashboardVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -127,9 +126,6 @@ class DashboardController extends AbstractController
     #[Route('/user/new', name: 'user_new')]
     public function newUser(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
-        // $this->denyAccessUnlessGranted(DashboardVoter::CREATE, new User());
-
-        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         if (!$this->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException('Accès refusé.');
         }
@@ -161,10 +157,6 @@ class DashboardController extends AbstractController
         if (!$this->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException('Accès refusé.');
         }
-
-        $this->denyAccessUnlessGranted(DashboardVoter::DELETE, $user);
-
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager->remove($user);
