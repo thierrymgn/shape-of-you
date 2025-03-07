@@ -9,6 +9,7 @@ use App\Enum\WardrobeStatus;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,7 +23,11 @@ class WardrobeItemType extends AbstractType
             ->add('brand')
             ->add('size')
             ->add('color')
-            ->add('image')
+            ->add('image', FileType::class, [
+                'label' => 'Image (JPG, PNG file)',
+                'mapped' => false,
+                'required' => false,
+            ])
             ->add('status', EnumType::class, [
                 'class' => WardrobeStatus::class,
                 'choice_label' => fn (WardrobeStatus $wardrobeStatus) => $wardrobeStatus->name,

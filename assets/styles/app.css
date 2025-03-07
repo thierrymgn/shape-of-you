@@ -9,3 +9,23 @@
 .portrait {
     height: 52rem;
 }
+
+@keyframes shimmer {
+    0% {
+      transform: translateX(-150%);
+    }
+    100% {
+      transform: translateX(150%);
+    }
+  }
+  .shimmer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    transform: translateX(-150%);
+    animation: shimmer 2s infinite;
+  }

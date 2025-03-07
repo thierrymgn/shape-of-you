@@ -34,7 +34,7 @@ final class SocialPostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // image upload
+            // début image upload
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
                 $newFilename = uniqid().'.'.$imageFile->guessExtension();
@@ -48,6 +48,7 @@ final class SocialPostController extends AbstractController
                 }
                 $socialPost->setImage($newFilename);
             }
+            // fin image upload
 
             /** @var \App\Entity\User $user */
             $user = $this->getUser();
