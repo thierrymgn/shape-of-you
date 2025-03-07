@@ -12,6 +12,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\OutfitRepository;
 use App\Repository\UserRepository;
 use App\Repository\WardrobeItemRepository;
+use App\Security\DashboardVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,10 @@ class DashboardController extends AbstractController
     #[Route('', name: 'index')]
     public function index(): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
         $now = new \DateTimeImmutable();
         $today = new \DateTimeImmutable('today');
 
@@ -109,6 +114,9 @@ class DashboardController extends AbstractController
     #[Route('/user', name: 'user')]
     public function dashboardUser(): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
         $users = $this->userRepository->findAll();
 
         return $this->render('dashboard/userDashboard.html.twig', [
@@ -119,7 +127,12 @@ class DashboardController extends AbstractController
     #[Route('/user/new', name: 'user_new')]
     public function newUser(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        // $this->denyAccessUnlessGranted(DashboardVoter::CREATE, new User());
+
+        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
 
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -145,6 +158,12 @@ class DashboardController extends AbstractController
     #[Route('/user/{id}/delete', name: 'user_delete', methods: ['POST'])]
     public function deleteUser(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
+        $this->denyAccessUnlessGranted(DashboardVoter::DELETE, $user);
+
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
@@ -162,6 +181,10 @@ class DashboardController extends AbstractController
     #[Route('/outfit', name: 'outfit', methods: ['GET'])]
     public function dashboardOutfit(): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
         $outfits = $this->outfitRepository->findAll();
 
         return $this->render('dashboard/outfitDashboard.html.twig', [
@@ -172,6 +195,10 @@ class DashboardController extends AbstractController
     #[Route('/category', name: 'category')]
     public function dashboardCategory(CategoryRepository $categoryRepository): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
         // Récupère toutes les catégories
         $categories = $categoryRepository->findAll();
 
@@ -183,7 +210,9 @@ class DashboardController extends AbstractController
     #[Route('/category/new', name: 'category_new')]
     public function newCategory(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
 
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -206,7 +235,9 @@ class DashboardController extends AbstractController
     #[Route('/category/{id}/delete', name: 'category_delete', methods: ['POST'])]
     public function deleteCategory(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
 
         if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
             $entityManager->remove($category);
@@ -223,6 +254,10 @@ class DashboardController extends AbstractController
     #[Route('/wardrobe', name: 'wardrobe')]
     public function dashboardWardrobeItems(WardrobeItemRepository $wardrobeItemRepository): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
         $wardrobeItems = $wardrobeItemRepository->findAll();
 
         return $this->render('dashboard/wardrobeDashboard.html.twig', [
@@ -233,6 +268,10 @@ class DashboardController extends AbstractController
     #[Route('/wardrobe/new', name: 'wardrobe_new', methods: ['GET', 'POST'])]
     public function newWardrobeItem(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
         $wardrobeItem = new WardrobeItem();
         $form = $this->createForm(WardrobeItemAdminType::class, $wardrobeItem);
         $form->handleRequest($request);
@@ -261,7 +300,9 @@ class DashboardController extends AbstractController
     #[Route('/wardrobe/{id}/edit', name: 'wardrobe_edit', methods: ['GET', 'POST'])]
     public function editWardrobeItem(Request $request, WardrobeItem $wardrobeItem, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('edit', $wardrobeItem);
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
 
         $form = $this->createForm(WardrobeItemAdminType::class, $wardrobeItem);
         $form->handleRequest($request);
@@ -283,7 +324,9 @@ class DashboardController extends AbstractController
     #[Route('/wardrobe/{id}/delete', name: 'wardrobe_delete', methods: ['POST'])]
     public function deleteWardrobeItem(Request $request, WardrobeItem $wardrobeItem, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('delete', $wardrobeItem);
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
 
         if ($this->isCsrfTokenValid('delete'.$wardrobeItem->getId(), $request->request->get('_token'))) {
             $entityManager->remove($wardrobeItem);
