@@ -30,7 +30,10 @@ class AiAnalysis
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'OutfitId')]
+    /**
+     * @ORM\ManyToOne(targetEntity=Outfit::class, inversedBy="OutfitId", cascade={"persist"})
+     */
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'OutfitId')]
     private ?Outfit $OutfitId = null;
 
     #[ORM\ManyToOne(inversedBy: 'WardrobeItemId')]

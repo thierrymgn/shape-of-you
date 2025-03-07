@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    App\Service\OutfitRecommendationService:
+        arguments:
+            $openaiApiKey: '%env(OPENAI_API_KEY)%'
+            $openaiModelId: 'gpt-4o-mini'

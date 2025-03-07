@@ -26,7 +26,7 @@
 								{% endif %}
 							{% endif %}
 						</div>
-						<input id="image" name="{{ field_name(form.image) }}" type="file" accept="image/*" class="hidden">
+						<input required require id="image" name="{{ field_name(form.image) }}" type="file" accept="image/*" class="hidden">
 					</label>
 				</div>
 				<div class="flex justify-center mt-4">
@@ -34,13 +34,15 @@
 				</div>
 			</div>
 			<div class="sm:col-span-full">
-				<label for="description" class="block text-sm/6 font-medium text-gray-900">Description</label>
+				<label for="description" class="block text-sm/6 font-medium text-gray-900">Description<span class="text-red-500">*</span>
+				</label>
 				<div class="mt-2">
-					<input id="description" name="{{ field_name(form.description) }}" value="{{ field_value(form.description) }}" placeholder="{{ field_label(form.description) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
+					<input required require id="description" name="{{ field_name(form.description) }}" value="{{ field_value(form.description) }}" placeholder="{{ field_label(form.description) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 				</div>
 			</div>
 			<div class="sm:col-span-3">
-				<label for="country" class="block text-sm/6 font-medium text-gray-900">Season</label>
+				<label for="country" class="block text-sm/6 font-medium text-gray-900">Season<span class="text-red-500">*</span>
+				</label>
 				<div class="mt-2 grid grid-cols-1">
 					<select name="{{ field_name(form.season) }}" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 						{% for label, value in field_choices(form.season) %}
@@ -54,7 +56,8 @@
 			</div>
 
 			<div class="sm:col-span-3">
-				<label for="country" class="block text-sm/6 font-medium text-gray-900">Category</label>
+				<label for="country" class="block text-sm/6 font-medium text-gray-900">Category<span class="text-red-500">*</span>
+				</label>
 				<div class="mt-2 grid grid-cols-1">
 					<select name="{{ field_name(form.category) }}" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 						{% for label, value in field_choices(form.category) %}
@@ -68,27 +71,31 @@
 			</div>
 
 			<div class="sm:col-span-2">
-				<label for="name" class="block text-sm/6 font-medium text-gray-900">Name</label>
+				<label for="name" class="block text-sm/6 font-medium text-gray-900">Name<span class="text-red-500">*</span>
+				</label>
 				<div class="mt-2">
-					<input id="name" name="{{ field_name(form.name) }}" value="{{ field_value(form.name) }}" placeholder="{{ field_label(form.name) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
+					<input required require id="name" name="{{ field_name(form.name) }}" value="{{ field_value(form.name) }}" placeholder="{{ field_label(form.name) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 				</div>
 			</div>
 			<div class="sm:col-span-2">
-				<label for="brand" class="block text-sm/6 font-medium text-gray-900">Brand</label>
+				<label for="brand" class="block text-sm/6 font-medium text-gray-900">Brand<span class="text-red-500">*</span>
+				</label>
 				<div class="mt-2">
-					<input id="brand" name="{{ field_name(form.brand) }}" value="{{ field_value(form.brand) }}" placeholder="{{ field_label(form.brand) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
-				</div>
-			</div>
-
-			<div class="sm:col-span-2">
-				<label for="size" class="block text-sm/6 font-medium text-gray-900">Size</label>
-				<div class="mt-2">
-					<input id="size" name="{{ field_name(form.size) }}" value="{{ field_value(form.size) }}" placeholder="{{ field_label(form.size) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
+					<input required require id="brand" name="{{ field_name(form.brand) }}" value="{{ field_value(form.brand) }}" placeholder="{{ field_label(form.brand) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 				</div>
 			</div>
 
 			<div class="sm:col-span-2">
-				<label for="country" class="block text-sm/6 font-medium text-gray-900">Status</label>
+				<label for="size" class="block text-sm/6 font-medium text-gray-900">Size<span class="text-red-500">*</span>
+				</label>
+				<div class="mt-2">
+					<input required require id="size" name="{{ field_name(form.size) }}" value="{{ field_value(form.size) }}" placeholder="{{ field_label(form.size) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
+				</div>
+			</div>
+
+			<div class="sm:col-span-2">
+				<label for="country" class="block text-sm/6 font-medium text-gray-900">Status<span class="text-red-500">*</span>
+				</label>
 				<div class="mt-2 grid grid-cols-1">
 					<select name="{{ field_name(form.status) }}" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 						{% for label, value in field_choices(form.status) %}
@@ -101,9 +108,10 @@
 				</div>
 			</div>
 			<div class="sm:col-span-2">
-				<label for="color" class="block text-sm/6 font-medium text-gray-900">Color</label>
+				<label for="color" class="block text-sm/6 font-medium text-gray-900">Color<span class="text-red-500">*</span>
+				</label>
 				<div class="mt-2">
-					<input id="color" name="{{ field_name(form.color) }}" value="{{ field_value(form.color) }}" placeholder="{{ field_label(form.color) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
+					<input required require id="color" name="{{ field_name(form.color) }}" value="{{ field_value(form.color) }}" placeholder="{{ field_label(form.color) }}" type="text" autocomplete="name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 				</div>
 			</div>
 		</div>
@@ -128,37 +136,52 @@
 {{ form_row(form._token) }}
 {{ form_end(form, {'render_rest': false}) }}
 <script>
-	document.getElementById('analyze-btn').addEventListener('click', function(e) {
-	  e.preventDefault();
-	  const imageInput = document.getElementById('image');
-	  if (!imageInput.files || imageInput.files.length === 0) {
-		alert("Veuillez sélectionner une image à analyser.");
-		return;
-	  }
-	  const file = imageInput.files[0];
+	document.getElementById('analyze-btn').addEventListener('click', function (e) {
+e.preventDefault();
+const imageInput = document.getElementById('image');
+if (! imageInput.files || imageInput.files.length === 0) {
+alert("Veuillez sélectionner une image à analyser.");
+return;
+}
+const file = imageInput.files[0];
 
-	  const formData = new FormData();
-	  formData.append('image', file);
-	
-	  fetch('{{ path("app_ai_analyze") }}', {
-		method: 'POST',
-		body: formData
-	  })
-	  .then(response => {
-		if (!response.ok) {
-		  return response.text().then(text => { throw new Error("HTTP error " + response.status + ": " + text); });
-		}
-		return response.json();
-	  })
-	  .then(data => {
-		if(data.name) document.getElementById('name').value = data.name;
-		if(data.brand) document.getElementById('brand').value = data.brand;
-		if(data.color) document.getElementById('color').value = data.color;
-		if(data.description) document.getElementById('description').value = data.description;
-	  })
-	  .catch(error => {
-		console.error("Erreur lors de l'analyse:", error);
-		alert("Erreur lors de l'analyse avec l'IA: " + error.message);
-	  });
-	});
+const formData = new FormData();
+formData.append('image', file);
+
+fetch('{{ path("app_ai_analyze") }}', {
+method: 'POST',
+body: formData
+}).then(response => {
+if (!response.ok) {
+return response.text().then(text => {
+throw new Error("HTTP error " + response.status + ": " + text);
+});
+}
+return response.json();
+}).then(data => {
+if (data.name) 
+document.getElementById('name').value = data.name;
+
+
+
+if (data.brand) 
+document.getElementById('brand').value = data.brand;
+
+
+
+if (data.color) 
+document.getElementById('color').value = data.color;
+
+
+
+if (data.description) 
+document.getElementById('description').value = data.description;
+
+
+
+}).catch(error => {
+console.error("Erreur lors de l'analyse:", error);
+alert("Erreur lors de l'analyse avec l'IA: " + error.message);
+});
+});
 </script>

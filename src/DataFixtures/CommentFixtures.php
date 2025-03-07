@@ -39,10 +39,6 @@ class CommentFixtures extends Fixture
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setUpdatedAt(new \DateTimeImmutable());
 
-            if (method_exists($reply, 'setParentComment')) {
-                $reply->setParentComment($parentComment);
-            }
-
             $parentComment->setRepliesCount($parentComment->getRepliesCount() + 1);
 
             $manager->persist($reply);
