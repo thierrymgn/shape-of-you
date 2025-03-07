@@ -89,7 +89,7 @@ class Outfit
     /**
      * @var Collection<int, AiAnalysis>
      */
-    #[ORM\OneToMany(targetEntity: AiAnalysis::class, mappedBy: 'OutfitId', cascade: ["remove"])]
+    #[ORM\OneToMany(targetEntity: AiAnalysis::class, mappedBy: 'OutfitId', cascade: ['remove'])]
     private Collection $OutfitId;
 
     public function __construct()

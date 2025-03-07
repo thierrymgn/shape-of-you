@@ -59,7 +59,6 @@ class AiRecommendationController extends AbstractController
                 if (empty($outfits)) {
                     $this->addFlash('warning', 'Nous n\'avons pas pu générer de suggestions...');
                 }
-
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la génération des suggestions: '.$e->getMessage());
             }
@@ -133,7 +132,7 @@ class AiRecommendationController extends AbstractController
 
         try {
             $permanentOutfit = clone $outfitToSave;
-//            $permanentOutfit->setId(null);
+            //            $permanentOutfit->setId(null);
             $permanentOutfit->setCustomer($user);
 
             foreach ($outfitToSave->getOutfitItems() as $item) {

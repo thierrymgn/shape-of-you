@@ -242,45 +242,6 @@ class OutfitRecommendationService
     }
 
     /**
-     * Récupère les tendances actuelles.
-     *
-     * @return array<int, array{occasion: string, season: WardrobeSeason}>
-     */
-    private function getCurrentTrends(): array
-    {
-        $month = (int) date('n');
-        $currentSeason = match (true) {
-            $month >= 3 && $month <= 5 => WardrobeSeason::SPRING,
-            $month >= 6 && $month <= 8 => WardrobeSeason::SUMMER,
-            $month >= 9 && $month <= 11 => WardrobeSeason::AUTUMN,
-            default => WardrobeSeason::WINTER,
-        };
-
-        return match ($currentSeason) {
-            WardrobeSeason::SPRING => [
-                ['occasion' => 'Casual printanier', 'season' => WardrobeSeason::SPRING],
-                ['occasion' => 'Brunch en terrasse', 'season' => WardrobeSeason::SPRING],
-                ['occasion' => 'Sortie culturelle', 'season' => WardrobeSeason::SPRING],
-            ],
-            WardrobeSeason::SUMMER => [
-                ['occasion' => 'Plage', 'season' => WardrobeSeason::SUMMER],
-                ['occasion' => 'Festival', 'season' => WardrobeSeason::SUMMER],
-                ['occasion' => 'Soirée d\'été', 'season' => WardrobeSeason::SUMMER],
-            ],
-            WardrobeSeason::AUTUMN => [
-                ['occasion' => 'Look layering d\'automne', 'season' => WardrobeSeason::AUTUMN],
-                ['occasion' => 'Week-end à la campagne', 'season' => WardrobeSeason::AUTUMN],
-                ['occasion' => 'Rentrée professionnelle', 'season' => WardrobeSeason::AUTUMN],
-            ],
-            default => [
-                ['occasion' => 'Tenue chaleureuse quotidienne', 'season' => WardrobeSeason::WINTER],
-                ['occasion' => 'Fêtes de fin d\'année', 'season' => WardrobeSeason::WINTER],
-                ['occasion' => 'Soirée cocooning', 'season' => WardrobeSeason::WINTER],
-            ],
-        };
-    }
-
-    /**
      * Analyse le style personnel d'un utilisateur.
      *
      * @param User $user L'utilisateur dont on analyse le style
