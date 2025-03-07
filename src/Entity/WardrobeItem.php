@@ -63,7 +63,7 @@ class WardrobeItem
     #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'wardrobeItems')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'wardrobeItems')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $customer = null;
 

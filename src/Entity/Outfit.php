@@ -71,7 +71,7 @@ class Outfit
     #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'outfits')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'outfits')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: "L'utilisateur doit être spécifié")]
     private ?User $customer = null;
@@ -89,7 +89,7 @@ class Outfit
     /**
      * @var Collection<int, AiAnalysis>
      */
-    #[ORM\OneToMany(targetEntity: AiAnalysis::class, mappedBy: 'OutfitId')]
+    #[ORM\OneToMany(targetEntity: AiAnalysis::class, mappedBy: 'OutfitId', cascade: ['remove'])]
     private Collection $OutfitId;
 
     public function __construct()

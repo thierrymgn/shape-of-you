@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register
+{% block title %}Inscription
 {% endblock %}
 
 {% block body %}
@@ -9,36 +9,36 @@
 
 	<div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
 		<div class="sm:mx-auto sm:w-full sm:max-w-md">
-			<img class="mx-auto h-10 w-auto" src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company">
-			<h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign up</h2>
+			<img class="mx-auto h-10 w-auto" src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Votre entreprise">
+			<h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Inscrivez-vous</h2>
 		</div>
 
 		<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
 			<div class="bg-white px-6 py-12 shadow-sm sm:rounded-lg sm:px-12">
 				{{ form_start(registrationForm) }}
 				<div>
-					<label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
+					<label for="email" class="block text-sm/6 font-medium text-gray-900">Adresse e-mail</label>
 					<div class="">
 						<input type="email" name="{{ field_name(registrationForm.email) }}" value="{{ field_value(registrationForm.email) }}" placeholder="{{ field_label(registrationForm.email) }}" id="email" autocomplete="email" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 					</div>
 				</div>
 
 				<div>
-					<label for="firstName" class="block text-sm/6 font-medium text-gray-900 mt-2">First name</label>
+					<label for="firstName" class="block text-sm/6 font-medium text-gray-900 mt-2">Prénom</label>
 					<div class="">
 						<input type="firstName" name="{{ field_name(registrationForm.firstName) }}" value="{{ field_value(registrationForm.firstName) }}" placeholder="{{ field_label(registrationForm.firstName) }}" id="firstName" autocomplete="firstName" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 					</div>
 				</div>
 
 				<div>
-					<label for="lastName" class="block text-sm/6 font-medium text-gray-900 mt-2">Last name</label>
+					<label for="lastName" class="block text-sm/6 font-medium text-gray-900 mt-2">Nom</label>
 					<div class="">
 						<input type="lastName" name="{{ field_name(registrationForm.lastName) }}" value="{{ field_value(registrationForm.lastName) }}" placeholder="{{ field_label(registrationForm.lastName) }}" id="lastName" autocomplete="lastName" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 					</div>
 				</div>
 
 				<div>
-					<label for="password" class="block text-sm/6 font-medium text-gray-900 mt-2">Password</label>
+					<label for="password" class="block text-sm/6 font-medium text-gray-900 mt-2">Mot de passe</label>
 					<div class="">
 						<input type="password" name="{{ field_name(registrationForm.plainPassword) }}" value="{{ field_value(registrationForm.plainPassword) }}" placeholder="{{ field_label(registrationForm.plainPassword) }}" id="password" autocomplete="current-password" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 border">
 					</div>
@@ -51,7 +51,7 @@
 				</div>
 
 				<div>
-					<button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-2">Sign up</button>
+					<button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-2">S'inscrire</button>
 				</div>
 				{{ form_end(registrationForm) }}
 
@@ -61,7 +61,7 @@
 							<div class="w-full border-t border-gray-200"></div>
 						</div>
 						<div class="relative flex justify-center text-sm/6 font-medium">
-							<span class="bg-white px-6 text-gray-900">Or sign up with</span>
+							<span class="bg-white px-6 text-gray-900">Ou inscrivez-vous avec</span>
 						</div>
 					</div>
 
@@ -79,8 +79,8 @@
 				</div>
 			</div>
 			<p class="mt-10 text-center text-sm/6 text-gray-500">
-				Already have an account?
-				<a href="{{ path('app_login') }}" class="font-medium text-indigo-600 hover:text-indigo-500">Sign in</a>
+				Déjà un compte ?
+				<a href="{{ path('app_login') }}" class="font-medium text-indigo-600 hover:text-indigo-500">Se connecter</a>
 			</p>
 		</div>
 	</div>

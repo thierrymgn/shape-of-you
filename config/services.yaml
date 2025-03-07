@@ -8,10 +8,13 @@ parameters:
     wardrobe_images_directory: '%kernel.project_dir%/public/images/wardrobe'
     social_post_images_directory: '%kernel.project_dir%/public/uploads/images/social_post'
     outfits_images_directory: '%kernel.project_dir%/public/images/outfits'
+    openai_api_key: '%env(OPENAI_API_KEY)%'
+    openai_model_id: '%env(default:default_openai_model:OPENAI_MODEL_ID)%'
+    default_openai_model: 'gpt-4o-mini'
     wardrobeItem_images_directory: '%kernel.project_dir%/public/images/wardrobeItem'
     openai_api_key_wardrobe: '%env(OPENAI_API_KEY_WARDROBE)%'
 
-    
+
 services:
     # default configuration for services in *this* file
     App\Service\AIAnalyzerService: ~
@@ -32,10 +35,16 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            
+
     # App\Controller\AIController:
     #     arguments:
     #         $openaiApiKeyWardrobe: '%openai_api_key_wardrobe%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # IA Services configuration
+    App\Service\OutfitRecommendationService:
+        arguments:
+            $openaiApiKey: '%openai_api_key%'
+            $openaiModelId: '%openai_model_id%'
