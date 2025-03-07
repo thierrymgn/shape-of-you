@@ -223,7 +223,7 @@ class DashboardController extends AbstractController
     #[Route('/wardrobe', name: 'wardrobe')]
     public function dashboardWardrobeItems(WardrobeItemRepository $wardrobeItemRepository): Response
     {
-        $wardrobeItems = $wardrobeItemRepository->findBy(['customer' => $this->getUser()]);
+        $wardrobeItems = $wardrobeItemRepository->findAll();
 
         return $this->render('dashboard/wardrobeDashboard.html.twig', [
             'wardrobe_items' => $wardrobeItems,
