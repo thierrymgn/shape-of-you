@@ -15,26 +15,35 @@ class UserProfileController extends AbstractController
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function myProfile(FollowRepository $followRepository): Response
     {
-        $currentUser = $this->getUser();
+        /** @var User $currentUser */
+        $currentUser = $this->getUser(); // Symfony garantit que c'est bien un User
 
         $followers = $followRepository->findBy(['following' => $currentUser]);
         $following = $followRepository->findBy(['follower' => $currentUser]);
+        $WardrobeItems = $currentUser->getWardrobeItems();
+        $Outfits = $currentUser->getOutfits();
 
         return $this->render('user/my_profile.html.twig', [
             'userProfile' => $currentUser,
             'followers' => $followers,
             'following' => $following,
+            'wardrobeItems' => $WardrobeItems,
+            'outfits' => $Outfits,
         ]);
     }
 
     #[Route('/user/{id}', name: 'app_user_profile')]
     public function userProfile(User $user, FollowRepository $followRepository): Response
     {
+        /** @var ?User $currentUser */
         $currentUser = $this->getUser();
-        $isFollowing = $followRepository->findOneBy([
-            'follower' => $currentUser,
-            'following' => $user,
-        ]);
+
+        $isFollowing = $currentUser ?
+            $followRepository->findOneBy([
+                'follower' => $currentUser,
+                'following' => $user,
+            ])
+            : null;
 
         $followers = $followRepository->findBy(['following' => $user]);
         $following = $followRepository->findBy(['follower' => $user]);

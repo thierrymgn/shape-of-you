@@ -43,7 +43,123 @@
 						<p class="text-gray-500">You are not following anyone yet.</p>
 					{% endfor %}
 				</ul>
+				<div>
+					<!-- Mobile Tabs (Dropdown) -->
+					<div class="grid grid-cols-1 sm:hidden">
+						<select id="mobile-tabs" aria-label="Select a tab" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600">
+							<option value="wardrobe">Vêtements</option>
+							<option value="outfits">Tenues</option>
+						</select>
+						<svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end fill-gray-500" viewbox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
+							<path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+
+					<!-- Desktop Tabs -->
+					<div class="hidden sm:block">
+						<div class="border-b border-gray-200">
+							<nav class="-mb-px flex" aria-label="Tabs">
+								<a href="#wardrobe" data-tab="wardrobe" class="tab-link w-1/2 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-indigo-600 border-indigo-500 hover:border-gray-300 hover:text-gray-700">Vêtements</a>
+								<a href="#outfits" data-tab="outfits" class="tab-link w-1/2 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Tenues</a>
+							</nav>
+						</div>
+					</div>
+
+					<!-- Contenu des tabs -->
+					<div id="tab-content">
+
+						<div id="wardrobe" class="tab-content">
+							<ul role="list" class="divide-y divide-gray-100">
+								{% for wardrobeItem in wardrobeItems %}
+									<a href="{{ path('app_wardrobe_item_show', {id: wardrobeItem.id}) }}" class="block hover:bg-gray-50">
+										<li class="flex justify-between gap-x-6 py-5">
+											<div class="flex min-w-0 gap-x-4">
+												<img class="size-12 flex-none rounded-full bg-gray-50" src="{{ wardrobeItem.image }}" alt="{{ wardrobeItem.name }}">
+												<div class="min-w-0 flex-auto">
+													<p class="text-sm/6 font-semibold text-gray-900">{{ wardrobeItem.name }}</p>
+													<p class="mt-1 truncate text-xs/5 text-gray-500">{{ wardrobeItem.description }}</p>
+												</div>
+											</div>
+											<div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+												<p class="mt-1 text-xs/5 text-gray-500">Last update
+													<time>{{ wardrobeItem.updatedAt|date('F j, Y') }}
+													</time>
+												</p>
+											</div>
+										</li>
+									</a>
+								{% endfor %}
+							</ul>
+
+						</div>
+
+						<div id="outfits" class="tab-content hidden">
+							<ul role="list" class="divide-y divide-gray-100">
+								{% for outfit in outfits %}
+									<a href="{{ path('app_outfit_show', {id: outfit.id}) }}" class="block hover:bg-gray-50">
+										<li class="flex justify-between gap-x-6 py-5">
+											<div class="flex min-w-0 gap-x-4">
+												<img class="size-12 flex-none rounded-full bg-gray-50" src="{{ outfit.image }}" alt="{{ outfit.name }}">
+												<div class="min-w-0 flex-auto">
+													<p class="text-sm/6 font-semibold text-gray-900">{{ outfit.name }}</p>
+													<p class="mt-1 truncate text-xs/5 text-gray-500">{{ outfit.description }}</p>
+												</div>
+											</div>
+											<div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+												<p class="mt-1 text-xs/5 text-gray-500">Last update
+													<time>{{ outfit.updatedAt|date('F j, Y') }}
+													</time>
+												</p>
+											</div>
+										</li>
+									</a>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+const tabs = document.querySelectorAll(".tab-link");
+const tabContents = document.querySelectorAll(".tab-content");
+const mobileTabs = document.getElementById("mobile-tabs");
+
+function showTab(tabId) { // Masquer tous les contenus
+tabContents.forEach(tab => tab.classList.add("hidden"));
+
+// Désactiver tous les onglets
+tabs.forEach(tab => {
+tab.classList.remove("border-indigo-500", "text-indigo-600");
+tab.classList.add("border-transparent", "text-gray-500");
+});
+
+// Afficher l'onglet sélectionné
+document.getElementById(tabId).classList.remove("hidden");
+
+// Mettre l'onglet en surbrillance
+const activeTab = document.querySelector (`[data-tab="${tabId}"]`);
+if (activeTab) {
+activeTab.classList.add("border-indigo-500", "text-indigo-600");
+}
+}
+
+// Écouteurs d'événements pour le clic sur les tabs
+tabs.forEach(tab => {
+tab.addEventListener("click", function (e) {
+e.preventDefault();
+const tabId = this.getAttribute("data-tab");
+showTab(tabId);
+mobileTabs.value = tabId;
+});
+});
+
+// Changement via le dropdown mobile
+mobileTabs.addEventListener("change", function () {
+showTab(this.value);
+});
+});
+	</script>
 {% endblock %}
