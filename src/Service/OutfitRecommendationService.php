@@ -30,7 +30,7 @@ class OutfitRecommendationService
         string $openaiApiKey,
         string $openaiModelId = 'gpt-4o-mini',
     ) {
-        $this->client = OpenAI::client($openaiApiKey);
+        $this->client = \OpenAI::client($openaiApiKey);
         $this->entityManager = $entityManager;
         $this->wardrobeItemRepository = $wardrobeItemRepository;
         $this->outfitRepository = $outfitRepository;
