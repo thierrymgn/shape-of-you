@@ -51,6 +51,7 @@
         {% if formSubmitted %}
             <div class="mb-6">
                 <h2 class="text-xl font-semibold mb-4">Suggestions pour "{{ occasion }}" ({{ season.value }})</h2>
+                <h3 class="text-md font-normal mb-2 italic">Regardez dans la liste de vos tenues et supprimez celles qui ne vous intéressent pas</h3>
 
                 {% if outfits|length > 0 %}
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -68,23 +69,17 @@
                                             {% endfor %}
                                         </ul>
                                     </div>
-
-                                    <form method="post" action="{{ path('app_ai_save_outfit', {'id': outfit.id}) }}" class="mt-4">
-                                        <button type="submit" class="w-full px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                            Enregistrer cette tenue
-                                        </button>
-                                    </form>
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
-{#                {% else %}#}
-{#                    <div class="bg-white rounded-lg shadow p-6 text-center">#}
-{#                        <p class="text-gray-600">Aucune suggestion n'a pu être générée. Essayez avec d'autres critères ou ajoutez plus de vêtements à votre garde-robe.</p>#}
-{#                        <a href="{{ path('app_wardrobe_new') }}" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">#}
-{#                            Ajouter des vêtements#}
-{#                        </a>#}
-{#                    </div>#}
+                {% else %}
+                    <div class="bg-white rounded-lg shadow p-6 text-center">
+                        <p class="text-gray-600">Aucune suggestion n'a pu être générée. Essayez avec d'autres critères ou ajoutez plus de vêtements à votre garde-robe.</p>
+                        <a href="{{ path('app_wardrobe_new') }}" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            Ajouter des vêtements
+                        </a>
+                    </div>
                 {% endif %}
             </div>
         {% endif %}

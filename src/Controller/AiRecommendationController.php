@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\AiAnalysis;
+use App\Entity\OutfitItem;
 use App\Entity\User;
+use App\Enum\AnalysisType;
 use App\Enum\WardrobeSeason;
 use App\Service\OutfitRecommendationService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,8 +57,9 @@ class AiRecommendationController extends AbstractController
                 );
 
                 if (empty($outfits)) {
-                    $this->addFlash('warning', 'Nous n\'avons pas pu générer de suggestions. Essayez avec d\'autres critères ou ajoutez plus de vêtements.');
+                    $this->addFlash('warning', 'Nous n\'avons pas pu générer de suggestions...');
                 }
+
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la génération des suggestions: '.$e->getMessage());
             }
@@ -67,35 +72,6 @@ class AiRecommendationController extends AbstractController
             'formSubmitted' => $formSubmitted,
             'occasion' => $occasion,
             'season' => $season,
-        ]);
-    }
-
-    #[Route('/trending-outfits', name: 'app_ai_trending_outfits', methods: ['GET'])]
-    public function trendingOutfits(): Response
-    {
-        $user = $this->getUser();
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        if (!$user instanceof User) {
-            throw new \LogicException('L\'utilisateur connecté n\'est pas une instance valide de User.');
-        }
-
-        $outfits = [];
-
-        try {
-            $outfits = $this->recommendationService->suggestTrendingOutfits($user, 3);
-
-            if (empty($outfits)) {
-                $this->addFlash('info', 'Nous n\'avons pas trouvé de tendances adaptées à votre garde-robe pour le moment.');
-            }
-        } catch (\Exception $e) {
-            $this->addFlash('error', 'Une erreur est survenue lors de la génération des tendances: '.$e->getMessage());
-        }
-
-        return $this->render('ai/trending_outfits.html.twig', [
-            'outfits' => $outfits,
         ]);
     }
 
@@ -127,7 +103,7 @@ class AiRecommendationController extends AbstractController
     }
 
     #[Route('/save-outfit/{id}', name: 'app_ai_save_outfit', methods: ['POST'])]
-    public function saveOutfit(int $id): Response
+    public function saveOutfit(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
         if (!$user) {
@@ -138,9 +114,47 @@ class AiRecommendationController extends AbstractController
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance valide de User.');
         }
 
+        $sessionKey = 'suggested_outfits';
+        $suggestedOutfits = $request->getSession()->get($sessionKey, []);
+
+        $outfitToSave = null;
+        foreach ($suggestedOutfits as $outfit) {
+            if ($outfit->getId() === $id) {
+                $outfitToSave = $outfit;
+                break;
+            }
+        }
+
+        if (!$outfitToSave) {
+            $this->addFlash('error', 'Tenue non trouvée. Veuillez réessayer.');
+
+            return $this->redirectToRoute('app_ai_recommend_outfits');
+        }
+
         try {
-            // Ici, on peut implémenter la logique pour sauvegarder la tenue générée
-            // Par exemple, copier la tenue temporaire vers une tenue permanente de l'utilisateur
+            $permanentOutfit = clone $outfitToSave;
+//            $permanentOutfit->setId(null);
+            $permanentOutfit->setCustomer($user);
+
+            foreach ($outfitToSave->getOutfitItems() as $item) {
+                $newItem = new OutfitItem();
+                $newItem->setWardrobeItem($item->getWardrobeItem());
+                $newItem->setPosition($item->getPosition());
+                $newItem->setOutfit($permanentOutfit);
+                $permanentOutfit->addOutfitItem($newItem);
+            }
+
+            $analysis = $entityManager->getRepository(AiAnalysis::class)->findOneBy([
+                'analysisType' => AnalysisType::OUTFIT,
+                'createdAt' => $outfitToSave->getCreatedAt(),
+            ]);
+
+            if ($analysis) {
+                $analysis->setOutfitId($permanentOutfit);
+            }
+
+            $entityManager->persist($permanentOutfit);
+            $entityManager->flush();
 
             $this->addFlash('success', 'La tenue a été enregistrée dans votre garde-robe.');
         } catch (\Exception $e) {

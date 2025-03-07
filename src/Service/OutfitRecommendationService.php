@@ -177,8 +177,8 @@ class OutfitRecommendationService
             $outfit->setName($outfitData['name']);
             $outfit->setDescription($outfitData['description']);
             $outfit->setOccasion($occasion);
-            $outfit->setSeason($season);
             $outfit->setCustomer($user);
+            $outfit->setSeason($season);
             $outfit->setPublic(false);
 
             if (isset($outfitData['items']) && !empty($outfitData['items'])) {
@@ -199,6 +199,8 @@ class OutfitRecommendationService
                 }
             }
 
+            $this->entityManager->persist($outfit);
+
             $analysis = new AiAnalysis();
             $analysis->setAnalysisType(AnalysisType::OUTFIT);
             $analysis->setResults([
@@ -213,12 +215,11 @@ class OutfitRecommendationService
             $analysis->setOutfitId($outfit);
 
             $this->entityManager->persist($analysis);
-            $this->entityManager->persist($outfit);
 
             $outfits[] = $outfit;
         }
 
-//        $this->entityManager->flush();
+        $this->entityManager->flush();
 
         return $outfits;
     }
@@ -241,42 +242,12 @@ class OutfitRecommendationService
     }
 
     /**
-     * Suggère des tenues en fonction des tendances actuelles.
-     *
-     * @param User $user  L'utilisateur pour lequel générer des suggestions
-     * @param int  $count Le nombre de suggestions à générer
-     *
-     * @return array<Outfit> Les tenues suggérées
-     */
-    public function suggestTrendingOutfits(User $user, int $count = 3): array
-    {
-        // Récupérer les tendances actuelles (pourraient être stockées en base de données ou récupérées via une API externe)
-        $trends = $this->getCurrentTrends();
-
-        $outfits = [];
-
-        foreach ($trends as $trend) {
-            $outfit = $this->suggestOutfits($user, $trend['occasion'], $trend['season'], 1);
-            if (!empty($outfit)) {
-                $outfits[] = $outfit[0];
-            }
-
-            if (count($outfits) >= $count) {
-                break;
-            }
-        }
-
-        return $outfits;
-    }
-
-    /**
      * Récupère les tendances actuelles.
      *
      * @return array<int, array{occasion: string, season: WardrobeSeason}>
      */
     private function getCurrentTrends(): array
     {
-        // Cette méthode pourrait être étendue pour appeler une API externe ou consulter une base de données de tendances
         $month = (int) date('n');
         $currentSeason = match (true) {
             $month >= 3 && $month <= 5 => WardrobeSeason::SPRING,

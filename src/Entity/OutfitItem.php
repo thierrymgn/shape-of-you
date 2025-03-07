@@ -15,12 +15,12 @@ class OutfitItem
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'outfitItems')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'outfitItems')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: 'La tenue doit être spécifiée')]
     private ?Outfit $outfit = null;
 
-    #[ORM\ManyToOne(inversedBy: 'outfitItems')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'outfitItems')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: 'Le vêtement doit être spécifié')]
     private ?WardrobeItem $wardrobeItem = null;
