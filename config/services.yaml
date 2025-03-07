@@ -8,7 +8,7 @@ parameters:
     wardrobe_images_directory: '%kernel.project_dir%/public/images/wardrobe'
     social_post_images_directory: '%kernel.project_dir%/public/uploads/images/social_post'
     outfits_images_directory: '%kernel.project_dir%/public/images/outfits'
-    openai_api_key: '%env(OPENAI_API_KEY)%'
+    openai_api_key_outfit: '%env(OPENAI_API_KEY_MODEL_4)%'
     openai_model_id: '%env(default:default_openai_model:OPENAI_MODEL_ID)%'
     default_openai_model: 'gpt-4o-mini'
     wardrobeItem_images_directory: '%kernel.project_dir%/public/images/wardrobeItem'
@@ -46,5 +46,5 @@ services:
     # IA Services configuration
     App\Service\OutfitRecommendationService:
         arguments:
-            $openaiApiKey: '%openai_api_key%'
+            $openaiApiKey: '%openai_api_key_outfit%'
             $openaiModelId: '%openai_model_id%'

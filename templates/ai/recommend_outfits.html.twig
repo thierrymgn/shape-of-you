@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    <button id="generateButton" type="submit" class=" disabled:border-gray-50 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" disabled>
                         Générer des suggestions
                     </button>
                 </div>
@@ -84,4 +84,21 @@
             </div>
         {% endif %}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const occasionSelect = document.getElementById('occasion');
+            const seasonSelect = document.getElementById('season');
+            const generateButton = document.getElementById('generateButton');
+
+            function toggleButtonState() {
+                generateButton.disabled = !(occasionSelect.value && seasonSelect.value);
+            }
+
+            occasionSelect.addEventListener('change', toggleButtonState);
+            seasonSelect.addEventListener('change', toggleButtonState);
+        });
+    </script>
 {% endblock %}
