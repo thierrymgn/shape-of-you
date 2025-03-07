@@ -33,10 +33,10 @@
 			<div>
 				<h2 class="text-gray-500 first-letter:uppercase">
 					{% if social_post.author %}
-						{# <a href="{{ path('app_user_show', {'id': social_post.author.id}) }}"> #}
-						{{ social_post.author.firstName }}
-						{{ social_post.author.lastName }}
-						{# </a>     #}
+						<a href="{{ path('app_user_profile', {'id': social_post.author.id}) }}">
+							{{ social_post.author.firstName }}
+							{{ social_post.author.lastName }}
+						</a>
 					{% else %}
 						Unknown
 					{% endif %}
@@ -124,8 +124,10 @@
 						<p class="text-gray-700">{{ comment.content }}</p>
 						<p class="text-sm text-gray-500">
 							By:
-							{{ comment.userId.firstName }}
-							{{ comment.userId.lastName }}
+							<a href="{{ path('app_user_profile', {'id': comment.userId.id}) }}">
+								{{ comment.userId.firstName }}
+								{{ comment.userId.lastName }}
+							</a>
 							on
 							{{ comment.createdAt|date('d/m/Y H:i') }}
 						</p>
@@ -137,8 +139,10 @@
 										<p>{{ reply.content }}</p>
 										<p class="text-xs text-gray-400">
 											By:
-											{{ reply.userId.firstName }}
-											{{ reply.userId.lastName }}
+											<a href="{{ path('app_user_profile', {'id': reply.userId.id}) }}">
+												{{ reply.userId.firstName }}
+												{{ reply.userId.lastName }}
+											</a>
 											on
 											{{ reply.createdAt|date('d/m/Y H:i') }}
 										</p>
@@ -146,10 +150,10 @@
 								{% endfor %}
 							</div>
 						{% endif %}
-					</div>
-				{% endif %}
-			{% endfor %}
-		</div>
-
+					</p>
+				</div>
+			{% endif %}
+		{% endfor %}
 	</div>
-{% endblock %}
+
+</div>{% endblock %}

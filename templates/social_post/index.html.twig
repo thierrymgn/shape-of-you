@@ -17,8 +17,10 @@
 			<div class="px-16">
 				<h2 class="text-sm font-semibold text-gray-900">
 					{% if social_post.author %}
-						{{ social_post.author.firstName }}
-						{{ social_post.author.lastName }}
+						<a href="{{ path('app_user_profile', {'id': social_post.author.id}) }}">
+							{{ social_post.author.firstName }}
+							{{ social_post.author.lastName }}
+						</a>
 					{% else %}
 						Unknown
 					{% endif %}
